@@ -24,6 +24,7 @@ extern "C"
 #include <xc/xstring.h>
 }
 #include <string>
+#include <math.h>
 
 #define MIN_FOR_DIVISION 1e-16
 #define MIN_FOR_COMPARISON 1e-16

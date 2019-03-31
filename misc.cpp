@@ -1,4 +1,3 @@
-#include <math.h>
 #include "misc.h"
 
 void assert (bool check, std::string message)
