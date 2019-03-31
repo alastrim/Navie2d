@@ -1,6 +1,4 @@
-﻿#include <stdio.h>
-#include "matvec.h"
-#include "misc.h"
+﻿#include "matvec.h"
 
 int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<double> &X)
 {
@@ -13,21 +11,21 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
   LX.set (X);
 
   SetRTCAccuracy (EPS_FOR_SOLVING);
-  if (GAP2)
-    CGNIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
-  else
-    BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
+//  if (GAP2)
+//    CGNIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
+//  else
+  BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
 
-  if (DEBUG)
-    {
-      printf ("Matrix:\n");
-      LA.print ();
-      printf ("Vector:\n");
-      LB.print ();
-      printf ("Result:\n");
-      LX.print ();
-      printf ("\n");
-    }
+//  if (DEBUG)
+//    {
+//      printf ("Matrix:\n");
+//      LA.print ();
+//      printf ("Vector:\n");
+//      LB.print ();
+//      printf ("Result:\n");
+//      LX.print ();
+//      printf ("\n");
+//    }
 
   X = LX.get ();
   return 0;
@@ -80,8 +78,8 @@ void matrix::print ()
 void matrix::drop_laspack_pointer ()
 {
   if (m_laspack_pointer)
-
     Q_Destr (m_laspack_pointer);
+
   m_laspack_pointer = nullptr;
 }
 

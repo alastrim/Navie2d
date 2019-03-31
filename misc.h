@@ -25,11 +25,14 @@ extern "C"
 }
 #include <string>
 #include <math.h>
+#include <stdio.h>
 
 #define MIN_FOR_DIVISION 1e-16
 #define MIN_FOR_COMPARISON 1e-16
 #define EPS_FOR_SOLVING 1e-5
 #define MAXITER 100
+#define MAX_NON_ZERO 3
+#define ELEMS_ON_SCREEN 12
 
 void assert (bool check, std::string message);
 int toi (size_t src);
