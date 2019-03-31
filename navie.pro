@@ -1,6 +1,6 @@
 SOURCES += \
         main.cpp \
-	misc.cpp \
+        misc.cpp \
 
 HEADERS += \
     misc.h \

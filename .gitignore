@@ -1,0 +1,5 @@
+*.user
+*.o
+*.exe
+*.pro.user
+navie.pro.user
