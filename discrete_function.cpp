@@ -11,16 +11,10 @@ discrete_function::discrete_function (const grid *grid) : m_grid (grid)
 
 void discrete_function::fill (continuous_function cf)
 {
-  for (unsigned int i = 0; i < m_i_size; i++)
-    {
-      for (unsigned int j = 0; j < m_j_size; j++)
-        {
-          index ij = {i, j};
-          point xy = m_grid->get_point (ij);
-          double value = cf (xy);
-          set_value (ij, value);
-        }
-    }
+  do_for_each ([&] (index ij, point xy){
+    double value = cf (xy);
+    set_value (ij, value);
+  });
 }
 
 void discrete_function::set_value (index ij, double value)
@@ -39,6 +33,19 @@ double discrete_function::get_value (index ij)
   return m_data[tou (ij.first) * m_j_size + tou (ij.second)];
 }
 
+void discrete_function::do_for_each (discrete_foreach_function dff)
+{
+  for (unsigned int i = 0; i < m_i_size; i++)
+    {
+      for (unsigned int j = 0; j < m_j_size; j++)
+        {
+          index ij = {i, j};
+          point xy = m_grid->get_point (ij);
+          dff (ij, xy);
+        }
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 timed_discrete_function::timed_discrete_function (const grid *grid, const scale *scale) : m_grid (grid), m_scale (scale)
@@ -50,14 +57,12 @@ timed_discrete_function::timed_discrete_function (const grid *grid, const scale 
 
 void timed_discrete_function::fill (timed_continuous_function tcf)
 {
-  for (int k = 0; k < toi (m_k_size); k++)
-    {
-      double t = m_scale->get_time (k);
+  do_for_each ([&] (int k, double t) {
       continuous_function cf = [&] (point xy) { return tcf (t, xy); };
       std::unique_ptr<discrete_function> df = std::make_unique<discrete_function> (m_grid);
       df->fill (cf);
       set_cut (k, std::move (df));
-    }
+    });
 }
 
 void timed_discrete_function::set_cut (int k, std::unique_ptr<discrete_function> df)
@@ -68,9 +73,19 @@ void timed_discrete_function::set_cut (int k, std::unique_ptr<discrete_function>
   cut = std::move (df);
 }
 
-const discrete_function &timed_discrete_function::get_cut (int k)
+discrete_function &timed_discrete_function::get_cut (int k)
 {
   assert (k >= 0 && tou (k) < m_k_size, "Bad argument for timed function cut");
 
   return *m_data[tou (k)];
 }
+
+void timed_discrete_function::do_for_each (timed_discrete_foreach_function tdff)
+{
+  for (int k = 0; k < toi (m_k_size); k++)
+    {
+      double t = m_scale->get_time (k);
+      tdff (k, t);
+    }
+}
+

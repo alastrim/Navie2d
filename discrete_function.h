@@ -11,6 +11,7 @@ public:
   void set_value (index ij, double value);
   double get_value (index ij);
   const grid *get_grid () { return m_grid; }
+  void do_for_each (discrete_foreach_function dff);
 private:
   const grid *m_grid;
   std::vector<double> m_data;
@@ -24,9 +25,10 @@ public:
   timed_discrete_function (const grid *grid, const scale *scale);
   void fill (timed_continuous_function tcf);
   void set_cut (int k, std::unique_ptr<discrete_function> df);
-  const discrete_function &get_cut (int k);
+  discrete_function &get_cut (int k);
   const grid *get_grid () { return m_grid; }
   const scale *get_scale () { return m_scale; }
+  void do_for_each (timed_discrete_foreach_function tdff);
 private:
   const grid *m_grid;
   const scale *m_scale;
