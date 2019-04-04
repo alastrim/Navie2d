@@ -25,3 +25,9 @@ unsigned int tou (int src)
   return static_cast<unsigned int> (src);
 }
 
+unsigned int sbsc (int step_count)
+{
+  assert (step_count >= 0, "Bad step count given");
+  return tou (step_count + 1);
+}
+

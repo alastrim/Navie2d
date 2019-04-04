@@ -53,15 +53,15 @@ OBJECTS_DIR   = ./
 SOURCES       = main.cpp \
 		misc.cpp \
 		printers.cpp \
-		dicrete_function.cpp \
 		grid.cpp \
-		matvec.cpp 
+		matvec.cpp \
+		discrete_function.cpp 
 OBJECTS       = main.o \
 		misc.o \
 		printers.o \
-		dicrete_function.o \
 		grid.o \
-		matvec.o
+		matvec.o \
+		discrete_function.o
 DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/unix.conf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/linux.conf \
@@ -231,6 +231,7 @@ DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/qt_config.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/toolchain.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -251,14 +252,14 @@ DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/lex.prf \
 		navie.pro misc.h \
 		printers.h \
-		dicrete_function.h \
 		grid.h \
-		matvec.h main.cpp \
+		matvec.h \
+		discrete_function.h main.cpp \
 		misc.cpp \
 		printers.cpp \
-		dicrete_function.cpp \
 		grid.cpp \
-		matvec.cpp
+		matvec.cpp \
+		discrete_function.cpp
 QMAKE_TARGET  = navie
 DESTDIR       = 
 TARGET        = navie
@@ -439,6 +440,7 @@ Makefile: navie.pro ../../Soft/Qt/5.11.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/qt_config.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/toolchain.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/default_pre.prf \
@@ -630,6 +632,7 @@ Makefile: navie.pro ../../Soft/Qt/5.11.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/qt_config.prf:
 ../../Soft/Qt/5.11.2/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/toolchain.prf:
 ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/default_pre.prf:
@@ -666,8 +669,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents misc.h printers.h dicrete_function.h grid.h matvec.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp dicrete_function.cpp grid.cpp matvec.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents misc.h printers.h grid.h matvec.h discrete_function.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp grid.cpp matvec.cpp discrete_function.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -725,10 +728,6 @@ printers.o: printers.cpp printers.h \
 		misc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o printers.o printers.cpp
 
-dicrete_function.o: dicrete_function.cpp dicrete_function.h \
-		misc.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dicrete_function.o dicrete_function.cpp
-
 grid.o: grid.cpp grid.h \
 		misc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o grid.o grid.cpp
@@ -736,6 +735,11 @@ grid.o: grid.cpp grid.h \
 matvec.o: matvec.cpp matvec.h \
 		misc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o matvec.o matvec.cpp
+
+discrete_function.o: discrete_function.cpp discrete_function.h \
+		misc.h \
+		grid.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o discrete_function.o discrete_function.cpp
 
 ####### Install
 

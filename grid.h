@@ -20,8 +20,8 @@ class grid
 {
 public:
   grid (double x_origin, double y_origin, double x_end, double y_end, int x_step_count, int y_step_count);
-  point get_point (index ij);
-  grid_parameters get_parameters ();
+  point get_point (index ij) const;
+  grid_parameters get_parameters () const;
 private:
   grid_parameters m_parameters;
 };
@@ -39,8 +39,8 @@ class scale
 {
 public:
   scale (double t_origin, double t_end, int t_step_count);
-  double get_time (int k);
-  scale_parameters get_parameters ();
+  double get_time (int k) const;
+  scale_parameters get_parameters () const;
 private:
   scale_parameters m_parameters;
 };

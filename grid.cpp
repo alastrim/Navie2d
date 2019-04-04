@@ -13,7 +13,7 @@ grid::grid(double x_origin, double y_origin, double x_end, double y_end, int x_s
   m_parameters.m_y_step_count = y_step_count;
 }
 
-point grid::get_point (index ij)
+point grid::get_point (index ij) const
 {
   assert (ij.first >= 0 && ij.first <= m_parameters.m_x_step_count, "Bad index for point");
   assert (ij.second >= 0 && ij.second <= m_parameters.m_y_step_count, "Bad index for point");
@@ -23,7 +23,7 @@ point grid::get_point (index ij)
   return {x, y};
 }
 
-grid_parameters grid::get_parameters ()
+grid_parameters grid::get_parameters () const
 {
   return m_parameters;
 }
@@ -40,7 +40,7 @@ scale::scale (double t_origin, double t_end, int t_step_count)
   m_parameters.m_t_step_count = t_step_count;
 }
 
-double scale::get_time (int k)
+double scale::get_time (int k) const
 {
   assert (k >= 0 && k <= m_parameters.m_t_step_count, "Bad index for point");
 
@@ -48,7 +48,7 @@ double scale::get_time (int k)
   return t;
 }
 
-scale_parameters scale::get_parameters ()
+scale_parameters scale::get_parameters () const
 {
   return m_parameters;
 }
