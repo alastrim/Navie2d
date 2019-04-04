@@ -3,9 +3,6 @@
 
 #include "misc.h"
 
-typedef std::pair<double, double> point;
-typedef std::pair<int, int> index;
-
 struct grid_parameters
 {
   double m_x_origin;

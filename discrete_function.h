@@ -3,13 +3,6 @@
 
 #include "misc.h"
 
-class grid;
-class scale;
-typedef std::pair<double, double> point;
-typedef std::pair<int, int> index;
-typedef std::function<double (point xy)> continuous_function;
-typedef std::function<double (double t, point xy)> timed_continuous_function;
-
 class discrete_function
 {
 public:

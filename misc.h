@@ -43,4 +43,14 @@ unsigned int tou (int src);
 int fuzzycmp (double a, double b = 0.0);
 unsigned int sbsc (int step_count);
 
+class grid;
+class scale;
+class discrete_function;
+class timed_discrete_function;
+
+typedef std::pair<double, double> point;
+typedef std::pair<int, int> index;
+typedef std::function<double (point xy)> continuous_function;
+typedef std::function<double (double t, point xy)> timed_continuous_function;
+
 #endif // MISC_H
