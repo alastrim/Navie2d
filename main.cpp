@@ -20,7 +20,7 @@ int main (int argc, char **argv)
   tdfH.fill ([] (double t, point xy) {
     double x = xy.first;
     double y = xy.second;
-    return t + x + y;
+    return sin (t) * cos (x) * exp (y);
   });
 
   print_to_gnuplot (tdfH, "H");

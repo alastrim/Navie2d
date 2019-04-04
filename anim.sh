@@ -37,7 +37,7 @@ do for [i=0:t_step_count] {
     set yrange[0:Y]
     set zrange[-5:5]
     F = sprintf ("%s/%d", f_name, i)
-    splot F with lines
+    splot F with lines title f_name
 }
 
 EOF
