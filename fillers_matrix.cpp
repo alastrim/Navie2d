@@ -93,22 +93,22 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
           if (m1 == 0 || m2 == 0 || m1 == M1 || m2 == M2)
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0;
+              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
               continue;
             }
 
-          double check = (H.get_value ({m1,m2})+H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/4;
+          double check = (H.get_value ({m1,m2})+H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/4.0;
           if (!fuzzycmp (check))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0;
+              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
               continue;
             }
 
           A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = check/tau
                                                +check*(+fabs(V1.get_value ({m1,m2}))/h1
                                                        +fabs(V2.get_value ({m1,m2}))/h2)
-                                               +MIU*4.0/3.0*2/h1/h1 + MIU*1.0*2/h2/h2;
+                                               +MIU*4.0/3.0*2.0/h1/h1 + MIU*1.0*2.0/h2/h2;
           if (m2 < M2 - 1)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = +check*xmabs(V2.get_value ({m1,m2}))/2.0/h2
                                                    -MIU*1.0/h2/h2;
@@ -164,22 +164,22 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
           if (m1 == 0 || m2 == 0 || m1 == M1 || m2 == M2)
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0;
+              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
               continue;
             }
 
-          double check = (H.get_value ({m1,m2})+H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/4;
+          double check = (H.get_value ({m1,m2})+H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/4.0;
           if (!fuzzycmp (check))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0;
+              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
               continue;
             }
 
           A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = check/tau
                                                +check*(+fabs(V1.get_value ({m1,m2}))/h1
                                                        +fabs(V2.get_value ({m1,m2}))/h2)
-                                               +MIU*1.0*2/h1/h1 + MIU*4.0/3.0*2/h2/h2;
+                                               +MIU*1.0*2.0/h1/h1 + MIU*4.0/3.0*2.0/h2/h2;
           if (m2 < M2 - 1)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = +check*xmabs(V2.get_value ({m1,m2}))/2.0/h2
                                                    -MIU*4.0/3.0/h2/h2;
