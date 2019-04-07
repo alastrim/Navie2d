@@ -2,7 +2,9 @@
 #include "grid.h"
 #include "discrete_function.h"
 #include "printers.h"
-#include "fillers.h"
+#include "fillers_misc.h"
+#include "fillers_matrix.h"
+#include "fillers_functions.h"
 #include "loop.h"
 
 int main (int argc, char **argv)

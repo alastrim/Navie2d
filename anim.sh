@@ -35,10 +35,10 @@ X = ($3)
 Y = ($5)
 x_step = (X/x_step_count)
 y_step = (Y/y_step_count)
-x_start = (0+x_step/2)
-x_end = (X-x_step/2)
-y_start = (0+y_step/2)
-y_end = (Y-y_step/2)
+x_start = (0+x_step/2-1)
+x_end = (X-x_step/2+1)
+y_start = (0+y_step/2-1)
+y_end = (Y-y_step/2+1)
 grid_row_count = (y_step_count)
 grid_column_count = (x_step_count)
 
@@ -51,6 +51,9 @@ do for [i=0:t_step_count] {
     set xrange[x_start:x_end]
     set yrange[y_start:y_end]
     set zrange[-5:5]
+    set xlabel "x"
+    set ylabel "y"
+    set zlabel "z"
     F = sprintf ("%s/%d", f_name, i)
     splot F with lines title f_name
 }
@@ -71,10 +74,10 @@ X = ($3)
 Y = ($5)
 x_step = (X/x_step_count)
 y_step = (Y/y_step_count)
-x_start = (0)
-x_end = (X)
-y_start = (0)
-y_end = (Y)
+x_start = (0-1)
+x_end = (X+1)
+y_start = (0-1)
+y_end = (Y+1)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
 
@@ -87,6 +90,9 @@ do for [i=0:t_step_count] {
     set xrange[x_start:x_end]
     set yrange[y_start:y_end]
     set zrange[-5:5]
+    set xlabel "x"
+    set ylabel "y"
+    set zlabel "z"
     F = sprintf ("%s/%d", f_name, i)
     splot F with lines title f_name
 }
@@ -107,10 +113,10 @@ X = ($3)
 Y = ($5)
 x_step = (X/x_step_count)
 y_step = (Y/y_step_count)
-x_start = (0)
-x_end = (X)
-y_start = (0)
-y_end = (Y)
+x_start = (0-1)
+x_end = (X+1)
+y_start = (0-1)
+y_end = (Y+1)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
 
@@ -123,6 +129,9 @@ do for [i=0:t_step_count] {
     set xrange[x_start:x_end]
     set yrange[y_start:y_end]
     set zrange[-5:5]
+    set xlabel "x"
+    set ylabel "y"
+    set zlabel "z"
     F = sprintf ("%s/%d", f_name, i)
     splot F with lines title f_name
 }

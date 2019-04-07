@@ -2,7 +2,9 @@
 #include "discrete_function.h"
 #include "grid.h"
 #include "matvec.h"
-#include "fillers.h"
+#include "fillers_misc.h"
+#include "fillers_matrix.h"
+#include "fillers_functions.h"
 
 void time_loop (trio &essential)
 {

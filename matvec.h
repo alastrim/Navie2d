@@ -1,8 +1,4 @@
-﻿#ifndef MATVEC_H
-#define MATVEC_H
-
-#include <vector>
-#include <string>
+﻿#pragma once
 #include "misc.h"
 
 // Interfaces from C++ containers to laspack matrix and vector
@@ -57,5 +53,3 @@ private:
   std::vector<double> m_container;
   Vector *m_laspack_pointer;
 };
-
-#endif // MATVEC_H

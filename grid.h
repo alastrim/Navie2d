@@ -1,6 +1,4 @@
-#ifndef GRID_H
-#define GRID_H
-
+#pragma once
 #include "misc.h"
 
 struct grid_parameters
@@ -41,5 +39,3 @@ public:
 private:
   scale_parameters m_parameters;
 };
-
-#endif // GRID_H

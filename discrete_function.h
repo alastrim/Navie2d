@@ -1,6 +1,4 @@
-#ifndef DICRETE_FUNCTION_H
-#define DICRETE_FUNCTION_H
-
+#pragma once
 #include "misc.h"
 
 class discrete_function
@@ -37,5 +35,3 @@ private:
   std::vector<std::unique_ptr<discrete_function>> m_data;
   unsigned int m_k_size;
 };
-
-#endif // DICRETE_FUNCTION_H

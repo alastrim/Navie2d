@@ -1,8 +1,4 @@
-#ifndef LOOP_H
-#define LOOP_H
-
+#pragma once
 #include "misc.h"
 
 void time_loop (trio &essential);
-
-#endif // LOOP_H
