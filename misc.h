@@ -47,6 +47,7 @@ class grid;
 class scale;
 class discrete_function;
 class timed_discrete_function;
+struct trio;
 
 typedef std::pair<double, double> point;
 typedef std::pair<int, int> index;

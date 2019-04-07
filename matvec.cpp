@@ -11,9 +11,6 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
   LX.set (X);
 
   SetRTCAccuracy (EPS_FOR_SOLVING);
-//  if (GAP2)
-//    CGNIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
-//  else
   BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
 
 //  if (DEBUG)

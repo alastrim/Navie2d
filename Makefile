@@ -56,14 +56,16 @@ SOURCES       = main.cpp \
 		grid.cpp \
 		matvec.cpp \
 		discrete_function.cpp \
-		fillers.cpp 
+		fillers.cpp \
+		loop.cpp 
 OBJECTS       = main.o \
 		misc.o \
 		printers.o \
 		grid.o \
 		matvec.o \
 		discrete_function.o \
-		fillers.o
+		fillers.o \
+		loop.o
 DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/unix.conf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/linux.conf \
@@ -257,13 +259,15 @@ DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		grid.h \
 		matvec.h \
 		discrete_function.h \
-		fillers.h main.cpp \
+		fillers.h \
+		loop.h main.cpp \
 		misc.cpp \
 		printers.cpp \
 		grid.cpp \
 		matvec.cpp \
 		discrete_function.cpp \
-		fillers.cpp
+		fillers.cpp \
+		loop.cpp
 QMAKE_TARGET  = navie
 DESTDIR       = 
 TARGET        = navie
@@ -673,8 +677,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents misc.h printers.h grid.h matvec.h discrete_function.h fillers.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp grid.cpp matvec.cpp discrete_function.cpp fillers.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents misc.h printers.h grid.h matvec.h discrete_function.h fillers.h loop.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp grid.cpp matvec.cpp discrete_function.cpp fillers.cpp loop.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -757,6 +761,14 @@ fillers.o: fillers.cpp fillers.h \
 		discrete_function.h \
 		grid.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fillers.o fillers.cpp
+
+loop.o: loop.cpp loop.h \
+		misc.h \
+		discrete_function.h \
+		grid.h \
+		matvec.h \
+		fillers.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loop.o loop.cpp
 
 ####### Install
 

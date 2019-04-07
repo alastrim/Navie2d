@@ -6,11 +6,62 @@
 
 namespace fillers
 {
-void fill_initial_info (timed_discrete_function &tdfH, timed_discrete_function &tdfV1, timed_discrete_function &tdfV2)
+void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &essential)
 {
-  discrete_function &H_initial_cut = tdfH.get_cut (0);
-  discrete_function &V1_initial_cut = tdfV1.get_cut (0);
-  discrete_function &V2_initial_cut = tdfV2.get_cut (0);
+    std::vector<double> &H_raw = essential.m_tdfH.get_cut (k).get_raw_vector ();
+    std::vector<double> &V1_raw = essential.m_tdfV1.get_cut (k).get_raw_vector ();
+    std::vector<double> &V2_raw = essential.m_tdfV2.get_cut (k).get_raw_vector ();
+    unsigned int S = static_cast<unsigned int> (H_raw.size ());
+
+    A = std::vector<double> (S * S, 0);
+    B = std::vector<double> (S, 0);
+
+    for (unsigned int s = 0; s < S; s++)
+      {
+        A[s * S + s] = 1.5;
+        B[s] = H_raw[s] + H_raw[s] * 0 + V1_raw[s] * 0 + V2_raw[s] * 0;
+      }
+}
+
+void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &essential)
+{
+    std::vector<double> &H_raw = essential.m_tdfH.get_cut (k).get_raw_vector ();
+    std::vector<double> &V1_raw = essential.m_tdfV1.get_cut (k).get_raw_vector ();
+    std::vector<double> &V2_raw = essential.m_tdfV2.get_cut (k).get_raw_vector ();
+    unsigned int S = static_cast<unsigned int> (V1_raw.size ());
+
+    A = std::vector<double> (S * S, 0);
+    B = std::vector<double> (S, 0);
+
+    for (unsigned int s = 0; s < S; s++)
+      {
+        A[s * S + s] = 1.5;
+        B[s] = V1_raw[s] + H_raw[s] * 0 + V1_raw[s] * 0 + V2_raw[s] * 0;
+      }
+}
+
+void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &essential)
+{
+    std::vector<double> &H_raw = essential.m_tdfH.get_cut (k).get_raw_vector ();
+    std::vector<double> &V1_raw = essential.m_tdfV1.get_cut (k).get_raw_vector ();
+    std::vector<double> &V2_raw = essential.m_tdfV2.get_cut (k).get_raw_vector ();
+    unsigned int S = static_cast<unsigned int> (V2_raw.size ());
+
+    A = std::vector<double> (S * S, 0);
+    B = std::vector<double> (S, 0);
+
+    for (unsigned int s = 0; s < S; s++)
+      {
+        A[s * S + s] = 1.5;
+        B[s] = V2_raw[s] + H_raw[s] * 0 + V1_raw[s] * 0 + V2_raw[s] * 0;
+      }
+}
+
+void fill_initial_info (trio essential)
+{
+  discrete_function &H_initial_cut = essential.m_tdfH.get_cut (0);
+  discrete_function &V1_initial_cut = essential.m_tdfV1.get_cut (0);
+  discrete_function &V2_initial_cut = essential.m_tdfV2.get_cut (0);
 
   continuous_function H_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return x * y; };
   continuous_function V1_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return x + y; };
@@ -23,9 +74,9 @@ void fill_initial_info (timed_discrete_function &tdfH, timed_discrete_function &
   discrete_foreach_function zero_setter = [&] (index ij, point, discrete_function &self) { self.set_value (ij, 0); };
   timed_discrete_foreach_function timed_zero_setter = [&] (int k, double, timed_discrete_function &self) { self.get_cut (k).do_for_edge (zero_setter); };
 
-  tdfH.do_for_each (timed_zero_setter);
-  tdfV1.do_for_each (timed_zero_setter);
-  tdfV2.do_for_each (timed_zero_setter);
+  essential.m_tdfH.do_for_each (timed_zero_setter);
+  essential.m_tdfV1.do_for_each (timed_zero_setter);
+  essential.m_tdfV2.do_for_each (timed_zero_setter);
 }
 
 std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
@@ -45,6 +96,7 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
   double T = iT, X = iX, Y = iY;
 
   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
+
   result->m_H_grid = std::make_unique<grid> (0, 0, X, Y, x_step_count, y_step_count);
   result->m_V_grid = std::make_unique<grid> (0, 0, X, Y, x_step_count, y_step_count);
   result->m_scale = std::make_unique<scale> (0, T, t_step_count);
