@@ -42,7 +42,7 @@ y_end = (Y-y_step/2+1)
 grid_row_count = (y_step_count)
 grid_column_count = (x_step_count)
 
-set terminal gif animate delay 5
+set terminal gif animate delay 30
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {
@@ -81,7 +81,7 @@ y_end = (Y+1)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
 
-set terminal gif animate delay 5
+set terminal gif animate delay 30
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {
@@ -120,7 +120,7 @@ y_end = (Y+1)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
 
-set terminal gif animate delay 5
+set terminal gif animate delay 30
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {

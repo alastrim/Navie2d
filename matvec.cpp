@@ -48,6 +48,7 @@ void matrix::set (std::vector<double> &src)
   bool check = (m_size * m_size == toi (m_container.size ()));
   assert (check, "Bad arguments for matrix constructor call");
   m_non_zero_count = MAX_NON_ZERO;
+  m_non_zero_count = m_size;
 }
 
 QMatrix *matrix::get_as_laspack ()

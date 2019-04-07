@@ -45,9 +45,11 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
-          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0/tau+
-                                               ((xpabs(V1.get_value ({m1+1,m2})+V1.get_value ({m1+1,m2+1}))-xmabs(V1.get_value ({m1,m2})+V1.get_value ({m1,m2+1})))/2.0/h1+
-                                                (xpabs(V2.get_value ({m1,m2+1})+V2.get_value ({m1+1,m2+1}))-xmabs(V2.get_value ({m1,m2})+V2.get_value ({m1+1,m2})))/2.0/h2);
+          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0/tau
+                                               +((xpabs(V1.get_value ({m1+1,m2})+V1.get_value ({m1+1,m2+1}))
+                                                  -xmabs(V1.get_value ({m1,m2})+V1.get_value ({m1,m2+1})))/2.0/h1
+                                                 +(xpabs(V2.get_value ({m1,m2+1})+V2.get_value ({m1+1,m2+1}))
+                                                   -xmabs(V2.get_value ({m1,m2})+V2.get_value ({m1+1,m2})))/2.0/h2);
           if (m2 < M2 - 1)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = xmabs((V2.get_value({m1,m2+1})+V2.get_value({m1+1,m2+1}))/2.0)/2.0/h2;
           if (m1 < M1 - 1)
@@ -103,7 +105,10 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
               continue;
             }
 
-          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = check/tau+check*(fabs(V1.get_value ({m1,m2}))/h1+fabs(V2.get_value ({m1,m2}))/h2);
+          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = check/tau
+
+                                               +check*(fabs(V1.get_value ({m1,m2}))/h1
+                                                       +fabs(V2.get_value ({m1,m2}))/h2);
           if (m2 < M2 - 1)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = +check*xmabs(V2.get_value ({m1,m2}))/2.0/h2;
           if (m1 < M1 - 1)
@@ -113,11 +118,18 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
           if (m2 > 0)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = -check*xpabs(V2.get_value ({m1,m2}))/2.0/h2;
 
-          B[vect_to_mat (0,m1*M2+m2)] = check*V1.get_value ({m1,m2})/tau
-                                        -(pow((H.get_value ({m1,m2})+H.get_value ({m1,m2-1}))/2,GAMMA)-pow((H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/2,GAMMA))/h1
+          B[vect_to_mat (0,m1*M2+m2)] = check/tau*V1.get_value ({m1,m2})
+
+                                        -1.0/h1*(pow((H.get_value ({m1,m2})+H.get_value ({m1,m2-1}))/2,GAMMA)
+                                          -pow((H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/2,GAMMA))
+
                                         +MIU*(4.0/3.0/h1/h1*(V1.get_value ({m1-1,m2})-2*V1.get_value ({m1,m2})+V1.get_value ({m1+1,m2}))
                                               +1.0/h2/h2*(V1.get_value ({m1,m2-1})-2*V1.get_value ({m1,m2})+V1.get_value ({m1,m2+1})))
-                                        +MIU/3.0*(V2.get_value ({m1-1,m2-1})-V2.get_value ({m1-1,m2+1})-V2.get_value ({m1+1,m2-1})+V2.get_value ({m1+1,m2+1}))/4/h1/h2;
+
+                                        +MIU/3.0/4/h1/h2*(V2.get_value ({m1-1,m2-1})
+                                                  -V2.get_value ({m1-1,m2+1})
+                                                  -V2.get_value ({m1+1,m2-1})
+                                                  +V2.get_value ({m1+1,m2+1}));
         }
     }
 }
@@ -173,11 +185,18 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
           if (m2 > 0)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = -check*xpabs(V2.get_value ({m1,m2}))/2.0/h2;
 
-          B[vect_to_mat (0,m1*M2+m2)] = check*V2.get_value ({m1,m2})/tau
-                                        -(pow((H.get_value ({m1,m2})+H.get_value ({m1-1,m2}))/2,GAMMA)-pow((H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2-1}))/2,GAMMA))/h2
+          B[vect_to_mat (0,m1*M2+m2)] = check/tau*V2.get_value ({m1,m2})
+
+                                        -1.0/h2*(pow((H.get_value ({m1,m2})+H.get_value ({m1-1,m2}))/2,GAMMA)
+                                          -pow((H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2-1}))/2,GAMMA))
+
                                         +MIU*(1.0/h1/h1*(V1.get_value ({m1-1,m2})-2*V2.get_value ({m1,m2})+V2.get_value ({m1+1,m2}))
                                               +4.0/3.0/h2/h2*(V2.get_value ({m1,m2-1})-2*V2.get_value ({m1,m2})+V2.get_value ({m1,m2+1})))
-                                        +MIU/3.0*(V1.get_value ({m1-1,m2-1})-V1.get_value ({m1-1,m2+1})-V1.get_value ({m1+1,m2-1})+V1.get_value ({m1+1,m2+1}))/4/h1/h2;
+
+                                        +MIU/3.0/4/h1/h2*(V1.get_value ({m1-1,m2-1})
+                                                  -V1.get_value ({m1-1,m2+1})
+                                                  -V1.get_value ({m1+1,m2-1})
+                                                  +V1.get_value ({m1+1,m2+1}));
         }
     }
 }
