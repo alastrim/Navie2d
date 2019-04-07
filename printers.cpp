@@ -12,8 +12,8 @@ void print_to_gnuplot (discrete_function &df, std::string name)
       return;
     }
 
-  df.do_for_each ([&] (index ij, point xy) {
-    double value = df.get_value (ij);
+  df.do_for_each ([out] (index ij, point xy, discrete_function &self) {
+    double value = self.get_value (ij);
     fprintf (out, "%f %f %f\n", xy.first, xy.second, value);
   });
 
@@ -22,9 +22,9 @@ void print_to_gnuplot (discrete_function &df, std::string name)
 
 void print_to_gnuplot (timed_discrete_function &tdf, std::string name)
 {
-  tdf.do_for_each ([&] (int k, double) {
+  tdf.do_for_each ([name] (int k, double, timed_discrete_function &self) {
       std::string filename = name + "/" + std::to_string (k);
-      discrete_function &df = tdf.get_cut (k);
+      discrete_function &df = self.get_cut (k);
       print_to_gnuplot (df, filename);
     });
 }

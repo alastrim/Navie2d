@@ -1,144 +1,119 @@
-﻿#include <math.h>
-#include "fillers.h"
+﻿#include "fillers.h"
 #include "misc.h"
 #include "matvec.h"
 #include "discrete_function.h"
+#include "grid.h"
 
 namespace fillers
 {
-double r (double t, double x)
+void fill_initial_info (timed_discrete_function &tdfH, timed_discrete_function &tdfV1, timed_discrete_function &tdfV2)
 {
-  if (GAP2)
-    return 1;
-  if (GAP)
-    return ((x < 4.5 || x > 5.5) ? 1 : 2);
-  return exp(t) * (cos(M_PI * x / 10.0) + 1.5);
+  discrete_function &H_initial_cut = tdfH.get_cut (0);
+  discrete_function &V1_initial_cut = tdfV1.get_cut (0);
+  discrete_function &V2_initial_cut = tdfV2.get_cut (0);
+
+  continuous_function H_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return x * y; };
+  continuous_function V1_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return x + y; };
+  continuous_function V2_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return x - y; };
+
+  H_initial_cut.fill (H_initial_filler);
+  V1_initial_cut.fill (V1_initial_filler);
+  V2_initial_cut.fill (V2_initial_filler);
+
+  discrete_foreach_function zero_setter = [&] (index ij, point, discrete_function &self) { self.set_value (ij, 0); };
+  timed_discrete_foreach_function timed_zero_setter = [&] (int k, double, timed_discrete_function &self) { self.get_cut (k).do_for_edge (zero_setter); };
+
+  tdfH.do_for_each (timed_zero_setter);
+  tdfV1.do_for_each (timed_zero_setter);
+  tdfV2.do_for_each (timed_zero_setter);
 }
 
-double drdx (double t, double x)
+std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
 {
-  return - M_PI / 10 * exp(t) * sin (M_PI * x / 10.0);
-}
-
-double u (double t, double x)
-{
-  if (GAP2)
-    return ((x < 4.5 || x > 5.5) ? 0 : 1);
-  if (GAP)
-    return 0;
-  return cos (2.0 * M_PI * t) * sin (M_PI * (x / 10.0) * (x / 10.0));
-}
-
-double p (double t, double x)
-{
-  return pow (r (t, x), GAMMA);
-}
-
-double drdt (double t, double x)
-{
-  return exp(t) * (cos(M_PI * x / 10.0) + 1.5);
-}
-
-double drudx (double t, double x)
-{
-  return (exp (t) * M_PI * x * cos (2.0 * M_PI * t) * (1.5 + cos ((M_PI * x) / 10.0)) * cos ((M_PI * x * x) / 100.0)) / 50.0 - (exp (t) * M_PI * cos(2.0 * M_PI * t) * sin ((M_PI * x) / 10.0) * sin ((M_PI * x * x) / 100.0)) / 10.0;
-}
-
-double dudt (double t, double x)
-{
-  return -2.0 * M_PI * sin (2 * M_PI * t) * sin (M_PI * (x / 10.0) * (x / 10.0));
-}
-
-double dudx (double t, double x)
-{
-  return 1.0 / 50.0 * M_PI * x * cos (2 * M_PI * t) * cos (M_PI * (x / 10.0) * (x / 10.0));
-}
-
-double dpdx (double t, double x)
-{
-  return -(exp (t) * M_PI * GAMMA * pow ((exp (t) * (1.5 + cos ((M_PI * x) / 10.0))), (-1.0 + GAMMA)) * sin ((M_PI * x) / 10.0)) / 10.0;
-}
-
-double ddudxx (double t, double x)
-{
-  return (M_PI * cos (2.0 * M_PI * t) * cos ((M_PI * x * x) / 100.0))/50.0 - (M_PI * M_PI * x * x * cos (2.0 * M_PI * t) * sin ((M_PI * x * x) / 100.0)) / 2500.0;
-}
-
-double f0 (double t, double x)
-{
-  if (GAP)
-    return 0;
-  return drdt (t, x) + drudx (t, x);
-}
-double f (double t, double x)
-{
-  if (GAP)
-    return 0;
-  return (r (t, x) * dudt (t, x) + r (t, x) * u (t, x) * dudx (t, x) + dpdx (t, x) - MIU * ddudxx (t, x)) / r (t, x);
-}
-}
-
-void fill_first (std::vector<double> &A, std::vector<double> &B,
-                 discrete_function &H, discrete_function &V,
-                 int n, double h, double tau, discrete_function &/*f*/,
-                 discrete_function &f_0)
-{
-  std::vector<double> &H_cut = H.cut (n);
-  std::vector<double> &V_cut = V.cut (n);
-  unsigned int M = static_cast<unsigned int> (H_cut.size ());
-
-  A = std::vector<double> (M * M, 0);
-  B = std::vector<double> (M, 0);
-
-  for (unsigned int m = 0; m < M; m++)
+  int t_step_count, x_step_count, y_step_count, iT, iX, iY;
+  if (argc < 7 || !(iT = atoi (argv[1])) || !(t_step_count = atoi(argv[2])) || !(iX = atoi (argv[3])) || !(x_step_count = atoi(argv[4])) || !(iY = atoi (argv[5])) || !(y_step_count = atoi(argv[6])))
     {
-      if (m > 0)
-        A[m * M + m - 1] = -(V_cut[m] + fabs (V_cut[m])) / (2.0 * h);
-
-      A[m * M + m] = 1.0 / tau + (V_cut[m + 1] + fabs (V_cut[m + 1])
-          - V_cut[m] + fabs (V_cut[m])) / (2.0 * h);
-
-      if (m < M - 1)
-        A[m * M + m + 1] = (V_cut[m + 1] - fabs (V_cut[m + 1])) / (2.0 * h);
-
-      B[m] = H_cut[m] * (1.0 / tau) + f_0.val (n, toi (m));
+      printf ("Usage: ./main.exe <T> <t_step_count> <X> <x_step_count> <Y> <y_step_count>\n");
+      printf ("Bad arguments given, using default...");
+      t_step_count = 98;
+      x_step_count = 55;
+      y_step_count = 76;
+      iT = 9;
+      iX = 2;
+      iY = 3;
     }
+  double T = iT, X = iX, Y = iY;
+
+  std::unique_ptr<mesh> result = std::make_unique<mesh> ();
+  result->m_H_grid = std::make_unique<grid> (0, 0, X, Y, x_step_count, y_step_count);
+  result->m_V_grid = std::make_unique<grid> (0, 0, X, Y, x_step_count, y_step_count);
+  result->m_scale = std::make_unique<scale> (0, T, t_step_count);
+
+  return result;
+}
 }
 
-void fill_second (std::vector<double> &A, std::vector<double> &B,
-                  discrete_function &H, discrete_function &V,
-                  int n, double h, double tau, discrete_function &f,
-                  discrete_function &/*f_0*/)
-{
-  std::vector<double> &H_cut = H.cut (n + 1);
-  std::vector<double> &V_cut = V.cut (n);
-  unsigned int M = static_cast<unsigned int> (H_cut.size ());
+//void fill_first (std::vector<double> &A, std::vector<double> &B,
+//                 discrete_function &H, discrete_function &V,
+//                 int n, double h, double tau, discrete_function &/*f*/,
+//                 discrete_function &f_0)
+//{
+//  std::vector<double> &H_cut = H.cut (n);
+//  std::vector<double> &V_cut = V.cut (n);
+//  unsigned int M = static_cast<unsigned int> (H_cut.size ());
 
-  A = std::vector<double> ((M + 1) * (M + 1), 0);
-  B = std::vector<double> (M + 1, 0);
+//  A = std::vector<double> (M * M, 0);
+//  B = std::vector<double> (M, 0);
 
-  for (unsigned int m = 0; m < M + 1; m++)
-    {
-      double H_s_;
-      if (m == 0 || m == M || !fuzzycmp ((H_s_ = (H_cut[m] + H_cut[m - 1]) / 2)))
-        {
-          A[m * (M + 1) + m] = 1;
-          B[m] = 0;
-          continue;
-        }
+//  for (unsigned int m = 0; m < M; m++)
+//    {
+//      if (m > 0)
+//        A[m * M + m - 1] = -(V_cut[m] + fabs (V_cut[m])) / (2.0 * h);
 
-      A[m * (M + 1) + m - 1] = H_s_ * -(V_cut[m] + fabs (V_cut[m]))
-                               / (2 * h) - MIU / (h * h);
+//      A[m * M + m] = 1.0 / tau + (V_cut[m + 1] + fabs (V_cut[m + 1])
+//          - V_cut[m] + fabs (V_cut[m])) / (2.0 * h);
 
-      A[m * (M + 1) + m] = H_s_ * (1.0 / tau + (V_cut[m] + fabs (V_cut[m]))
-                                   / (2 * h) - (V_cut[m] - fabs (V_cut[m]))
-                                   / (2 * h)) + (2 * MIU) / (h * h);
+//      if (m < M - 1)
+//        A[m * M + m + 1] = (V_cut[m + 1] - fabs (V_cut[m + 1])) / (2.0 * h);
 
-      A[m * (M + 1) + m + 1] = H_s_ * (V_cut[m] - fabs (V_cut[m]))
-                               / (2 * h) - MIU / (h * h);
+//      B[m] = H_cut[m] * (1.0 / tau) + f_0.val (n, toi (m));
+//    }
+//}
 
-      B[m] = H_s_ * (V_cut[m] / tau - (GAMMA / (GAMMA - 1)) *
-                     ((pow (H_cut[m], GAMMA - 1) - pow (H_cut[m - 1], GAMMA - 1))
-                     / h) + f.val (n + 1, toi (m)));
-    }
-}
+//void fill_second (std::vector<double> &A, std::vector<double> &B,
+//                  discrete_function &H, discrete_function &V,
+//                  int n, double h, double tau, discrete_function &f,
+//                  discrete_function &/*f_0*/)
+//{
+//  std::vector<double> &H_cut = H.cut (n + 1);
+//  std::vector<double> &V_cut = V.cut (n);
+//  unsigned int M = static_cast<unsigned int> (H_cut.size ());
+
+//  A = std::vector<double> ((M + 1) * (M + 1), 0);
+//  B = std::vector<double> (M + 1, 0);
+
+//  for (unsigned int m = 0; m < M + 1; m++)
+//    {
+//      double H_s_;
+//      if (m == 0 || m == M || !fuzzycmp ((H_s_ = (H_cut[m] + H_cut[m - 1]) / 2)))
+//        {
+//          A[m * (M + 1) + m] = 1;
+//          B[m] = 0;
+//          continue;
+//        }
+
+//      A[m * (M + 1) + m - 1] = H_s_ * -(V_cut[m] + fabs (V_cut[m]))
+//                               / (2 * h) - MIU / (h * h);
+
+//      A[m * (M + 1) + m] = H_s_ * (1.0 / tau + (V_cut[m] + fabs (V_cut[m]))
+//                                   / (2 * h) - (V_cut[m] - fabs (V_cut[m]))
+//                                   / (2 * h)) + (2 * MIU) / (h * h);
+
+//      A[m * (M + 1) + m + 1] = H_s_ * (V_cut[m] - fabs (V_cut[m]))
+//                               / (2 * h) - MIU / (h * h);
+
+//      B[m] = H_s_ * (V_cut[m] / tau - (GAMMA / (GAMMA - 1)) *
+//                     ((pow (H_cut[m], GAMMA - 1) - pow (H_cut[m - 1], GAMMA - 1))
+//                     / h) + f.val (n + 1, toi (m)));
+//    }
+//}

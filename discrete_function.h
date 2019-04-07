@@ -12,6 +12,7 @@ public:
   double get_value (index ij);
   const grid *get_grid () { return m_grid; }
   void do_for_each (discrete_foreach_function dff);
+  void do_for_edge (discrete_foreach_function dff);
 private:
   const grid *m_grid;
   std::vector<double> m_data;

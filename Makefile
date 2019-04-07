@@ -55,13 +55,15 @@ SOURCES       = main.cpp \
 		printers.cpp \
 		grid.cpp \
 		matvec.cpp \
-		discrete_function.cpp 
+		discrete_function.cpp \
+		fillers.cpp 
 OBJECTS       = main.o \
 		misc.o \
 		printers.o \
 		grid.o \
 		matvec.o \
-		discrete_function.o
+		discrete_function.o \
+		fillers.o
 DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/unix.conf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/linux.conf \
@@ -254,12 +256,14 @@ DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		printers.h \
 		grid.h \
 		matvec.h \
-		discrete_function.h main.cpp \
+		discrete_function.h \
+		fillers.h main.cpp \
 		misc.cpp \
 		printers.cpp \
 		grid.cpp \
 		matvec.cpp \
-		discrete_function.cpp
+		discrete_function.cpp \
+		fillers.cpp
 QMAKE_TARGET  = navie
 DESTDIR       = 
 TARGET        = navie
@@ -669,8 +673,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents misc.h printers.h grid.h matvec.h discrete_function.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp grid.cpp matvec.cpp discrete_function.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents misc.h printers.h grid.h matvec.h discrete_function.h fillers.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp grid.cpp matvec.cpp discrete_function.cpp fillers.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -718,14 +722,20 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-main.o: main.cpp misc.h
+main.o: main.cpp misc.h \
+		grid.h \
+		discrete_function.h \
+		printers.h \
+		fillers.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 misc.o: misc.cpp misc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o misc.o misc.cpp
 
 printers.o: printers.cpp printers.h \
-		misc.h
+		misc.h \
+		discrete_function.h \
+		grid.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o printers.o printers.cpp
 
 grid.o: grid.cpp grid.h \
@@ -740,6 +750,13 @@ discrete_function.o: discrete_function.cpp discrete_function.h \
 		misc.h \
 		grid.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o discrete_function.o discrete_function.cpp
+
+fillers.o: fillers.cpp fillers.h \
+		misc.h \
+		matvec.h \
+		discrete_function.h \
+		grid.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fillers.o fillers.cpp
 
 ####### Install
 

@@ -11,9 +11,9 @@ discrete_function::discrete_function (const grid *grid) : m_grid (grid)
 
 void discrete_function::fill (continuous_function cf)
 {
-  do_for_each ([&] (index ij, point xy){
+  do_for_each ([&cf] (index ij, point xy, discrete_function &self){
     double value = cf (xy);
-    set_value (ij, value);
+    self.set_value (ij, value);
   });
 }
 
@@ -41,8 +41,36 @@ void discrete_function::do_for_each (discrete_foreach_function dff)
         {
           index ij = {i, j};
           point xy = m_grid->get_point (ij);
-          dff (ij, xy);
+          dff (ij, xy, *this);
         }
+    }
+}
+
+void discrete_function::do_for_edge (discrete_foreach_function dff)
+{
+  index ij;
+  point xy;
+
+  for (unsigned int i = 0; i < m_i_size; i++)
+    {
+      ij = {i, 0};
+      xy = m_grid->get_point (ij);
+      dff (ij, xy, *this);
+
+      ij = {i, m_j_size - 1};
+      xy = m_grid->get_point (ij);
+      dff (ij, xy, *this);
+    }
+
+  for (unsigned int j = 1; j < m_j_size - 1; j++)
+    {
+      ij = {0, j};
+      xy = m_grid->get_point (ij);
+      dff (ij, xy, *this);
+
+      ij = {m_i_size - 1, j};
+      xy = m_grid->get_point (ij);
+      dff (ij, xy, *this);
     }
 }
 
@@ -57,11 +85,11 @@ timed_discrete_function::timed_discrete_function (const grid *grid, const scale 
 
 void timed_discrete_function::fill (timed_continuous_function tcf)
 {
-  do_for_each ([&] (int k, double t) {
+  do_for_each ([&tcf] (int k, double t, timed_discrete_function &self) {
       continuous_function cf = [&] (point xy) { return tcf (t, xy); };
-      std::unique_ptr<discrete_function> df = std::make_unique<discrete_function> (m_grid);
+      std::unique_ptr<discrete_function> df = std::make_unique<discrete_function> (self.m_grid);
       df->fill (cf);
-      set_cut (k, std::move (df));
+      self.set_cut (k, std::move (df));
     });
 }
 
@@ -85,7 +113,7 @@ void timed_discrete_function::do_for_each (timed_discrete_foreach_function tdff)
   for (int k = 0; k < toi (m_k_size); k++)
     {
       double t = m_scale->get_time (k);
-      tdff (k, t);
+      tdff (k, t, *this);
     }
 }
 

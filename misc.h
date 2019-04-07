@@ -52,7 +52,7 @@ typedef std::pair<double, double> point;
 typedef std::pair<int, int> index;
 typedef std::function<double (point xy)> continuous_function;
 typedef std::function<double (double t, point xy)> timed_continuous_function;
-typedef std::function<void (index ij, point xy)> discrete_foreach_function;
-typedef std::function<void (int k, double t)> timed_discrete_foreach_function;
+typedef std::function<void (index ij, point xy, discrete_function &self)> discrete_foreach_function;
+typedef std::function<void (int k, double t, timed_discrete_function &self)> timed_discrete_foreach_function;
 
 #endif // MISC_H
