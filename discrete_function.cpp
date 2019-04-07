@@ -7,6 +7,7 @@ discrete_function::discrete_function (const grid *grid) : m_grid (grid)
   m_j_size = sbsc (m_grid->get_parameters ().m_y_step_count);
 
   m_data.resize (m_i_size * m_j_size);
+  fill ([] (point) { return 0; });
 }
 
 void discrete_function::fill (continuous_function cf)
@@ -81,6 +82,7 @@ timed_discrete_function::timed_discrete_function (const grid *grid, const scale 
   m_k_size = sbsc (m_scale->get_parameters ().m_t_step_count);
 
   m_data.resize (m_k_size);
+  fill ([] (double, point) { return 0; });
 }
 
 void timed_discrete_function::fill (timed_continuous_function tcf)

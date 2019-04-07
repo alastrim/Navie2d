@@ -18,7 +18,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
 
     for (unsigned int s = 0; s < S; s++)
       {
-        A[s * S + s] = 1.5;
+        A[s * S + s] = 1.1;
         B[s] = H_raw[s] + H_raw[s] * 0 + V1_raw[s] * 0 + V2_raw[s] * 0;
       }
 }
@@ -35,7 +35,7 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
 
     for (unsigned int s = 0; s < S; s++)
       {
-        A[s * S + s] = 1.5;
+        A[s * S + s] = 1.1;
         B[s] = V1_raw[s] + H_raw[s] * 0 + V1_raw[s] * 0 + V2_raw[s] * 0;
       }
 }
@@ -52,12 +52,12 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
 
     for (unsigned int s = 0; s < S; s++)
       {
-        A[s * S + s] = 1.5;
+        A[s * S + s] = 1.1;
         B[s] = V2_raw[s] + H_raw[s] * 0 + V1_raw[s] * 0 + V2_raw[s] * 0;
       }
 }
 
-void fill_initial_info (trio essential)
+void fill_initial_info (trio &essential)
 {
   discrete_function &H_initial_cut = essential.m_tdfH.get_cut (0);
   discrete_function &V1_initial_cut = essential.m_tdfV1.get_cut (0);
@@ -85,8 +85,8 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
   if (argc < 7 || !(iT = atoi (argv[1])) || !(t_step_count = atoi(argv[2])) || !(iX = atoi (argv[3])) || !(x_step_count = atoi(argv[4])) || !(iY = atoi (argv[5])) || !(y_step_count = atoi(argv[6])))
     {
       printf ("Usage: ./main.exe <T> <t_step_count> <X> <x_step_count> <Y> <y_step_count>\n");
-      printf ("Bad arguments given, using default...");
-      t_step_count = 98;
+      printf ("Bad arguments given, using default...\n");
+      t_step_count = 9;
       x_step_count = 55;
       y_step_count = 76;
       iT = 9;

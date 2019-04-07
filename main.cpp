@@ -3,6 +3,7 @@
 #include "discrete_function.h"
 #include "printers.h"
 #include "fillers.h"
+#include "loop.h"
 
 int main (int argc, char **argv)
 {
@@ -14,6 +15,8 @@ int main (int argc, char **argv)
   trio essential (tdfH, tdfV1, tdfV2);
 
   fillers::fill_initial_info (essential);
+
+  time_loop (essential);
 
   print_to_gnuplot (tdfH, "H");
   print_to_gnuplot (tdfV1, "V1");

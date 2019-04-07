@@ -28,7 +28,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
 void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &essential);
 void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &essential);
 
-void fill_initial_info (trio essential);
+void fill_initial_info (trio &essential);
 std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv);
 }
 

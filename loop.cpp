@@ -8,6 +8,9 @@ void time_loop (trio &essential)
 {
   essential.m_tdfH.do_for_each ([&essential] (int k, double, timed_discrete_function &)
   {
+      if (k == essential.m_tdfH.get_scale ()->get_parameters ().m_t_step_count)
+        return;
+
       {
         std::vector<double> A;
         std::vector<double> B;
