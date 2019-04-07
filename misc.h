@@ -35,7 +35,10 @@ extern "C"
 #define EPS_FOR_SOLVING 1e-5
 #define MAXITER 100
 #define MAX_NON_ZERO 3
-#define ELEMS_ON_SCREEN 12
+#define ELEMS_ON_SCREEN 100
+#define GAMMA 1.3
+#define MIU 0.1
+#define DEBUG false
 
 void assert (bool check, std::string message);
 int toi (size_t src);

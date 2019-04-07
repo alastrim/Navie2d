@@ -11,18 +11,19 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
   LX.set (X);
 
   SetRTCAccuracy (EPS_FOR_SOLVING);
-  BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
+//  BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
+  CGNIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
 
-//  if (DEBUG)
-//    {
-//      printf ("Matrix:\n");
-//      LA.print ();
-//      printf ("Vector:\n");
-//      LB.print ();
-//      printf ("Result:\n");
-//      LX.print ();
-//      printf ("\n");
-//    }
+  if (DEBUG)
+    {
+      printf ("Matrix:\n");
+      LA.print ();
+      printf ("Vector:\n");
+      LB.print ();
+      printf ("Result:\n");
+      LX.print ();
+      printf ("\n");
+    }
 
   X = LX.get ();
   return 0;
