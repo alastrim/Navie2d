@@ -14,7 +14,7 @@ void fill_initial_info (trio &essential)
   discrete_function &V1_initial_cut = essential.m_tdfV1.get_cut (0);
   discrete_function &V2_initial_cut = essential.m_tdfV2.get_cut (0);
 
-  continuous_function H_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return rho (0, x, y); };
+  continuous_function H_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return r (0, x, y); };
   continuous_function V1_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return u1 (0, x, y); };
   continuous_function V2_initial_filler = [] (point xy) { double x = xy.first, y = xy.second; return u2 (0, x, y); };
 
@@ -28,6 +28,20 @@ void fill_initial_info (trio &essential)
 //  essential.m_tdfH.do_for_each (timed_zero_setter);
   essential.m_tdfV1.do_for_each (timed_zero_setter);
   essential.m_tdfV2.do_for_each (timed_zero_setter);
+}
+
+void fill_real_info (trio &real)
+{
+  real.m_tdfH.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return r (t, x, y); });
+  real.m_tdfV1.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return u1 (t, x, y); });
+  real.m_tdfV2.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return u2 (t, x, y); });
+
+  discrete_foreach_function zero_setter = [&] (index ij, point, discrete_function &self) { self.set_value (ij, 0); };
+  timed_discrete_foreach_function timed_zero_setter = [&] (int k, double, timed_discrete_function &self) { self.get_cut (k).do_for_edge (zero_setter); };
+
+//  real.m_tdfH.do_for_each (timed_zero_setter);
+  real.m_tdfV1.do_for_each (timed_zero_setter);
+  real.m_tdfV2.do_for_each (timed_zero_setter);
 }
 
 std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)

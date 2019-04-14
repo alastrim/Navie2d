@@ -24,8 +24,10 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   discrete_function &H = essential.m_tdfH.get_cut (k);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
   discrete_function &V2 = essential.m_tdfV2.get_cut (k);
-  grid_parameters g_parameters = essential.m_tdfV1.get_grid ()->get_parameters ();
-  scale_parameters s_parameters = essential.m_tdfV1.get_scale ()->get_parameters ();
+  const grid *gr = essential.m_tdfV1.get_grid ();
+  const scale *sc = essential.m_tdfV1.get_scale ();
+  grid_parameters g_parameters = gr->get_parameters ();
+  scale_parameters s_parameters = sc->get_parameters ();
 
   unsigned int M1 = tou (g_parameters.m_x_step_count);
   unsigned int M2 = tou (g_parameters.m_y_step_count);
@@ -59,7 +61,8 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
           if (m2 > 0)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = -xpabs((V2.get_value({m1,m2})+V2.get_value({m1+1,m2}))/2.0)/2.0/h2;
 
-          B[vect_to_mat (0,m1*M2+m2)] = 1.0/tau*H.get_value({m1,m2});
+          B[vect_to_mat (0,m1*M2+m2)] = 1.0/tau*H.get_value({m1,m2})
+                                        +fillers::f_first (sc->get_time (k), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
         }
     }
 }
@@ -69,8 +72,10 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
   discrete_function &H = essential.m_tdfH.get_cut (k + 1);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
   discrete_function &V2 = essential.m_tdfV2.get_cut (k);
-  grid_parameters g_parameters = essential.m_tdfV1.get_grid ()->get_parameters ();
-  scale_parameters s_parameters = essential.m_tdfV1.get_scale ()->get_parameters ();
+  const grid *gr = essential.m_tdfV1.get_grid ();
+  const scale *sc = essential.m_tdfV1.get_scale ();
+  grid_parameters g_parameters = gr->get_parameters ();
+  scale_parameters s_parameters = sc->get_parameters ();
 
   unsigned int M1 = tou (g_parameters.m_x_step_count);
   unsigned int M2 = tou (g_parameters.m_y_step_count);
@@ -130,7 +135,8 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
                                                   +V2.get_value ({m1-1,m2-1})
                                                   -V2.get_value ({m1-1,m2+1})
                                                   -V2.get_value ({m1+1,m2-1})
-                                                  +V2.get_value ({m1+1,m2+1}));
+                                                  +V2.get_value ({m1+1,m2+1}))
+                                        +fillers::f_second (sc->get_time (k), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
         }
     }
 }
@@ -140,8 +146,10 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   discrete_function &H = essential.m_tdfH.get_cut (k + 1);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
   discrete_function &V2 = essential.m_tdfV2.get_cut (k);
-  grid_parameters g_parameters = essential.m_tdfV1.get_grid ()->get_parameters ();
-  scale_parameters s_parameters = essential.m_tdfV1.get_scale ()->get_parameters ();
+  const grid *gr = essential.m_tdfV1.get_grid ();
+  const scale *sc = essential.m_tdfV1.get_scale ();
+  grid_parameters g_parameters = gr->get_parameters ();
+  scale_parameters s_parameters = sc->get_parameters ();
 
   unsigned int M1 = tou (g_parameters.m_x_step_count);
   unsigned int M2 = tou (g_parameters.m_y_step_count);
@@ -201,7 +209,8 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
                                                   +V1.get_value ({m1-1,m2-1})
                                                   -V1.get_value ({m1-1,m2+1})
                                                   -V1.get_value ({m1+1,m2-1})
-                                                  +V1.get_value ({m1+1,m2+1}));
+                                                  +V1.get_value ({m1+1,m2+1}))
+                                        +fillers::f_third (sc->get_time (k), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
         }
     }
 }

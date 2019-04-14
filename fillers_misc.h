@@ -20,5 +20,6 @@ struct trio
 namespace fillers
 {
 void fill_initial_info (trio &essential);
+void fill_real_info (trio &real);
 std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv);
 }
