@@ -24,49 +24,54 @@ double p (double t, double x, double y)
 {
   return pow (r (t, x, y), GAMMA);
 }
+double du1dx1 (double t, double x, double y)
+{
+  return 2 * M_PI * cos (2.0 * M_PI * x) * sin (2.0 * M_PI * y) * exp (t);
+}
+double du2dx2 (double t, double x, double y)
+{
+  return 2 * M_PI * sin (2.0 * M_PI * x) * cos (2.0 * M_PI * y) * exp (-t);
+}
+double du1dx2 (double t, double x, double y)
+{
+  return 2 * M_PI * sin (2.0 * M_PI * x) * cos (2.0 * M_PI * y) * exp (t);
+}
+double du2dx1 (double t, double x, double y)
+{
+  return 2 * M_PI * cos (2.0 * M_PI * x) * sin (2.0 * M_PI * y) * exp (-t);
+}
 double drdt (double t, double x, double y)
 {
-  return exp (t) * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + cos (2.0 * M_PI * y));
+  return r (t, x, y);
 }
 double dru1dx1 (double t, double x, double y)
 {
-  return 2.0 * exp (2.0 * t) * M_PI * cos (2.0 * M_PI * x) * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + cos (2.0 * M_PI * y)) * sin (2.0 * M_PI * y) - 2.0 * exp (2.0 * t) * M_PI * (1.5 + cos (2.0 * M_PI * y)) * pow (sin (2.0 * M_PI * x), 2.0) * sin (2.0 * M_PI * y);
+  return 2.0 * exp (2.0 * t) * M_PI * cos (2.0 * M_PI * x)
+      * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + sin (2.0 * M_PI * y)) * sin (2.0 * M_PI * y)
+      - 2.0 * exp (2.0 * t) * M_PI * (1.5 + sin (2.0 * M_PI * y)) * pow (sin (2.0 * M_PI * x), 2.0) * sin (2.0 * M_PI * y);
 }
 double dru2dx2 (double , double x, double y)
 {
-  return 2.0 * M_PI * (1.5 + cos (2.0 * M_PI * x)) * cos (2.0 * M_PI * y) * (1.5 + cos (2.0 * M_PI * y)) * sin (2.0 * M_PI * x) - 2.0 * M_PI * (1.5 + cos (2.0 * M_PI * x)) * sin (2.0 * M_PI * x) * pow (sin (2.0 * M_PI * y), 2.0);
+  return 2.0 * M_PI * (1.5 + cos (2.0 * M_PI * x)) * cos (2.0 * M_PI * y) * (1.5 + sin (2.0 * M_PI * y)) * sin (2.0 * M_PI * x)
+      + 2.0 * M_PI * (1.5 + cos (2.0 * M_PI * x)) * sin (2.0 * M_PI * x) * sin (2.0 * M_PI * y) * cos (2.0 * M_PI * y);
 }
-double dru1dt (double t, double x, double y)
+double du1dt (double t, double x, double y)
 {
-  return 2.0 * exp (2.0 * t) * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + cos (2.0 * M_PI * y)) * sin (2.0 * M_PI * x) * sin (2.0 * M_PI * y);
+  return u1 (t, x, y);
 }
-double dru2dt (double , double , double )
+double du2dt (double t, double x, double y)
 {
-  return 0;
-}
-double dru1u1dx1 (double t, double x, double y)
-{
-  return 4.0 * exp (3.0 * t) * M_PI * cos (2.0 * M_PI * x) * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + cos (2.0 * M_PI * y)) * sin (2.0 * M_PI * x) * pow (sin (2.0 * M_PI * y), 2.0) - 2.0 * exp (3.0 * t) * M_PI * (1.5 + cos (2.0 * M_PI * y)) * pow (sin (2.0 * M_PI * x), 3.0) * pow (sin (2.0 * M_PI * y), 2.0);
-}
-double dru2u2dx2 (double t, double x, double y)
-{
-  return 4.0 * exp (-t) * M_PI * (1.5 + cos (2.0 * M_PI * x)) * cos (2 * M_PI * y) * (1.5 + cos (2.0 * M_PI * y)) * pow (sin (2.0 * M_PI * x), 2.0) * sin (2.0 * M_PI * y) - 2.0 * exp (-t) * M_PI * (1.5 + cos (2 * M_PI * x)) * pow (sin (2.0 * M_PI * x), 2.0) * pow (sin (2.0 * M_PI * y), 3.0);
-}
-double dru2u1dx2 (double t, double x, double y)
-{
-  return 4.0 * exp (t) * M_PI * (1.5 + cos (2.0 * M_PI * x)) * cos (2.0 * M_PI * y) * (1.5 + cos (2.0 * M_PI * y)) * pow (sin (2.0 * M_PI * x), 2.0) * sin (2.0 * M_PI * y) - 2.0 * exp (t) * M_PI * (1.5 + cos (2.0 * M_PI * x)) * pow (sin (2.0 * M_PI * x), 2.0) * pow (sin (2.0 * M_PI * y), 3.0);
-}
-double dru2u1dx1 (double t, double x, double y)
-{
-  return 4.0 * exp (t) * M_PI * cos (2.0 * M_PI * x) * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + cos (2.0 * M_PI * y)) * sin (2.0 * M_PI * x) * pow (sin (2.0 * M_PI * y), 2.0) - 2.0 * exp (t) * M_PI * (1.5 + cos (2.0 * M_PI * y)) * pow (sin (2.0 * M_PI * x), 3.0) * pow (sin (2.0 * M_PI * y), 2.0);
+  return -u2 (t, x, y);
 }
 double dpdx1 (double t, double x, double y)
 {
-  return -2.0 * exp (t) * M_PI * GAMMA * (1.5 + cos (2.0 * M_PI * y)) * pow ((exp (t) * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + cos (2.0 * M_PI * y))), (-1 + GAMMA)) * sin (2.0 * M_PI * x);
+  return -2.0 * exp (t) * M_PI * GAMMA * (1.5 + sin (2.0 * M_PI * y)) * pow ((exp (t) * (1.5 + cos (2.0 * M_PI * x))
+         * (1.5 + sin (2.0 * M_PI * y))), (-1 + GAMMA)) * sin (2.0 * M_PI * x);
 }
 double dpdx2 (double t, double x, double y)
 {
-  return -2.0 * exp (t) * M_PI * GAMMA * (1.5 + cos (2.0 * M_PI * x)) * pow ((exp (t) * (1.5 + cos (2.0 * M_PI * x)) * (1.5 + cos (2.0 * M_PI * y))), (-1 + GAMMA)) *  sin (2.0 * M_PI * y);
+  return 2.0 * exp (t) * M_PI * GAMMA * (1.5 + cos (2.0 * M_PI * x)) * pow ((exp (t) * (1.5 + cos (2.0 * M_PI * x))
+         * (1.5 + sin (2.0 * M_PI * y))), (-1 + GAMMA)) *  cos (2.0 * M_PI * y);
 }
 double f_first (double t, double x, double y)
 {
@@ -74,10 +79,10 @@ double f_first (double t, double x, double y)
 }
 double f_second (double t, double x, double y)
 {
-  return dru1dt (t, x, y) + dru1u1dx1 (t, x, y) + dru2u1dx2 (t, x, y) + dpdx1 (t, x, y);
+  return r (t, x, y) * (du1dt (t, x, y) + u1 (t, x, y) * du1dx1 (t, x, y) + u2 (t, x, y) * du1dx2 (t, x, y)) + dpdx1 (t, x, y);
 }
 double f_third (double t, double x, double y)
 {
-  return dru2dt (t, x, y) + dru2u1dx1 (t, x, y) + dru2u2dx2 (t, x, y) + dpdx2 (t, x, y);
+  return r (t, x, y) * (du2dt (t, x, y) + u1 (t, x, y) * du2dx1 (t, x, y) + u2 (t, x, y) * du2dx2 (t, x, y)) + dpdx2 (t, x, y);
 }
 }
