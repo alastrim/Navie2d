@@ -52,11 +52,11 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
       printf ("Usage: ./main.exe <T> <t_step_count> <X> <x_step_count> <Y> <y_step_count>\n");
       printf ("Bad arguments given, using default...\n");
       t_step_count = 9;
-      x_step_count = 55;
-      y_step_count = 76;
-      iT = 9;
-      iX = 2;
-      iY = 3;
+      x_step_count = 3;
+      y_step_count = 3;
+      iT = 1;
+      iX = 1;
+      iY = 1;
     }
   double T = iT, X = iX, Y = iY;
 
