@@ -63,7 +63,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = (w = -xpabs((V2.get_value({m1,m2})+V2.get_value({m1+1,m2}))/2.0)/2.0/h2);
 
           double a = 1.0/tau*H.get_value({m1,m2});
-          double b = fillers::f_first (sc->get_time (k), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
+          double b = fillers::f_first (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
           B[vect_to_mat (0,m1*M2+m2)] = a + b;
         }
     }
@@ -79,10 +79,10 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
   grid_parameters g_parameters = gr->get_parameters ();
   scale_parameters s_parameters = sc->get_parameters ();
 
-  unsigned int M1 = tou (g_parameters.m_x_step_count);
-  unsigned int M2 = tou (g_parameters.m_y_step_count);
+  unsigned int M1 = tou (g_parameters.m_x_step_count) + 1;
+  unsigned int M2 = tou (g_parameters.m_y_step_count) + 1;
   unsigned int S = static_cast<unsigned int> (V1.get_raw_vector ().size ());
-  assert (S == (M1 + 1) * (M2 + 1), "Bad matrix size");
+  assert (S == (M1) * (M2), "Bad matrix size");
 
   double tau = s_parameters.m_t_step;
   double h1 = g_parameters.m_x_step;
@@ -93,11 +93,11 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
   A = std::vector<double> (S * S, 0);
   B = std::vector<double> (S, 0);
 
-  for (unsigned int m1 = 0; m1 <= M1; m1++)
+  for (unsigned int m1 = 0; m1 < M1; m1++)
     {
-      for (unsigned int m2 = 0; m2 <= M2; m2++)
+      for (unsigned int m2 = 0; m2 < M2; m2++)
         {
-          if (m1 == 0 || m2 == 0 || m1 == M1 || m2 == M2)
+          if (m1 == 0 || m2 == 0 || m1 == M1 - 1 || m2 == M2 - 1)
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
               B[vect_to_mat (0,m1*M2+m2)] = 0.0;
@@ -116,16 +116,12 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
                                                +check*(+fabs(V1.get_value ({m1,m2}))/h1
                                                        +fabs(V2.get_value ({m1,m2}))/h2)
                                                +MIU*4.0/3.0*2.0/h1/h1 + MIU*1.0*2.0/h2/h2;
-          if (m2 < M2 - 1)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = +check*xmabs(V2.get_value ({m1,m2}))/2.0/h2
                                                    -MIU*1.0/h2/h2;
-          if (m1 < M1 - 1)
             A[vect_to_mat (m1*M2+m2,(m1+1)*M2+m2)] = +check*xmabs(V1.get_value ({m1,m2}))/2.0/h1
                                                      -MIU*4.0/3.0/h1/h1;
-          if (m1 > 0)
             A[vect_to_mat (m1*M2+m2,(m1-1)*M2+m2)] = -check*xpabs(V1.get_value ({m1,m2}))/2.0/h1
                                                      -MIU*4.0/3.0/h1/h1;
-          if (m2 > 0)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = -check*xpabs(V2.get_value ({m1,m2}))/2.0/h2
                                                    -MIU*1.0/h2/h2;
 
@@ -140,7 +136,7 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
                        -V2.get_value ({m1-1,m2+1})
                        -V2.get_value ({m1+1,m2-1})
                        +V2.get_value ({m1+1,m2+1}));
-          double d = fillers::f_second (sc->get_time (k), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
+          double d = check * fillers::f_second (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
           B[vect_to_mat (0,m1*M2+m2)] = a + b + c + d;
         }
     }
@@ -156,10 +152,10 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   grid_parameters g_parameters = gr->get_parameters ();
   scale_parameters s_parameters = sc->get_parameters ();
 
-  unsigned int M1 = tou (g_parameters.m_x_step_count);
-  unsigned int M2 = tou (g_parameters.m_y_step_count);
-  unsigned int S = static_cast<unsigned int> (V1.get_raw_vector ().size ());
-  assert (S == (M1 + 1) * (M2 + 1), "Bad matrix size");
+  unsigned int M1 = tou (g_parameters.m_x_step_count) + 1;
+  unsigned int M2 = tou (g_parameters.m_y_step_count) + 1;
+  unsigned int S = static_cast<unsigned int> (V2.get_raw_vector ().size ());
+  assert (S == (M1) * (M2), "Bad matrix size");
 
   double tau = s_parameters.m_t_step;
   double h1 = g_parameters.m_x_step;
@@ -170,11 +166,11 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   A = std::vector<double> (S * S, 0);
   B = std::vector<double> (S, 0);
 
-  for (unsigned int m1 = 0; m1 <= M1; m1++)
+  for (unsigned int m1 = 0; m1 < M1; m1++)
     {
-      for (unsigned int m2 = 0; m2 <= M2; m2++)
+      for (unsigned int m2 = 0; m2 < M2; m2++)
         {
-          if (m1 == 0 || m2 == 0 || m1 == M1 || m2 == M2)
+          if (m1 == 0 || m2 == 0 || m1 == M1 - 1 || m2 == M2 - 1)
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
               B[vect_to_mat (0,m1*M2+m2)] = 0.0;
@@ -193,16 +189,12 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
                                                +check*(+fabs(V1.get_value ({m1,m2}))/h1
                                                        +fabs(V2.get_value ({m1,m2}))/h2)
                                                +MIU*1.0*2.0/h1/h1 + MIU*4.0/3.0*2.0/h2/h2;
-          if (m2 < M2 - 1)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = +check*xmabs(V2.get_value ({m1,m2}))/2.0/h2
                                                    -MIU*4.0/3.0/h2/h2;
-          if (m1 < M1 - 1)
             A[vect_to_mat (m1*M2+m2,(m1+1)*M2+m2)] = +check*xmabs(V1.get_value ({m1,m2}))/2.0/h1
                                                      -MIU*1.0/h2/h2;
-          if (m1 > 0)
             A[vect_to_mat (m1*M2+m2,(m1-1)*M2+m2)] = -check*xpabs(V1.get_value ({m1,m2}))/2.0/h1
                                                      -MIU*1.0/h1/h1;
-          if (m2 > 0)
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = -check*xpabs(V2.get_value ({m1,m2}))/2.0/h2
                                                    -MIU*4.0/3.0/h2/h2;
 
@@ -215,7 +207,7 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
                        -V1.get_value ({m1-1,m2+1})
                        -V1.get_value ({m1+1,m2-1})
                        +V1.get_value ({m1+1,m2+1}));
-          double d = fillers::f_third (sc->get_time (k), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
+          double d = check * fillers::f_third (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
           B[vect_to_mat (0,m1*M2+m2)] = a + b + c + d;
         }
     }
