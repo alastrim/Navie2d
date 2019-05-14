@@ -62,8 +62,8 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
 
   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
 
-  double half_x_step = (X - 0) / x_step_count / 2;
-  double half_y_step = (Y - 0) / y_step_count / 2;
+  double half_x_step = (X - 0) / x_step_count / 2.0;
+  double half_y_step = (Y - 0) / y_step_count / 2.0;
 
   result->m_H_grid = std::make_unique<grid> (0 + half_x_step, 0 + half_y_step,
                                              X - half_x_step, Y - half_y_step,

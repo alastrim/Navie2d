@@ -37,7 +37,7 @@ extern "C"
 #define MAX_NON_ZERO 3
 #define ELEMS_ON_SCREEN 100
 #define GAMMA 1.4
-#define MIU 0.001
+#define MIU 0.1
 #define DEBUG 0
 
 void assert (bool check, std::string message);

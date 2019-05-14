@@ -63,8 +63,8 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = (w = -xpabs((V2.get_value({m1,m2})+V2.get_value({m1+1,m2}))/2.0)/2.0/h2);
 
           double a = 1.0/tau*H.get_value({m1,m2});
-          double b = fillers::f_first (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
-          B[vect_to_mat (0,m1*M2+m2)] = a + b;
+          double b = fillers::f_1 (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
+          B[m1*M2+m2] = a + b;
         }
     }
 }
@@ -136,8 +136,8 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
                        -V2.get_value ({m1-1,m2+1})
                        -V2.get_value ({m1+1,m2-1})
                        +V2.get_value ({m1+1,m2+1}));
-          double d = check * fillers::f_second (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
-          B[vect_to_mat (0,m1*M2+m2)] = a + b + c + d;
+          double d = check * fillers::f_2 (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
+          B[m1*M2+m2] = a + b + c + d;
         }
     }
 }
@@ -199,16 +199,18 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
                                                    -MIU*4.0/3.0/h2/h2;
 
           double a = check/tau*V2.get_value ({m1,m2});
+          double b1 = (H.get_value ({m1,m2})+H.get_value ({m1-1,m2}))/2.0;
+          double b2 = (H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2-1}))/2.0;
           double b = -1.0/h2*(
-                       +pow((H.get_value ({m1,m2})+H.get_value ({m1-1,m2}))/2.0,GAMMA)
-                       -pow((H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2-1}))/2.0,GAMMA));
+                       +pow(b1,GAMMA)
+                       -pow(b2,GAMMA));
           double c = MIU/3.0/4.0/h1/h2*(
                        +V1.get_value ({m1-1,m2-1})
                        -V1.get_value ({m1-1,m2+1})
                        -V1.get_value ({m1+1,m2-1})
                        +V1.get_value ({m1+1,m2+1}));
-          double d = check * fillers::f_third (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
-          B[vect_to_mat (0,m1*M2+m2)] = a + b + c + d;
+          double d = check * fillers::f_3 (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
+          B[m1*M2+m2] = a + b + c + d;
         }
     }
 }

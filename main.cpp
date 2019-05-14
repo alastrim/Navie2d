@@ -17,13 +17,13 @@ int main (int argc, char **argv)
   trio essential (tdfH, tdfV1, tdfV2);
   fillers::fill_initial_info (essential);
 
-  time_loop (essential);
-
   timed_discrete_function real_tdfH (main_mesh->m_H_grid.get (), main_mesh->m_scale.get ());
   timed_discrete_function real_tdfV1 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get ());
   timed_discrete_function real_tdfV2 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get ());
   trio real (real_tdfH, real_tdfV1, real_tdfV2);
   fillers::fill_real_info (real);
+
+  time_loop (essential, real);
 
   print_to_gnuplot (tdfH, "H");
   print_to_gnuplot (tdfV1, "V1");

@@ -27,4 +27,7 @@ double dpdx2 (double t, double x, double y);
 double f_first (double t, double x, double y);
 double f_second (double t, double x, double y);
 double f_third (double t, double x, double y);
+double f_1 (double t, double x, double y);
+double f_2 (double t, double x, double y);
+double f_3 (double t, double x, double y);
 }

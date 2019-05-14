@@ -1,14 +1,17 @@
 ﻿#include "matvec.h"
 
-int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<double> &X)
+int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
 {
   matrix LA;
   vector LB;
   vector LX;
+  vector Lreal;
 
   LA.set (A);
   LB.set (B);
   LX.set (X);
+  Lreal.set (real);
+
 
   SetRTCAccuracy (EPS_FOR_SOLVING);
 //  BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
@@ -22,6 +25,8 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
       LB.print ();
       printf ("Result:\n");
       LX.print ();
+      printf ("Real:\n");
+      Lreal.print ();
       printf ("\n");
     }
 
@@ -48,7 +53,7 @@ void matrix::set (std::vector<double> &src)
   bool check = (m_size * m_size == toi (m_container.size ()));
   assert (check, "Bad arguments for matrix constructor call");
   m_non_zero_count = MAX_NON_ZERO;
-  m_non_zero_count = m_size;
+  m_non_zero_count = m_size + 1;
 }
 
 QMatrix *matrix::get_as_laspack ()

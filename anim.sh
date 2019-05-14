@@ -14,7 +14,7 @@ mkdir realH
 mkdir realV1
 mkdir realV2
 make
-./navie $1 $2 $3 $4 $5 $6
+./navie $1 $2 $3 $4 $5 $6 $7
 
 if [ ! -d H ]; then
 	exit
@@ -26,6 +26,7 @@ fi
 #4 - x_step_count
 #5 - Y
 #6 - y_step_count
+#7 - anim delay
 
 gnuplot -p << EOF
 
@@ -49,7 +50,7 @@ y_end = (Y-y_step/2+1)
 grid_row_count = (y_step_count)
 grid_column_count = (x_step_count)
 
-set terminal gif animate delay 5
+set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {
@@ -90,7 +91,7 @@ y_end = (Y+1)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
 
-set terminal gif animate delay 5
+set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {
@@ -131,7 +132,7 @@ y_end = (Y+1)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
 
-set terminal gif animate delay 5
+set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {
@@ -150,7 +151,6 @@ do for [i=0:t_step_count] {
 
 EOF
 
-
-eog H.gif &
 eog V1.gif &
 eog V2.gif &
+eog H.gif &
