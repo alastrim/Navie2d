@@ -32,8 +32,8 @@ extern "C"
 
 #define MIN_FOR_DIVISION 1e-16
 #define MIN_FOR_COMPARISON 1e-16
-#define EPS_FOR_SOLVING 1e-5
-#define MAXITER 100
+#define EPS_FOR_SOLVING 1e-8
+#define MAXITER 1000
 #define MAX_NON_ZERO 3
 #define ELEMS_ON_SCREEN 100
 #define GAMMA 1.4

@@ -22,11 +22,6 @@ void time_loop (trio &essential, trio &real)
         fillers::fill_first (k, A, B, essential);
 
         solve_system (A, B, X, realvect);
-        for (size_t i = 0; i < X.size (); i++)
-          {
-            if (X[i] < 0)
-              X[i] = 0;
-          }
       }
       // Solving second system
       {

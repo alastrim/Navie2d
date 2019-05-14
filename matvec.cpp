@@ -14,8 +14,8 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
 
 
   SetRTCAccuracy (EPS_FOR_SOLVING);
-//  BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
-  CGNIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
+  BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, JacobiPrecond, 0);
+//  CGNIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
 
   if (DEBUG)
     {

@@ -29,6 +29,8 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   grid_parameters g_parameters = gr->get_parameters ();
   scale_parameters s_parameters = sc->get_parameters ();
 
+  const grid *H_gr = essential.m_tdfH.get_grid ();
+
   unsigned int M1 = tou (g_parameters.m_x_step_count);
   unsigned int M2 = tou (g_parameters.m_y_step_count);
   unsigned int S = static_cast<unsigned int> (H.get_raw_vector ().size ());
@@ -62,7 +64,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = (w = -xpabs(V2.tilda ({m1,m2}))/2.0/h2);
 
           double a = 1.0/tau*H.get_value({m1,m2});
-          double b = fillers::f_1 (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
+          double b = fillers::f_1 (sc->get_time (k+1), H_gr->get_point ({m1,m2}).first, H_gr->get_point ({m1,m2}).second);
           B[m1*M2+m2] = a + b;
         }
     }
@@ -96,7 +98,7 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
-          if (m1 == 0 || m2 == 0 || m1 == M1 - 1 || m2 == M2 - 1)
+          if (m1 == 0 || m2 == 0 || m1 == (M1 - 1) || m2 == (M2 - 1))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
               B[vect_to_mat (0,m1*M2+m2)] = 0.0;
@@ -169,7 +171,7 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
-          if (m1 == 0 || m2 == 0 || m1 == M1 - 1 || m2 == M2 - 1)
+          if (m1 == 0 || m2 == 0 || m1 == (M1 - 1) || m2 == (M2 - 1))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
               B[vect_to_mat (0,m1*M2+m2)] = 0.0;
