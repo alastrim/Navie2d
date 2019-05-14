@@ -49,18 +49,17 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
         {
           double x, y, z, w;
           A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0/tau
-                                               +(xpabs(V1.get_value({m1+1,m2})+V1.get_value({m1+1,m2+1}))
-                                                  -xmabs(V1.get_value({m1,m2})+V1.get_value({m1,m2+1})))/2.0/h1
-                                                 +(xpabs(V2.get_value({m1,m2+1})+V2.get_value({m1+1,m2+1}))
-                                                   -xmabs(V2.get_value({m1,m2})+V2.get_value({m1+1,m2})))/2.0/h2;
+                                               +(xpabs(V1.tilda({m1+1,m2}))-xmabs(V1.tilda({m1,m2})))/2.0/h1
+                                               +(xpabs(V2.tilda({m1,m2+1}))-xmabs(V2.tilda({m1,m2})))/2.0/h2;
+
           if (m2 < M2 - 1)
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = (x = xmabs((V2.get_value({m1,m2+1})+V2.get_value({m1+1,m2+1}))/2.0)/2.0/h2);
+            A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = (x = xmabs(V2.tilda ({m1,m2+1}))/2.0/h2);
           if (m1 < M1 - 1)
-            A[vect_to_mat (m1*M2+m2,(m1+1)*M2+m2)] = (y = xmabs((V1.get_value({m1+1,m2})+V1.get_value({m1+1,m2+1}))/2.0)/2.0/h1);
+            A[vect_to_mat (m1*M2+m2,(m1+1)*M2+m2)] = (y = xmabs(V1.tilda ({m1+1,m2}))/2.0/h1);
           if (m1 > 0)
-            A[vect_to_mat (m1*M2+m2,(m1-1)*M2+m2)] = (z = -xpabs((V1.get_value({m1,m2})+V1.get_value({m1,m2+1}))/2.0)/2.0/h1);
+            A[vect_to_mat (m1*M2+m2,(m1-1)*M2+m2)] = (z = -xpabs(V1.tilda ({m1,m2}))/2.0/h1);
           if (m2 > 0)
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = (w = -xpabs((V2.get_value({m1,m2})+V2.get_value({m1+1,m2}))/2.0)/2.0/h2);
+            A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = (w = -xpabs(V2.tilda ({m1,m2}))/2.0/h2);
 
           double a = 1.0/tau*H.get_value({m1,m2});
           double b = fillers::f_1 (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);

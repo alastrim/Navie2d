@@ -1,13 +1,14 @@
 #include "discrete_function.h"
 #include "grid.h"
 
-discrete_function::discrete_function (const grid *grid) : m_grid (grid)
+discrete_function::discrete_function (const grid *grid, std::string name) : m_grid (grid)
 {
   m_i_size = sbsc (m_grid->get_parameters ().m_x_step_count);
   m_j_size = sbsc (m_grid->get_parameters ().m_y_step_count);
 
   m_data.resize (m_i_size * m_j_size);
   fill ([] (point) { return 0; });
+  m_name = name;
 }
 
 void discrete_function::fill (continuous_function cf)
@@ -32,6 +33,20 @@ double discrete_function::get_value (index ij)
   assert (ij.second >= 0 && tou (ij.second) < m_j_size, "Bad argument for function get value");
 
   return m_data[tou (ij.first) * m_j_size + tou (ij.second)];
+}
+
+double discrete_function::tilda (index ij)
+{
+  if (m_name == "V1")
+    {
+      return (get_value (ij) + get_value ({ij.first, ij.second + 1})) / 2;
+    }
+  if (m_name == "V2")
+    {
+      return (get_value (ij) + get_value ({ij.first + 1, ij.second})) / 2;
+    }
+  assert (false, "Do not call tilda for anything other than V1 and V2");
+  return 0;
 }
 
 void discrete_function::do_for_each (discrete_foreach_function dff)
@@ -77,7 +92,8 @@ void discrete_function::do_for_edge (discrete_foreach_function dff)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-timed_discrete_function::timed_discrete_function (const grid *grid, const scale *scale) : m_grid (grid), m_scale (scale)
+timed_discrete_function::timed_discrete_function (const grid *grid, const scale *scale, std::string name)
+  : m_name (name), m_grid (grid), m_scale (scale)
 {
   m_k_size = sbsc (m_scale->get_parameters ().m_t_step_count);
 
@@ -89,7 +105,7 @@ void timed_discrete_function::fill (timed_continuous_function tcf)
 {
   do_for_each ([&tcf] (int k, double t, timed_discrete_function &self) {
       continuous_function cf = [&] (point xy) { return tcf (t, xy); };
-      std::unique_ptr<discrete_function> df = std::make_unique<discrete_function> (self.m_grid);
+      std::unique_ptr<discrete_function> df = std::make_unique<discrete_function> (self.m_grid, self.m_name);
       df->fill (cf);
       self.set_cut (k, std::move (df));
     });
