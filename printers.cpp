@@ -28,3 +28,8 @@ void print_to_gnuplot (timed_discrete_function &tdf, std::string name)
       print_to_gnuplot (df, filename);
     });
 }
+
+void print_residuals (timed_discrete_function &tdf, timed_discrete_function &tdf_real, std::string name)
+{
+  printf ("Residual for %s is: %e\n", name.c_str (), tdf.residual (tdf_real));
+}

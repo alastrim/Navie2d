@@ -19,6 +19,17 @@ void discrete_function::fill (continuous_function cf)
   });
 }
 
+double discrete_function::residual (const discrete_function &real)
+{
+  double max = 0;
+  do_for_each ([&max, &real] (index ij, point, discrete_function &self){
+      double diff = fabs (self.get_value (ij) - real.get_value (ij));
+      if (diff > max)
+        max = diff;
+  });
+  return max;
+}
+
 void discrete_function::set_value (index ij, double value)
 {
   assert (ij.first >= 0 && tou (ij.first) < m_i_size, "Bad argument for function set value");
@@ -27,7 +38,7 @@ void discrete_function::set_value (index ij, double value)
   m_data[tou (ij.first) * m_j_size + tou (ij.second)] = value;
 }
 
-double discrete_function::get_value (index ij)
+double discrete_function::get_value (index ij) const
 {
   assert (ij.first >= 0 && tou (ij.first) < m_i_size, "Bad argument for function get value");
   assert (ij.second >= 0 && tou (ij.second) < m_j_size, "Bad argument for function get value");
@@ -111,6 +122,17 @@ void timed_discrete_function::fill (timed_continuous_function tcf)
     });
 }
 
+double timed_discrete_function::residual (const timed_discrete_function &real)
+{
+  double max = 0;
+  do_for_each ([&max, &real] (int k, double, timed_discrete_function &self) {
+      double diff = self.get_cut (k).residual (real.get_cut (k));
+      if (diff > max)
+        max = diff;
+    });
+  return max;
+}
+
 void timed_discrete_function::set_cut (int k, std::unique_ptr<discrete_function> df)
 {
   assert (k >= 0 && tou (k) < m_k_size, "Bad argument for timed function cut");
@@ -120,6 +142,13 @@ void timed_discrete_function::set_cut (int k, std::unique_ptr<discrete_function>
 }
 
 discrete_function &timed_discrete_function::get_cut (int k)
+{
+  assert (k >= 0 && tou (k) < m_k_size, "Bad argument for timed function cut");
+
+  return *m_data[tou (k)];
+}
+
+const discrete_function &timed_discrete_function::get_cut (int k) const
 {
   assert (k >= 0 && tou (k) < m_k_size, "Bad argument for timed function cut");
 

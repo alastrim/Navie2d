@@ -1,13 +1,14 @@
-#pragma once
+﻿#pragma once
 #include "misc.h"
 
 class discrete_function
 {
 public:
   discrete_function (const grid *grid, std::string name);
+  double residual (const discrete_function &real);
   void fill (continuous_function cf);
   void set_value (index ij, double value);
-  double get_value (index ij);
+  double get_value (index ij) const;
   double tilda (index ij);
   const grid *get_grid () { return m_grid; }
   void do_for_each (discrete_foreach_function dff);
@@ -25,9 +26,11 @@ class timed_discrete_function
 {
 public:
   timed_discrete_function (const grid *grid, const scale *scale, std::string name);
+  double residual (const timed_discrete_function &real);
   void fill (timed_continuous_function tcf);
   void set_cut (int k, std::unique_ptr<discrete_function> df);
   discrete_function &get_cut (int k);
+  const discrete_function &get_cut (int k) const;
   const grid *get_grid () { return m_grid; }
   const scale *get_scale () { return m_scale; }
   void do_for_each (timed_discrete_foreach_function tdff);
