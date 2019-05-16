@@ -52,7 +52,6 @@ void matrix::set (std::vector<double> &src)
   m_size = static_cast<int> (sqrt (toi (m_container.size ())));
   bool check = (m_size * m_size == toi (m_container.size ()));
   assert (check, "Bad arguments for matrix constructor call");
-  m_non_zero_count = MAX_NON_ZERO;
   m_non_zero_count = m_size + 1;
 }
 
@@ -69,12 +68,10 @@ int matrix::size ()
 
 void matrix::print ()
 {
-  int max = std::min<int> (ELEMS_ON_SCREEN, m_size);
-
-  for (int i = 0; i < max; i++)
+  for (int i = 0; i < m_size; i++)
     {
-      for (int j = 0; j < max; j++)
-        printf ("%9.4f ", m_container[tou (i * m_size + j)]);
+      for (int j = 0; j < m_size; j++)
+        printf ("%f ", m_container[tou (i * m_size + j)]);
       printf ("\n");
     }
 }
@@ -147,10 +144,9 @@ int vector::size ()
 void vector::print ()
 {
   update_from_laspack ();
-  int max = std::min<int> (ELEMS_ON_SCREEN, m_size);
 
-  for (int i = 0; i < max; i++)
-      printf ("%9.4f ", m_container[tou (i)]);
+  for (int i = 0; i < m_size; i++)
+      printf ("%f ", m_container[tou (i)]);
   printf ("\n");
 }
 

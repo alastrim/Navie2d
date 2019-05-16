@@ -24,15 +24,13 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   discrete_function &H = essential.m_tdfH.get_cut (k);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
   discrete_function &V2 = essential.m_tdfV2.get_cut (k);
-  const grid *gr = essential.m_tdfV1.get_grid ();
-  const scale *sc = essential.m_tdfV1.get_scale ();
+  const grid *gr = essential.m_tdfH.get_grid ();
+  const scale *sc = essential.m_tdfH.get_scale ();
   grid_parameters g_parameters = gr->get_parameters ();
   scale_parameters s_parameters = sc->get_parameters ();
 
-  const grid *H_gr = essential.m_tdfH.get_grid ();
-
-  unsigned int M1 = tou (g_parameters.m_x_step_count);
-  unsigned int M2 = tou (g_parameters.m_y_step_count);
+  unsigned int M1 = tou (g_parameters.m_x_step_count) + 1;
+  unsigned int M2 = tou (g_parameters.m_y_step_count) + 1;
   unsigned int S = static_cast<unsigned int> (H.get_raw_vector ().size ());
   assert (S == M1 * M2, "Bad matrix size");
 
@@ -64,7 +62,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
             A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = (w = -xpabs(V2.tilda ({m1,m2}))/2.0/h2);
 
           double a = 1.0/tau*H.get_value({m1,m2});
-          double b = fillers::f_1 (sc->get_time (k+1), H_gr->get_point ({m1,m2}).first, H_gr->get_point ({m1,m2}).second);
+          double b = fillers::f_1 (sc->get_time (k+1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
           B[m1*M2+m2] = a + b;
         }
     }

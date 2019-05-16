@@ -34,7 +34,7 @@ int main (int argc, char **argv)
   print_to_gnuplot (real_tdfV2, "realV2");
 
   print_residuals (tdfH, real_tdfH, "H");
-  print_residuals (tdfV1, real_tdfV2, "V1");
+  print_residuals (tdfV1, real_tdfV1, "V1");
   print_residuals (tdfV2, real_tdfV2, "V2");
 
   return 0;

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     12544,        337]
-NotebookOptionsPosition[     11297,        309]
-NotebookOutlinePosition[     11635,        324]
-CellTagsIndexPosition[     11592,        321]
+NotebookDataLength[     12690,        340]
+NotebookOptionsPosition[     11443,        312]
+NotebookOutlinePosition[     11782,        327]
+CellTagsIndexPosition[     11739,        324]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -99,21 +99,21 @@ Cell[BoxData[{"\"\<dr/dt + dru1/dx1 + dru2/dx2:\>\"", "\[IndentingNewLine]",
 06e2cc581189"],
 
 Cell[BoxData["\<\"dr/dt + dru1/dx1 + dru2/dx2:\"\>"], "Output",
- CellChangeTimes->{{3.76684585242308*^9, 
-  3.7668458790551767`*^9}},ExpressionUUID->"b6fb7dcb-a7ec-4f8f-b1d9-\
-0c7c7ecbd16e"],
+ CellChangeTimes->{{3.76684585242308*^9, 3.7668458790551767`*^9}, 
+   3.766897051241678*^9},ExpressionUUID->"8c0d81c4-45fe-4b17-ac8b-\
+97a54c356fe3"],
 
 Cell["\<\
-2*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*Sin(2*Pi*x)*Sin(2*Pi*y) + 
-   Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)) + 
-   2*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y)) + 
+2*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*Sin(2*Pi*x)*Sin(2*Pi*y) + \
+Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)) + 2*Pi*(1.5 + \
+Cos(2*Pi*x))*Cos(2*Pi*y)*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y)) + 
    2*Power(E,2*t)*Pi*Cos(2*Pi*x)*(1.5 + Cos(2*Pi*x))*Sin(2*Pi*y)*(1.5 + \
-Sin(2*Pi*y)) - 
-   2*Power(E,2*t)*Pi*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y)*(1.5 + Sin(2*Pi*y))\
+Sin(2*Pi*y)) - 2*Power(E,2*t)*Pi*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y)*(1.5 + \
+Sin(2*Pi*y))\
 \>", "Output",
- CellChangeTimes->{{3.76684585242308*^9, 
-  3.766845879056673*^9}},ExpressionUUID->"4b8c1fbc-d5c3-4698-9edf-\
-82c7f3ac57e3"]
+ CellChangeTimes->{{3.76684585242308*^9, 3.7668458790551767`*^9}, 
+   3.766897051243718*^9},ExpressionUUID->"4b04cb71-f883-47bd-a285-\
+9c4f403bf2c2"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -194,24 +194,24 @@ ea08ca3405ee"],
 
 Cell[BoxData["\<\"(r(du1/dt+u1*du1/dx1+u2*du1/dx2)+dp/dx1-MIU*(4/3*d2u1/dx1x1+\
 d2u1/dx2x2+1/3*d2u2/dx1dx2)/r)\"\>"], "Output",
- CellChangeTimes->{
-  3.7668458829599943`*^9},ExpressionUUID->"01c471df-99f0-4cac-95cc-\
-bfe8979e8d84"],
+ CellChangeTimes->{3.7668458829599943`*^9, 
+  3.766897055225972*^9},ExpressionUUID->"25b36c67-9816-4d9c-b8c7-\
+a0da9f7a541f"],
 
 Cell["\<\
-(-2*Power(E,t)*GAMMA*Pi*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y))*
-      Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA) - 
-     MIU*((4*Power(Pi,2)*Cos(2*Pi*x)*Cos(2*Pi*y))/(3.*Power(E,t)) - 
-        (28*Power(E,t)*Power(Pi,2)*Sin(2*Pi*x)*Sin(2*Pi*y))/3.) + 
-     Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y))*
-      (Power(E,t)*Sin(2*Pi*x)*Sin(2*Pi*y) + \
+(-2*Power(E,t)*GAMMA*Pi*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y))*Power(Power(E,t)*(1.5 \
++ Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA) - 
+     MIU*((4*Power(Pi,2)*Cos(2*Pi*x)*Cos(2*Pi*y))/(3.*Power(E,t)) - \
+(28*Power(E,t)*Power(Pi,2)*Sin(2*Pi*x)*Sin(2*Pi*y))/3.) + 
+     Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + \
+Sin(2*Pi*y))*(Power(E,t)*Sin(2*Pi*x)*Sin(2*Pi*y) + \
 2*Pi*Cos(2*Pi*y)*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y) + 
-        2*Power(E,2*t)*Pi*Cos(2*Pi*x)*Sin(2*Pi*x)*Power(Sin(2*Pi*y),2)))/
-   (Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)))\
+        2*Power(E,2*t)*Pi*Cos(2*Pi*x)*Sin(2*Pi*x)*Power(Sin(2*Pi*y),2)))/(\
+Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)))\
 \>", "Output",
- CellChangeTimes->{
-  3.766845882961197*^9},ExpressionUUID->"fd190427-4a04-4b2b-a35b-\
-a3166e435c3a"]
+ CellChangeTimes->{3.7668458829599943`*^9, 
+  3.7668970552277308`*^9},ExpressionUUID->"324d113f-24c5-46c7-9c81-\
+505a6dbfbdbc"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -289,26 +289,29 @@ Cell[BoxData[
 Cell[BoxData["\<\"(r(du2/dt+u1*du2/dx1+u2*du2/dx2)+dp/dx2-MIU*(1/3*d2u1/dx1x2+\
 d2u2/dx1x1+4/3*d2u2/dx2dx2)/r)\"\>"], "Output",
  CellChangeTimes->{
-  3.76684588577906*^9},ExpressionUUID->"0caf879d-238c-4e9a-be66-095060ff88bc"],
+  3.76684588577906*^9, {3.76689704176457*^9, 
+   3.766897058171959*^9}},ExpressionUUID->"9a89f2ab-aa2b-4876-a42a-\
+94f00dc5fb6d"],
 
 Cell["\<\
-(2*Power(E,t)*GAMMA*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*
-      Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA) - 
-     MIU*((4*Power(E,t)*Power(Pi,2)*Cos(2*Pi*x)*Cos(2*Pi*y))/3. - 
-        (28*Power(Pi,2)*Sin(2*Pi*x)*Sin(2*Pi*y))/(3.*Power(E,t))) + 
-     Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y))*
-      (-((Sin(2*Pi*x)*Sin(2*Pi*y))/Power(E,t)) + 
-        (2*Pi*Cos(2*Pi*y)*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y))/Power(E,2*t) + 
+(2*Power(E,t)*GAMMA*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*Power(Power(E,t)*(1.5 \
++ Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA) - 
+     MIU*((4*Power(E,t)*Power(Pi,2)*Cos(2*Pi*x)*Cos(2*Pi*y))/3. - \
+(28*Power(Pi,2)*Sin(2*Pi*x)*Sin(2*Pi*y))/(3.*Power(E,t))) + 
+     Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + \
+Sin(2*Pi*y))*(-((Sin(2*Pi*x)*Sin(2*Pi*y))/Power(E,t)) + \
+(2*Pi*Cos(2*Pi*y)*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y))/Power(E,2*t) + 
         2*Pi*Cos(2*Pi*x)*Sin(2*Pi*x)*Power(Sin(2*Pi*y),2)))/(Power(E,t)*(1.5 \
 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)))\
 \>", "Output",
  CellChangeTimes->{
-  3.766845885780198*^9},ExpressionUUID->"01ac7775-91b3-47e8-b8b8-\
-66ac39a29d1e"]
+  3.76684588577906*^9, {3.76689704176457*^9, 
+   3.766897058187755*^9}},ExpressionUUID->"b35e0ae7-d46a-45c8-9c6f-\
+2a5d72a8fad6"]
 }, Open  ]]
 },
-WindowSize->{891, 911},
-WindowMargins->{{0, Automatic}, {Automatic, 30}},
+WindowSize->{1853, 1025},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
 FrontEndVersion->"11.2 for Linux x86 (64-bit) (September 10, 2017)",
 StyleDefinitions->"Default.nb"
 ]
@@ -326,18 +329,18 @@ Notebook[{
 Cell[558, 20, 1818, 49, 193, "Input",ExpressionUUID->"bf227f1b-b6e1-4636-837b-5777f3d42875"],
 Cell[CellGroupData[{
 Cell[2401, 73, 898, 25, 55, "Input",ExpressionUUID->"0dfa363f-b458-4ffd-8c78-06e2cc581189"],
-Cell[3302, 100, 190, 3, 35, "Output",ExpressionUUID->"b6fb7dcb-a7ec-4f8f-b1d9-0c7c7ecbd16e"],
-Cell[3495, 105, 510, 10, 126, "Output",ExpressionUUID->"4b8c1fbc-d5c3-4698-9edf-82c7f3ac57e3"]
+Cell[3302, 100, 213, 3, 35, "Output",ExpressionUUID->"8c0d81c4-45fe-4b17-ac8b-97a54c356fe3"],
+Cell[3518, 105, 529, 10, 69, "Output",ExpressionUUID->"4b04cb71-f883-47bd-a285-9c4f403bf2c2"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4042, 120, 2776, 72, 239, "Input",ExpressionUUID->"04c303f3-65f0-44b3-9fde-ea08ca3405ee"],
-Cell[6821, 194, 231, 4, 35, "Output",ExpressionUUID->"01c471df-99f0-4cac-95cc-bfe8979e8d84"],
-Cell[7055, 200, 684, 13, 183, "Output",ExpressionUUID->"fd190427-4a04-4b2b-a35b-a3166e435c3a"]
+Cell[4084, 120, 2776, 72, 239, "Input",ExpressionUUID->"04c303f3-65f0-44b3-9fde-ea08ca3405ee"],
+Cell[6863, 194, 253, 4, 35, "Output",ExpressionUUID->"25b36c67-9816-4d9c-b8c7-a0da9f7a541f"],
+Cell[7119, 200, 691, 13, 107, "Output",ExpressionUUID->"324d113f-24c5-46c7-9c81-505a6dbfbdbc"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[7776, 218, 2578, 68, 285, "Input",ExpressionUUID->"f1f49eab-ce4c-4f8c-9417-61cba5331588"],
-Cell[10357, 288, 226, 3, 35, "Output",ExpressionUUID->"0caf879d-238c-4e9a-be66-095060ff88bc"],
-Cell[10586, 293, 695, 13, 183, "Output",ExpressionUUID->"01ac7775-91b3-47e8-b8b8-66ac39a29d1e"]
+Cell[7847, 218, 2578, 68, 285, "Input",ExpressionUUID->"f1f49eab-ce4c-4f8c-9417-61cba5331588"],
+Cell[10428, 288, 277, 5, 35, "Output",ExpressionUUID->"9a89f2ab-aa2b-4876-a42a-94f00dc5fb6d"],
+Cell[10708, 295, 719, 14, 107, "Output",ExpressionUUID->"b35e0ae7-d46a-45c8-9c6f-2a5d72a8fad6"]
 }, Open  ]]
 }
 ]
