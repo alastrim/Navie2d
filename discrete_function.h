@@ -9,7 +9,13 @@ public:
   void fill (continuous_function cf);
   void set_value (index ij, double value);
   double get_value (index ij) const;
-  double tilda (index ij);
+  double val (unsigned int i, unsigned int j) const { return get_value ({i, j}); }
+  double tilda (unsigned int i, unsigned int j) const { return tilda ({i, j}); }
+  double left (unsigned int i, unsigned int j) const { return left ({i, j}); }
+  double right (unsigned int i, unsigned int j) const { return right ({i, j}); }
+  double tilda (index ij) const;
+  double left (index ij) const;
+  double right (index ij) const;
   const grid *get_grid () { return m_grid; }
   void do_for_each (discrete_foreach_function dff);
   void do_for_edge (discrete_foreach_function dff);

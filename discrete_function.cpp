@@ -46,7 +46,19 @@ double discrete_function::get_value (index ij) const
   return m_data[tou (ij.first) * m_j_size + tou (ij.second)];
 }
 
-double discrete_function::tilda (index ij)
+double discrete_function::left (index ij) const
+{
+  assert (m_name == "H", "Do not call left/right for anything other than H");
+  return (get_value (ij) + get_value ({ij.first, ij.second - 1})) / 2;
+}
+
+double discrete_function::right (index ij) const
+{
+  assert (m_name == "H", "Do not call left/right for anything other than H");
+  return (get_value (ij) + get_value ({ij.first - 1, ij.second})) / 2;
+}
+
+double discrete_function::tilda (index ij) const
 {
   if (m_name == "V1")
     {

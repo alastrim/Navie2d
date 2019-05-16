@@ -47,23 +47,22 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
-          double x, y, z, w;
-          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0/tau
-                                               +(xpabs(V1.tilda({m1+1,m2}))-xmabs(V1.tilda({m1,m2})))/2.0/h1
-                                               +(xpabs(V2.tilda({m1,m2+1}))-xmabs(V2.tilda({m1,m2})))/2.0/h2;
+          double t = sc->get_time (k + 1), x = gr->get_point ({m1,m2}).first, y = gr->get_point ({m1,m2}).second;
 
-          if (m2 < M2 - 1)
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = (x = xmabs(V2.tilda ({m1,m2+1}))/2.0/h2);
-          if (m1 < M1 - 1)
-            A[vect_to_mat (m1*M2+m2,(m1+1)*M2+m2)] = (y = xmabs(V1.tilda ({m1+1,m2}))/2.0/h1);
-          if (m1 > 0)
-            A[vect_to_mat (m1*M2+m2,(m1-1)*M2+m2)] = (z = -xpabs(V1.tilda ({m1,m2}))/2.0/h1);
-          if (m2 > 0)
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = (w = -xpabs(V2.tilda ({m1,m2}))/2.0/h2);
+          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.
+                                               +tau*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))/2.0/h1
+                                               +tau*(xpabs(V2.tilda(m1,m2+1))-xmabs(V2.tilda(m1,m2)))/2.0/h2;
 
-          double a = 1.0/tau*H.get_value({m1,m2});
-          double b = fillers::f_1 (sc->get_time (k+1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
-          B[m1*M2+m2] = a + b;
+          if (m2<M2-1)
+            A[vect_to_mat(m1*M2+m2,m1*M2+m2+1)]=tau*xmabs(V2.tilda (m1,m2+1))/2.0/h2;
+          if (m1<M1-1)
+            A[vect_to_mat(m1*M2+m2,(m1+1)*M2+m2)]=tau*xmabs(V1.tilda (m1+1,m2))/2.0/h1;
+          if (m1>0)
+            A[vect_to_mat(m1*M2+m2,(m1-1)*M2+m2)]=-tau*xpabs(V1.tilda (m1,m2))/2.0/h1;
+          if (m2>0)
+            A[vect_to_mat(m1*M2+m2,m1*M2+m2-1)]=-tau*xpabs(V2.tilda (m1,m2))/2.0/h2;
+
+          B[m1*M2+m2]=H.val(m1,m2)+tau*f_1(t,x,y);
         }
     }
 }
@@ -96,47 +95,41 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
+          double t = sc->get_time (k + 1), x = gr->get_point ({m1,m2}).first, y = gr->get_point ({m1,m2}).second;
+
           if (m1 == 0 || m2 == 0 || m1 == (M1 - 1) || m2 == (M2 - 1))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
+              B[m1*M2+m2] = 0.0;
               continue;
             }
 
-          double check = (H.get_value ({m1,m2})+H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/4.0;
+          double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
           if (!fuzzycmp (check))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
+              B[m1*M2+m2] = 0.0;
               continue;
             }
 
-          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = check/tau
-                                               +check*(+fabs(V1.get_value ({m1,m2}))/h1
-                                                       +fabs(V2.get_value ({m1,m2}))/h2)
-                                               +MIU*4.0/3.0*2.0/h1/h1 + MIU*1.0*2.0/h2/h2;
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = +check*xmabs(V2.get_value ({m1,m2}))/2.0/h2
-                                                   -MIU*1.0/h2/h2;
-            A[vect_to_mat (m1*M2+m2,(m1+1)*M2+m2)] = +check*xmabs(V1.get_value ({m1,m2}))/2.0/h1
-                                                     -MIU*4.0/3.0/h1/h1;
-            A[vect_to_mat (m1*M2+m2,(m1-1)*M2+m2)] = -check*xpabs(V1.get_value ({m1,m2}))/2.0/h1
-                                                     -MIU*4.0/3.0/h1/h1;
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = -check*xpabs(V2.get_value ({m1,m2}))/2.0/h2
-                                                   -MIU*1.0/h2/h2;
+          A[vect_to_mat(m1*M2+m2,m1*M2+m2)]=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
+                                            +tau*MIU*(8./3./h1/h1+2./h2/h2);
 
-          double a = check/tau*V1.get_value ({m1,m2});
-          double b1 = (H.get_value ({m1,m2})+H.get_value ({m1,m2-1}))/2.0;
-          double b2 = (H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/2.0;
-          double b = -1.0/h1*(
-                       +pow(b1,GAMMA)
-                       -pow(b2,GAMMA));
-          double c = MIU/3.0/4.0/h1/h2*(
-                       +V2.get_value ({m1-1,m2-1})
-                       -V2.get_value ({m1-1,m2+1})
-                       -V2.get_value ({m1+1,m2-1})
-                       +V2.get_value ({m1+1,m2+1}));
-          double d = check * fillers::f_2 (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
-          B[m1*M2+m2] = a + b + c + d;
+          A[vect_to_mat(m1*M2+m2,(m1-1)*M2+m2)]=-tau/2./h1*xpabs(V1.val(m1,m2))*check
+                                                -4./3.*tau*MIU/h1/h1;
+
+          A[vect_to_mat(m1*M2+m2,(m1+1)*M2+m2)]=tau/2./h1*xmabs(V1.val(m1,m2))*check
+                                                -4./3.*tau*MIU/h1/h1;
+
+          A[vect_to_mat(m1*M2+m2,m1*M2+m2-1)]=-tau/2./h2*xpabs(V2.val(m1,m2))*check
+                                              -tau*MIU/h2/h2;
+
+          A[vect_to_mat(m1*M2+m2,m1*M2+m2+1)]=tau/2./h2*xmabs(V2.val(m1,m2))*check
+                                              -tau*MIU/h2/h2;
+
+          B[m1*M2+m2]=check*V1.val(m1,m2)-tau/h1*(p(H.left(m1,m2))-p(H.left(m1-1,m2)))
+                      +tau*MIU/12./h1/h2*(V2.val(m1+1,m2+1)-V2.val(m1+1,m2-1)-V2.val(m1-1,m2+1)+V2.val(m1-1,m2-1))
+                      +tau*f_2(t,x,y)*check;
         }
     }
 }
@@ -169,47 +162,41 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
+          double t = sc->get_time (k + 1), x = gr->get_point ({m1,m2}).first, y = gr->get_point ({m1,m2}).second;
+
           if (m1 == 0 || m2 == 0 || m1 == (M1 - 1) || m2 == (M2 - 1))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
+              B[m1*M2+m2] = 0.0;
               continue;
             }
 
-          double check = (H.get_value ({m1,m2})+H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2})+H.get_value ({m1-1,m2-1}))/4.0;
+          double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
           if (!fuzzycmp (check))
             {
               A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[vect_to_mat (0,m1*M2+m2)] = 0.0;
+              B[m1*M2+m2] = 0.0;
               continue;
             }
 
-          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = check/tau
-                                               +check*(+fabs(V1.get_value ({m1,m2}))/h1
-                                                       +fabs(V2.get_value ({m1,m2}))/h2)
-                                               +MIU*1.0*2.0/h1/h1 + MIU*4.0/3.0*2.0/h2/h2;
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2+1)] = +check*xmabs(V2.get_value ({m1,m2}))/2.0/h2
-                                                   -MIU*4.0/3.0/h2/h2;
-            A[vect_to_mat (m1*M2+m2,(m1+1)*M2+m2)] = +check*xmabs(V1.get_value ({m1,m2}))/2.0/h1
-                                                     -MIU*1.0/h2/h2;
-            A[vect_to_mat (m1*M2+m2,(m1-1)*M2+m2)] = -check*xpabs(V1.get_value ({m1,m2}))/2.0/h1
-                                                     -MIU*1.0/h1/h1;
-            A[vect_to_mat (m1*M2+m2,m1*M2+m2-1)] = -check*xpabs(V2.get_value ({m1,m2}))/2.0/h2
-                                                   -MIU*4.0/3.0/h2/h2;
+          A[vect_to_mat(m1*M2+m2,m1*M2+m2)]=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
+                                            +tau*MIU*(8./3./h1/h1+2./h2/h2);
 
-          double a = check/tau*V2.get_value ({m1,m2});
-          double b1 = (H.get_value ({m1,m2})+H.get_value ({m1-1,m2}))/2.0;
-          double b2 = (H.get_value ({m1,m2-1})+H.get_value ({m1-1,m2-1}))/2.0;
-          double b = -1.0/h2*(
-                       +pow(b1,GAMMA)
-                       -pow(b2,GAMMA));
-          double c = MIU/3.0/4.0/h1/h2*(
-                       +V1.get_value ({m1-1,m2-1})
-                       -V1.get_value ({m1-1,m2+1})
-                       -V1.get_value ({m1+1,m2-1})
-                       +V1.get_value ({m1+1,m2+1}));
-          double d = check * fillers::f_3 (sc->get_time (k + 1), gr->get_point ({m1,m2}).first, gr->get_point ({m1,m2}).second);
-          B[m1*M2+m2] = a + b + c + d;
+          A[vect_to_mat(m1*M2+m2,(m1-1)*M2+m2)]=tau/2./h2*xmabs(V2.val(m1,m2))*check
+                                                -tau*MIU/h2/h2;
+
+          A[vect_to_mat(m1*M2+m2,(m1+1)*M2+m2)]=-tau/2./h2*xmabs(V2.val(m1,m2))*check
+                                                -tau*MIU/h2/h2;
+
+          A[vect_to_mat(m1*M2+m2,m1*M2+m2-1)]=tau/2./h1*xmabs(V1.val(m1,m2))*check
+                                              -4./3.*tau*MIU/h1/h1;
+
+          A[vect_to_mat(m1*M2+m2,m1*M2+m2+1)]=-tau/2./h1*xpabs(V1.val(m1,m2))*check
+                                              -4./3.*tau*MIU/h1/h1;
+
+          B[m1*M2+m2]=check*V2.val(m1,m2)-tau/h2*(p(H.right(m1,m2))-p(H.right(m1,m2-1)))
+                      +tau*MIU/12./h1/h2*(V1.val(m1+1,m2+1)-V1.val(m1+1,m2-1)-V1.val(m1-1,m2+1)+V1.val(m1-1,m2-1))
+                      +tau*f_3(t,x,y)*check;
         }
     }
 }

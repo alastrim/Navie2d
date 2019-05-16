@@ -151,6 +151,6 @@ do for [i=0:t_step_count] {
 
 EOF
 
-#eog V1.gif &
-#eog V2.gif &
+eog V1.gif &
+eog V2.gif &
 eog H.gif &

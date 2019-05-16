@@ -27,7 +27,10 @@ double r (double t, double x, double y)
 {
   return (cos (2.0 * M_PI * x) + 3.0/2.0) * (sin (2.0 * M_PI * y) + 3.0/2.0) * exp (t);
 }
-
+double p (double r)
+{
+  return pow (r, GAMMA);
+}
 
 
 
