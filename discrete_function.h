@@ -9,10 +9,10 @@ public:
   void fill (continuous_function cf);
   void set_value (index ij, double value);
   double get_value (index ij) const;
-  double val (unsigned int i, unsigned int j) const { return get_value ({i, j}); }
-  double tilda (unsigned int i, unsigned int j) const { return tilda ({i, j}); }
-  double left (unsigned int i, unsigned int j) const { return left ({i, j}); }
-  double right (unsigned int i, unsigned int j) const { return right ({i, j}); }
+  double val (int i, int j) const { return get_value ({i, j}); }
+  double tilda (int i, int j) const { return tilda ({i, j}); }
+  double left (int i, int j) const { return left ({i, j}); }
+  double right (int i, int j) const { return right ({i, j}); }
   double tilda (index ij) const;
   double left (index ij) const;
   double right (index ij) const;

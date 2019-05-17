@@ -40,8 +40,10 @@ void discrete_function::set_value (index ij, double value)
 
 double discrete_function::get_value (index ij) const
 {
-  assert (ij.first >= 0 && tou (ij.first) < m_i_size, "Bad argument for function get value");
-  assert (ij.second >= 0 && tou (ij.second) < m_j_size, "Bad argument for function get value");
+  if (ij.first < 0 || tou (ij.first) >= m_i_size)
+    return 0;
+  if (ij.second < 0 || tou (ij.second) >= m_j_size)
+    return 0;
 
   return m_data[tou (ij.first) * m_j_size + tou (ij.second)];
 }
