@@ -47,22 +47,23 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
+          unsigned int i = m1 * M2 + m2;
           double t = sc->get_time (k + 1), x = gr->get_point ({m1,m2}).first, y = gr->get_point ({m1,m2}).second;
 
-          A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.
-                                               +tau*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))/2.0/h1
-                                               +tau*(xpabs(V2.tilda(m1,m2+1))-xmabs(V2.tilda(m1,m2)))/2.0/h2;
+          A[vect_to_mat (i,i)] = 1.
+                                 +tau*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))/2.0/h1
+                                 +tau*(xpabs(V2.tilda(m1,m2+1))-xmabs(V2.tilda(m1,m2)))/2.0/h2;
 
           if (m2<M2-1)
-            A[vect_to_mat(m1*M2+m2,m1*M2+m2+1)]=tau*xmabs(V2.tilda (m1,m2+1))/2.0/h2;
+            A[vect_to_mat(i,m1*M2+m2+1)]=tau*xmabs(V2.tilda (m1,m2+1))/2.0/h2;
           if (m1<M1-1)
-            A[vect_to_mat(m1*M2+m2,(m1+1)*M2+m2)]=tau*xmabs(V1.tilda (m1+1,m2))/2.0/h1;
+            A[vect_to_mat(i,(m1+1)*M2+m2)]=tau*xmabs(V1.tilda (m1+1,m2))/2.0/h1;
           if (m1>0)
-            A[vect_to_mat(m1*M2+m2,(m1-1)*M2+m2)]=-tau*xpabs(V1.tilda (m1,m2))/2.0/h1;
+            A[vect_to_mat(i,(m1-1)*M2+m2)]=-tau*xpabs(V1.tilda (m1,m2))/2.0/h1;
           if (m2>0)
-            A[vect_to_mat(m1*M2+m2,m1*M2+m2-1)]=-tau*xpabs(V2.tilda (m1,m2))/2.0/h2;
+            A[vect_to_mat(i,m1*M2+m2-1)]=-tau*xpabs(V2.tilda (m1,m2))/2.0/h2;
 
-          B[m1*M2+m2]=H.val(m1,m2)+tau*f_1(t,x,y);
+          B[i]=H.val(m1,m2)+tau*f_1(t,x,y);
         }
     }
 }
@@ -95,41 +96,42 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
+          unsigned int i = m1 * M2 + m2;
           double t = sc->get_time (k + 1), x = gr->get_point ({m1,m2}).first, y = gr->get_point ({m1,m2}).second;
 
           if (m1 == 0 || m2 == 0 || m1 == (M1 - 1) || m2 == (M2 - 1))
             {
-              A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[m1*M2+m2] = 0.0;
+              A[vect_to_mat (i,i)] = 1.0;
+              B[i] = 0.0;
               continue;
             }
 
           double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
           if (!fuzzycmp (check))
             {
-              A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[m1*M2+m2] = 0.0;
+              A[vect_to_mat (i,i)] = 1.0;
+              B[i] = 0.0;
               continue;
             }
 
-          A[vect_to_mat(m1*M2+m2,m1*M2+m2)]=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
-                                            +tau*MIU*(8./3./h1/h1+2./h2/h2);
+          A[vect_to_mat(i,i)]=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
+                              +tau*MIU*(8./3./h1/h1+2./h2/h2);
 
-          A[vect_to_mat(m1*M2+m2,(m1-1)*M2+m2)]=-tau/2./h1*xpabs(V1.val(m1,m2))*check
-                                                -4./3.*tau*MIU/h1/h1;
+          A[vect_to_mat(i,(m1-1)*M2+m2)]=-tau/2./h1*xpabs(V1.val(m1,m2))*check
+                                         -4./3.*tau*MIU/h1/h1;
 
-          A[vect_to_mat(m1*M2+m2,(m1+1)*M2+m2)]=tau/2./h1*xmabs(V1.val(m1,m2))*check
-                                                -4./3.*tau*MIU/h1/h1;
+          A[vect_to_mat(i,(m1+1)*M2+m2)]=tau/2./h1*xmabs(V1.val(m1,m2))*check
+                                         -4./3.*tau*MIU/h1/h1;
 
-          A[vect_to_mat(m1*M2+m2,m1*M2+m2-1)]=-tau/2./h2*xpabs(V2.val(m1,m2))*check
-                                              -tau*MIU/h2/h2;
+          A[vect_to_mat(i,m1*M2+m2-1)]=-tau/2./h2*xpabs(V2.val(m1,m2))*check
+                                       -tau*MIU/h2/h2;
 
-          A[vect_to_mat(m1*M2+m2,m1*M2+m2+1)]=tau/2./h2*xmabs(V2.val(m1,m2))*check
-                                              -tau*MIU/h2/h2;
+          A[vect_to_mat(i,m1*M2+m2+1)]=tau/2./h2*xmabs(V2.val(m1,m2))*check
+                                       -tau*MIU/h2/h2;
 
-          B[m1*M2+m2]=check*V1.val(m1,m2)-tau/h1*(p(H.left(m1,m2))-p(H.left(m1-1,m2)))
-                      +tau*MIU/12./h1/h2*(V2.val(m1+1,m2+1)-V2.val(m1+1,m2-1)-V2.val(m1-1,m2+1)+V2.val(m1-1,m2-1))
-                      +tau*f_2(t,x,y)*check;
+          B[i]=check*V1.val(m1,m2)-tau/h1*(p(H.left(m1,m2))-p(H.left(m1-1,m2)))
+               +tau*MIU/12./h1/h2*(V2.val(m1+1,m2+1)-V2.val(m1+1,m2-1)-V2.val(m1-1,m2+1)+V2.val(m1-1,m2-1))
+               +tau*f_2(t,x,y)*check;
         }
     }
 }
@@ -162,41 +164,43 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     {
       for (unsigned int m2 = 0; m2 < M2; m2++)
         {
+          unsigned int i = m1 * M2 + m2;
           double t = sc->get_time (k + 1), x = gr->get_point ({m1,m2}).first, y = gr->get_point ({m1,m2}).second;
 
           if (m1 == 0 || m2 == 0 || m1 == (M1 - 1) || m2 == (M2 - 1))
             {
-              A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[m1*M2+m2] = 0.0;
+              A[vect_to_mat (i,i)] = 1.0;
+              B[i] = 0.0;
               continue;
             }
 
           double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
           if (!fuzzycmp (check))
             {
-              A[vect_to_mat (m1*M2+m2,m1*M2+m2)] = 1.0;
-              B[m1*M2+m2] = 0.0;
+              A[vect_to_mat (i,i)] = 1.0;
+              B[i] = 0.0;
               continue;
             }
 
-          A[vect_to_mat(m1*M2+m2,m1*M2+m2)]=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
-                                            +tau*MIU*(8./3./h1/h1+2./h2/h2);
+          A[vect_to_mat(i,i)]=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
+                              +tau*MIU*(2./h1/h1+8./3./h2/h2);
 
-          A[vect_to_mat(m1*M2+m2,(m1-1)*M2+m2)]=tau/2./h2*xmabs(V2.val(m1,m2))*check
-                                                -tau*MIU/h2/h2;
+          A[vect_to_mat(i,(m1-1)*M2+m2)]=-tau/2./h1*xpabs(V1.val(m1,m2))*check
+                                         -tau*MIU/h1/h1;
 
-          A[vect_to_mat(m1*M2+m2,(m1+1)*M2+m2)]=-tau/2./h2*xmabs(V2.val(m1,m2))*check
-                                                -tau*MIU/h2/h2;
+          A[vect_to_mat(i,(m1+1)*M2+m2)]=tau/2./h1*xmabs(V1.val(m1,m2))*check
+                                         -tau*MIU/h1/h1;
 
-          A[vect_to_mat(m1*M2+m2,m1*M2+m2-1)]=tau/2./h1*xmabs(V1.val(m1,m2))*check
-                                              -4./3.*tau*MIU/h1/h1;
+          A[vect_to_mat(i,m1*M2+m2-1)]=-tau/2./h2*xpabs(V2.val(m1,m2))*check
+                                       -4./3.*tau*MIU/h2/h2;
 
-          A[vect_to_mat(m1*M2+m2,m1*M2+m2+1)]=-tau/2./h1*xpabs(V1.val(m1,m2))*check
-                                              -4./3.*tau*MIU/h1/h1;
+          A[vect_to_mat(i,m1*M2+m2+1)]=tau/2./h2*xmabs(V2.val(m1,m2))*check
+                                       -4./3.*tau*MIU/h2/h2;
 
-          B[m1*M2+m2]=check*V2.val(m1,m2)-tau/h2*(p(H.right(m1,m2))-p(H.right(m1,m2-1)))
-                      +tau*MIU/12./h1/h2*(V1.val(m1+1,m2+1)-V1.val(m1+1,m2-1)-V1.val(m1-1,m2+1)+V1.val(m1-1,m2-1))
-                      +tau*f_3(t,x,y)*check;
+
+          B[i]=check*V2.val(m1,m2)-tau/h2*(p(H.right(m1,m2))-p(H.right(m1,m2-1)))
+               +tau*MIU/12./h1/h2*(V1.val(m1+1,m2+1)-V1.val(m1+1,m2-1)-V1.val(m1-1,m2+1)+V1.val(m1-1,m2-1))
+               +tau*f_3(t,x,y)*check;
         }
     }
 }

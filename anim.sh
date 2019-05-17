@@ -58,7 +58,7 @@ do for [i=0:t_step_count] {
     set dgrid3d grid_row_count,grid_column_count
     set xrange[x_start:x_end]
     set yrange[y_start:y_end]
-    set zrange[-5:15]
+    set zrange[-5:18]
     set xlabel "x"
     set ylabel "y"
     set zlabel "z"

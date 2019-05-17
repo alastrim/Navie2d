@@ -30,10 +30,9 @@ extern "C"
 #include <functional>
 #include <memory>
 
-#define MIN_FOR_DIVISION 1e-16
-#define MIN_FOR_COMPARISON 1e-16
-#define EPS_FOR_SOLVING 1e-5
-#define MAXITER 1000
+#define MIN_FOR_COMPARISON 1e-14
+#define EPS_FOR_SOLVING 1e-8
+#define MAXITER 2000
 #define GAMMA 1.4
 #define MIU 0.1
 #define DEBUG 0
