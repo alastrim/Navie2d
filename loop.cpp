@@ -10,8 +10,8 @@ void time_loop (trio &essential, trio &real)
 {
   essential.m_tdfH.do_for_each ([&essential, &real] (int k, double, timed_discrete_function &)
   {
-      printf ("Looping step %d of %d\n", k, essential.m_tdfH.get_scale ()->get_parameters ().m_t_step_count);
-      if (k == essential.m_tdfH.get_scale ()->get_parameters ().m_t_step_count)
+      printf ("Looping step %d of %d\n", k, essential.m_tdfH.get_scale ()->get_parameters ().m_t_point_count - 1);
+      if (k == essential.m_tdfH.get_scale ()->get_parameters ().m_t_point_count - 1)
         return;
 
       {

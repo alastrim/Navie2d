@@ -3,8 +3,8 @@
 
 discrete_function::discrete_function (const grid *grid, std::string name) : m_grid (grid)
 {
-  m_i_size = sbsc (m_grid->get_parameters ().m_x_step_count);
-  m_j_size = sbsc (m_grid->get_parameters ().m_y_step_count);
+  m_i_size = tou (m_grid->get_parameters ().m_x_point_count);
+  m_j_size = tou (m_grid->get_parameters ().m_y_point_count);
 
   m_data.resize (m_i_size * m_j_size);
   fill ([] (point) { return 0; });
@@ -120,7 +120,7 @@ void discrete_function::do_for_edge (discrete_foreach_function dff)
 timed_discrete_function::timed_discrete_function (const grid *grid, const scale *scale, std::string name)
   : m_name (name), m_grid (grid), m_scale (scale)
 {
-  m_k_size = sbsc (m_scale->get_parameters ().m_t_step_count);
+  m_k_size = tou (m_scale->get_parameters ().m_t_point_count);
 
   m_data.resize (m_k_size);
   fill ([] (double, point) { return 0; });

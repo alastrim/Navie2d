@@ -41,7 +41,6 @@ void assert (bool check, std::string message);
 int toi (size_t src);
 unsigned int tou (int src);
 int fuzzycmp (double a, double b = 0.0);
-unsigned int sbsc (int step_count);
 
 class grid;
 class scale;

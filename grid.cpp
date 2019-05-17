@@ -9,17 +9,34 @@ grid::grid(double x_origin, double y_origin, double x_end, double y_end, int x_s
   m_parameters.m_y_origin = y_origin;
   m_parameters.m_x_step = (x_end - x_origin) / x_step_count;
   m_parameters.m_y_step = (y_end - y_origin) / y_step_count;
-  m_parameters.m_x_step_count = x_step_count;
-  m_parameters.m_y_step_count = y_step_count;
+  m_parameters.m_x_point_count = x_step_count + 1;
+  m_parameters.m_y_point_count = y_step_count + 1;
+}
+
+point_type grid::get_type (index ij) const
+{
+  int i = ij.first;
+  int j = ij.second;
+
+  if (i == 0 || i == m_parameters.m_x_point_count - 1 || j == 0 || j == m_parameters.m_y_point_count - 1)
+    return point_type::edge;
+
+  if (i < 0  || i >= m_parameters.m_x_point_count || j < 0 || j >= m_parameters.m_y_point_count)
+    return point_type::outer;
+
+  assert (i > 0 && i < m_parameters.m_x_point_count - 1, "Bad index for point");
+  assert (j > 0 && j < m_parameters.m_y_point_count - 1, "Bad index for point");
+
+  return point_type::inner;
 }
 
 point grid::get_point (index ij) const
 {
-  assert (ij.first >= 0 && ij.first <= m_parameters.m_x_step_count, "Bad index for point");
-  assert (ij.second >= 0 && ij.second <= m_parameters.m_y_step_count, "Bad index for point");
+  assert (get_type (ij) != point_type::outer, "Bad index for point");
 
   double x = m_parameters.m_x_origin + m_parameters.m_x_step * ij.first;
   double y = m_parameters.m_y_origin + m_parameters.m_y_step * ij.second;
+
   return {x, y};
 }
 
@@ -37,12 +54,12 @@ scale::scale (double t_origin, double t_end, int t_step_count)
 
   m_parameters.m_t_origin = t_origin;
   m_parameters.m_t_step = (t_end - t_origin) / t_step_count;
-  m_parameters.m_t_step_count = t_step_count;
+  m_parameters.m_t_point_count = t_step_count + 1;
 }
 
 double scale::get_time (int k) const
 {
-  assert (k >= 0 && k <= m_parameters.m_t_step_count, "Bad index for point");
+  assert (k >= 0 && k < m_parameters.m_t_point_count, "Bad index for point");
 
   double t = m_parameters.m_t_origin + m_parameters.m_t_step * k;
   return t;
