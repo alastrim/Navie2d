@@ -16,9 +16,12 @@ static double xpabs (double x)
   return x + fabs (x);
 }
 
-
+class VectorSetter;
+class MatrixSetter;
+bool process_if_edge (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at);
 class MatrixSetter
 {
+friend bool process_if_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at);
 public:
   MatrixSetter (std::vector<double> &A, const discrete_function &df) : A (A), m_df (df) {}
   double & operator () (int m1_base, int m2_base, int m1_mod, int m2_mod)
@@ -61,23 +64,30 @@ private:
   const discrete_function &m_df;
 };
 
-static void trivial (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at)
+bool process_if_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at)
 {
-  A_at (m1,m2,0,0) = 1.0;
-  B_at (m1,m2) = 0.0;
+  const grid *gr = A_at.m_df.get_grid ();
+  if (gr->get_type ({m1, m2}) == point_type::edge || !fuzzycmp (check))
+    {
+      A_at (m1,m2,0,0) = 1.0;
+      B_at (m1,m2) = 0.0;
+      return true;
+    }
+  return false;
 }
 
 namespace fillers
 {
 void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &essential)
 {
-  discrete_function &H = essential.m_tdfH.get_cut (k), &V1 = essential.m_tdfV1.get_cut (k), &V2 = essential.m_tdfV2.get_cut (k);
-  const grid *gr = essential.m_tdfH.get_grid ();
-  const scale *sc = essential.m_tdfH.get_scale ();
-  grid_parameters g_parameters = gr->get_parameters ();
-  scale_parameters s_parameters = sc->get_parameters ();
+  discrete_function &H = essential.m_tdfH.get_cut (k);
+  discrete_function &V1 = essential.m_tdfV1.get_cut (k);
+  discrete_function &V2 = essential.m_tdfV2.get_cut (k);
 
-  double tau = s_parameters.m_t_step, h1 = g_parameters.m_x_step, h2 = g_parameters.m_y_step;
+  double t = essential.m_tdfH.get_scale ()->get_time (k + 1);
+  double tau = essential.m_tdfH.get_scale ()->get_parameters ().m_t_step;
+  double h1 = essential.m_tdfH.get_grid ()->get_parameters ().m_x_step;
+  double h2 = essential.m_tdfH.get_grid ()->get_parameters ().m_y_step;
 
   MatrixSetter A_at (A, H);
   VectorSetter B_at (B, H);
@@ -85,7 +95,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   H.do_for_each ([&] (index ij, point xy, discrete_function &)
   {
     int m1 = ij.first, m2 = ij.second;
-    double t = sc->get_time (k + 1), x = xy.first, y = xy.second;
+    double x = xy.first, y = xy.second;
 
     A_at(m1,m2,0,0)=1.
                   +tau*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))/2.0/h1
@@ -105,21 +115,11 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
   discrete_function &H = essential.m_tdfH.get_cut (k + 1);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
   discrete_function &V2 = essential.m_tdfV2.get_cut (k);
-  const grid *gr = essential.m_tdfV1.get_grid ();
-  const scale *sc = essential.m_tdfV1.get_scale ();
-  grid_parameters g_parameters = gr->get_parameters ();
-  scale_parameters s_parameters = sc->get_parameters ();
 
-  int M1 = g_parameters.m_x_point_count;
-  int M2 = g_parameters.m_y_point_count;
-  int S = static_cast<int> (V1.get_raw_vector ().size ());
-  assert (S == (M1) * (M2), "Bad matrix size");
-  A = std::vector<double> (tou(S * S), 0);
-  B = std::vector<double> (tou(S), 0);
-
-  double tau = s_parameters.m_t_step;
-  double h1 = g_parameters.m_x_step;
-  double h2 = g_parameters.m_y_step;
+  double t = essential.m_tdfV1.get_scale ()->get_time (k + 1);
+  double tau = essential.m_tdfV1.get_scale ()->get_parameters ().m_t_step;
+  double h1 = essential.m_tdfV1.get_grid ()->get_parameters ().m_x_step;
+  double h2 = essential.m_tdfV1.get_grid ()->get_parameters ().m_y_step;
 
   MatrixSetter A_at (A, V1);
   VectorSetter B_at (B, V1);
@@ -127,11 +127,11 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
   V1.do_for_each ([&] (index ij, point xy, discrete_function &)
   {
     int m1 = ij.first, m2 = ij.second;
-    double t = sc->get_time (k + 1), x = xy.first, y = xy.second;
+    double x = xy.first, y = xy.second;
     double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
 
-    if (gr->get_type ({m1, m2}) == point_type::edge || !fuzzycmp (check))
-      return trivial (m1, m2, A_at, B_at);
+    if (process_if_edge (m1, m2, check, A_at, B_at))
+      return;
 
     A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
                     +tau*MIU*(8./3./h1/h1+2./h2/h2);
@@ -159,21 +159,11 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   discrete_function &H = essential.m_tdfH.get_cut (k + 1);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
   discrete_function &V2 = essential.m_tdfV2.get_cut (k);
-  const grid *gr = essential.m_tdfV2.get_grid ();
-  const scale *sc = essential.m_tdfV2.get_scale ();
-  grid_parameters g_parameters = gr->get_parameters ();
-  scale_parameters s_parameters = sc->get_parameters ();
 
-  int M1 = g_parameters.m_x_point_count;
-  int M2 = g_parameters.m_y_point_count;
-  int S = static_cast<int> (V2.get_raw_vector ().size ());
-  assert (S == (M1) * (M2), "Bad matrix size");
-  A = std::vector<double> (tou(S * S), 0);
-  B = std::vector<double> (tou(S), 0);
-
-  double tau = s_parameters.m_t_step;
-  double h1 = g_parameters.m_x_step;
-  double h2 = g_parameters.m_y_step;
+  double t = essential.m_tdfV2.get_scale ()->get_time (k + 1);
+  double tau = essential.m_tdfV2.get_scale ()->get_parameters ().m_t_step;
+  double h1 = essential.m_tdfV2.get_grid ()->get_parameters ().m_x_step;
+  double h2 = essential.m_tdfV2.get_grid ()->get_parameters ().m_y_step;
 
   MatrixSetter A_at (A, V2);
   VectorSetter B_at (B, V2);
@@ -181,11 +171,11 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
   V1.do_for_each ([&] (index ij, point xy, discrete_function &)
   {
     int m1 = ij.first, m2 = ij.second;
-    double t = sc->get_time (k + 1), x = xy.first, y = xy.second;
+    double x = xy.first, y = xy.second;
     double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
 
-    if (gr->get_type ({m1, m2}) == point_type::edge || !fuzzycmp (check))
-      return trivial (m1, m2, A_at, B_at);
+    if (process_if_edge (m1, m2, check, A_at, B_at))
+      return;
 
     A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
                     +tau*MIU*(2./h1/h1+8./3./h2/h2);
