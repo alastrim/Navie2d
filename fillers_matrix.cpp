@@ -69,13 +69,10 @@ void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &e
 
     A_at(m1,m2,-1,0)=-tau/2./h1*xpabs(V1.val(m1,m2))*check
                     -4./3.*tau*MIU/h1/h1;
-
     A_at(m1,m2,+1,0)=tau/2./h1*xmabs(V1.val(m1,m2))*check
                     -4./3.*tau*MIU/h1/h1;
-
     A_at(m1,m2,0,-1)=-tau/2./h2*xpabs(V2.val(m1,m2))*check
                     -tau*MIU/h2/h2;
-
     A_at(m1,m2,0,+1)=tau/2./h2*xmabs(V2.val(m1,m2))*check
                     -tau*MIU/h2/h2;
 
@@ -113,13 +110,10 @@ void fill_third (int k, std::vector<double> &A, std::vector<double> &B, trio &es
 
     A_at(m1,m2,-1,0)=-tau/2./h1*xpabs(V1.val(m1,m2))*check
                      -tau*MIU/h1/h1;
-
     A_at(m1,m2,+1,0)=tau/2./h1*xmabs(V1.val(m1,m2))*check
                      -tau*MIU/h1/h1;
-
     A_at(m1,m2,0,-1)=-tau/2./h2*xpabs(V2.val(m1,m2))*check
                      -4./3.*tau*MIU/h2/h2;
-
     A_at(m1,m2,0,+1)=tau/2./h2*xmabs(V2.val(m1,m2))*check
                     -4./3.*tau*MIU/h2/h2;
 

@@ -13,6 +13,39 @@ discrete_function::discrete_function (const grid *grid, std::string name) : m_gr
 
 void discrete_function::fill (continuous_function cf)
 {
+//  printf ("%s\n", m_name.c_str ());
+//  for (int i = -2; i < toi (m_i_size) + 2; i++)
+//    {
+//      for (int j = -2; j < toi (m_j_size) +2; j++)
+//        {
+//          point_type type = m_grid->get_type ({i, j});
+//          switch (type)
+//            {
+//          case point_type::inner:
+//          {
+//            printf ("i");
+//            break;
+//          }
+//          case point_type::edge:
+//          {
+//            printf ("e");
+//            break;
+//          }
+//          case point_type::outer:
+//          {
+//            printf ("o");
+//            break;
+//          }
+//          case point_type::INVALID:
+//          {
+//            assert (false, "Sanity");
+//          }
+//            }
+//        }
+//      printf ("\n");
+//    }
+//  printf ("\n");
+
   do_for_each ([&cf] (index ij, point xy, discrete_function &self){
     double value = cf (xy);
     self.set_value (ij, value);
@@ -84,34 +117,6 @@ void discrete_function::do_for_each (discrete_foreach_function dff)
           point xy = m_grid->get_point (ij);
           dff (ij, xy, *this);
         }
-    }
-}
-
-void discrete_function::do_for_edge (discrete_foreach_function dff)
-{
-  index ij;
-  point xy;
-
-  for (unsigned int i = 0; i < m_i_size; i++)
-    {
-      ij = {i, 0};
-      xy = m_grid->get_point (ij);
-      dff (ij, xy, *this);
-
-      ij = {i, m_j_size - 1};
-      xy = m_grid->get_point (ij);
-      dff (ij, xy, *this);
-    }
-
-  for (unsigned int j = 1; j < m_j_size - 1; j++)
-    {
-      ij = {0, j};
-      xy = m_grid->get_point (ij);
-      dff (ij, xy, *this);
-
-      ij = {m_i_size - 1, j};
-      xy = m_grid->get_point (ij);
-      dff (ij, xy, *this);
     }
 }
 

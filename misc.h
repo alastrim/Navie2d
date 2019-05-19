@@ -30,7 +30,7 @@ extern "C"
 #include <functional>
 #include <memory>
 
-#define MIN_FOR_COMPARISON 1e-14
+#define MIN_FOR_COMPARISON 1e-10
 #define EPS_FOR_SOLVING 1e-8
 #define MAXITER 2000
 #define GAMMA 1.4

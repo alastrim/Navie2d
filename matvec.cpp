@@ -71,7 +71,7 @@ void matrix::print ()
   for (int i = 0; i < m_size; i++)
     {
       for (int j = 0; j < m_size; j++)
-        printf ("%f ", m_container[tou (i * m_size + j)]);
+        printf ("%9.6f ", m_container[tou (i * m_size + j)]);
       printf ("\n");
     }
 }
@@ -146,7 +146,7 @@ void vector::print ()
   update_from_laspack ();
 
   for (int i = 0; i < m_size; i++)
-      printf ("%f ", m_container[tou (i)]);
+      printf ("%9.6f ", m_container[tou (i)]);
   printf ("\n");
 }
 

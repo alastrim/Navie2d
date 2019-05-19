@@ -19,7 +19,6 @@ public:
   const grid *get_grid () const { return m_grid; }
   std::string get_name () const { return m_name; }
   void do_for_each (discrete_foreach_function dff);
-  void do_for_edge (discrete_foreach_function dff);
   std::vector<double> &get_raw_vector () { return m_data; }
 private:
   std::string m_name;
