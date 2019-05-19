@@ -53,7 +53,7 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
       printf ("Bad arguments given, using default...\n");
       t_step_count = 35;
       x_step_count = 13;
-      y_step_count = 13;
+      y_step_count = 15;
       iT = 1;
       iX = 1;
       iY = 1;

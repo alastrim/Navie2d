@@ -18,16 +18,35 @@ point_type grid::get_type (index ij) const
   int i = ij.first;
   int j = ij.second;
 
-  if (i == 0 || i == m_parameters.m_x_point_count - 1 || j == 0 || j == m_parameters.m_y_point_count - 1)
-    return point_type::edge;
+  point_type x_point_type = point_type::INVALID;
+  point_type y_point_type = point_type::INVALID;
+  point_type res_point_type = point_type::INVALID;
 
-  if (i < 0  || i >= m_parameters.m_x_point_count || j < 0 || j >= m_parameters.m_y_point_count)
-    return point_type::outer;
+  if (i == 0 || i == m_parameters.m_x_point_count - 1)
+    x_point_type = point_type::edge;
+  else if (i > 0 && i < m_parameters.m_x_point_count - 1)
+    x_point_type = point_type::inner;
+  else if (i < 0 || i > m_parameters.m_x_point_count - 1)
+    x_point_type = point_type::outer;
+  assert (x_point_type != point_type::INVALID, "Bad point type");
 
-  assert (i > 0 && i < m_parameters.m_x_point_count - 1, "Bad index for point");
-  assert (j > 0 && j < m_parameters.m_y_point_count - 1, "Bad index for point");
+  if (j == 0 || j == m_parameters.m_y_point_count - 1)
+    y_point_type = point_type::edge;
+  else if (j > 0 && j < m_parameters.m_y_point_count - 1)
+    y_point_type = point_type::inner;
+  else if (j < 0 || j > m_parameters.m_y_point_count - 1)
+    y_point_type = point_type::outer;
+  assert (y_point_type != point_type::INVALID, "Bad point type");
 
-  return point_type::inner;
+  if (x_point_type == point_type::outer || y_point_type == point_type::outer)
+    res_point_type = point_type::outer;
+  else if (x_point_type == point_type::inner && y_point_type == point_type::inner)
+    res_point_type = point_type::inner;
+  else if (x_point_type == point_type::edge || y_point_type == point_type::edge)
+    res_point_type = point_type::edge;
+  assert (res_point_type != point_type::INVALID, "Bad point type");
+
+  return res_point_type;
 }
 
 point grid::get_point (index ij) const

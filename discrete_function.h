@@ -16,7 +16,8 @@ public:
   double tilda (index ij) const;
   double left (index ij) const;
   double right (index ij) const;
-  const grid *get_grid () { return m_grid; }
+  const grid *get_grid () const { return m_grid; }
+  std::string get_name () const { return m_name; }
   void do_for_each (discrete_foreach_function dff);
   void do_for_edge (discrete_foreach_function dff);
   std::vector<double> &get_raw_vector () { return m_data; }
@@ -37,7 +38,7 @@ public:
   void set_cut (int k, std::unique_ptr<discrete_function> df);
   discrete_function &get_cut (int k);
   const discrete_function &get_cut (int k) const;
-  const grid *get_grid () { return m_grid; }
+  const grid *get_grid () const { return m_grid; }
   const scale *get_scale () { return m_scale; }
   void do_for_each (timed_discrete_foreach_function tdff);
 private:

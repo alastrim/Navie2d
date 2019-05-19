@@ -5,7 +5,8 @@ enum class point_type
 {
   inner,
   edge,
-  outer
+  outer,
+  INVALID
 };
 
 struct grid_parameters
