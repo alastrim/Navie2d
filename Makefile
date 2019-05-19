@@ -59,7 +59,8 @@ SOURCES       = main.cpp \
 		loop.cpp \
 		fillers_misc.cpp \
 		fillers_matrix.cpp \
-		fillers_functions.cpp 
+		fillers_functions.cpp \
+		setter_helpers.cpp 
 OBJECTS       = main.o \
 		misc.o \
 		printers.o \
@@ -69,7 +70,8 @@ OBJECTS       = main.o \
 		loop.o \
 		fillers_misc.o \
 		fillers_matrix.o \
-		fillers_functions.o
+		fillers_functions.o \
+		setter_helpers.o
 DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/unix.conf \
 		../../Soft/Qt/5.11.2/gcc_64/mkspecs/common/linux.conf \
@@ -266,7 +268,8 @@ DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		fillers_misc.h \
 		fillers_matrix.h \
 		fillers_functions.h \
-		loop.h main.cpp \
+		loop.h \
+		setter_helpers.h main.cpp \
 		misc.cpp \
 		printers.cpp \
 		grid.cpp \
@@ -275,7 +278,8 @@ DIST          = ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		loop.cpp \
 		fillers_misc.cpp \
 		fillers_matrix.cpp \
-		fillers_functions.cpp
+		fillers_functions.cpp \
+		setter_helpers.cpp
 QMAKE_TARGET  = navie
 DESTDIR       = 
 TARGET        = navie
@@ -685,8 +689,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Soft/Qt/5.11.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents misc.h printers.h grid.h matvec.h discrete_function.h fillers_misc.h fillers_matrix.h fillers_functions.h loop.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp grid.cpp matvec.cpp discrete_function.cpp loop.cpp fillers_misc.cpp fillers_matrix.cpp fillers_functions.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents misc.h printers.h grid.h matvec.h discrete_function.h fillers_misc.h fillers_matrix.h fillers_functions.h loop.h setter_helpers.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp misc.cpp printers.cpp grid.cpp matvec.cpp discrete_function.cpp loop.cpp fillers_misc.cpp fillers_matrix.cpp fillers_functions.cpp setter_helpers.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -791,7 +795,8 @@ fillers_matrix.o: fillers_matrix.cpp fillers_misc.h \
 		fillers_functions.h \
 		matvec.h \
 		discrete_function.h \
-		grid.h
+		grid.h \
+		setter_helpers.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fillers_matrix.o fillers_matrix.cpp
 
 fillers_functions.o: fillers_functions.cpp fillers_misc.h \
@@ -802,6 +807,12 @@ fillers_functions.o: fillers_functions.cpp fillers_misc.h \
 		discrete_function.h \
 		grid.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fillers_functions.o fillers_functions.cpp
+
+setter_helpers.o: setter_helpers.cpp setter_helpers.h \
+		misc.h \
+		discrete_function.h \
+		grid.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o setter_helpers.o setter_helpers.cpp
 
 ####### Install
 
