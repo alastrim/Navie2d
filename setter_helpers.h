@@ -19,6 +19,7 @@ public:
   double & operator () (int m1_base, int m2_base, int m1_mod, int m2_mod);
 private:
   std::vector<double> &A;
+  std::vector<int> m_taken;
   const discrete_function &m_df;
   double m_dummy;
 };

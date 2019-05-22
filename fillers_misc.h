@@ -10,6 +10,7 @@ struct mesh
 
 struct trio
 {
+  trio (const trio &) = delete;
   trio (timed_discrete_function &tdfH, timed_discrete_function &tdfV1, timed_discrete_function &tdfV2)
     : m_tdfH (tdfH), m_tdfV1 (tdfV1), m_tdfV2 (tdfV2) {}
   timed_discrete_function &m_tdfH;

@@ -8,6 +8,7 @@ double u2 (double t, double x, double y);
 double r (double t, double x, double y);
 double p (double t, double x, double y);
 double p (double r);
+double dpdx (double t, double x, double y);
 
 
 double f_1 (double t, double x, double y);

@@ -8,7 +8,16 @@
 
 static double Cos (double x) { return cos (x); }
 static double Sin (double x) { return sin (x); }
-static double Power (double x, double y) { return pow (x, y); }
+static double Power (double x, double y)
+{
+  if (!fuzzycmp (y, 2))
+    return x * x;
+  if (!fuzzycmp (y, 3))
+    return x * x * x;
+  assert (x > 0, "Sanity");
+
+  return pow (x, y);
+}
 static double Pi = M_PI;
 static double E = M_E;
 
@@ -29,11 +38,14 @@ double r (double t, double x, double y)
 }
 double p (double r)
 {
+  assert (r > 0, "Sanity");
   return pow (r, GAMMA);
 }
 
-
-
+double dpdx (double t, double x, double y)
+{
+  return -2*Power(E,t)*GAMMA*Pi*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y))*Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA);
+}
 
 
 double f_1 (double t, double x, double y)

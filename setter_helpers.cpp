@@ -36,7 +36,11 @@ double & MatrixSetter::operator () (int m1_base, int m2_base, int m1_mod, int m2
   if (gr->get_type ({m1, m2}) == point_type::outer)
     return m_dummy;
 
-  return A[tou (i * S + m1 * M2 + m2)];
+  int ind = i * S + m1 * M2 + m2;
+  assert (std::find (m_taken.begin (), m_taken.end (), ind) == m_taken.end (), "Taken sanity");
+  m_taken.push_back (ind);
+
+  return A[tou (ind)];
 }
 
 double & VectorSetter::operator () (int m1, int m2)

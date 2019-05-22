@@ -9,9 +9,9 @@ void assert (bool check, std::string message)
     }
 }
 
-int fuzzycmp (double a, double b)
+int fuzzycmp (double a, double b, double eps)
 {
-  if (fabs (a - b) < MIN_FOR_COMPARISON)
+  if (fabs (a - b) < eps)
     return 0;
   if (a > b)
     return 1;

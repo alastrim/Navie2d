@@ -29,8 +29,9 @@ extern "C"
 #include <vector>
 #include <functional>
 #include <memory>
+#include <algorithm>
 
-#define MIN_FOR_COMPARISON 1e-10
+#define MIN_FOR_COMPARISON 1e-12
 #define EPS_FOR_SOLVING 1e-8
 #define MAXITER 2000
 #define GAMMA 1.4
@@ -40,7 +41,7 @@ extern "C"
 void assert (bool check, std::string message);
 int toi (size_t src);
 unsigned int tou (int src);
-int fuzzycmp (double a, double b = 0.0);
+int fuzzycmp (double a, double b = 0.0, double eps = MIN_FOR_COMPARISON);
 
 class grid;
 class scale;
