@@ -43,7 +43,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
 
 void fill_second (int k, std::vector<double> &A, std::vector<double> &B, trio &essential)
 {
-  discrete_function &H = essential.m_tdfH.get_cut (k);
+  discrete_function &H = essential.m_tdfH.get_cut (k + 1);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
   discrete_function &V2 = essential.m_tdfV2.get_cut (k);
 
