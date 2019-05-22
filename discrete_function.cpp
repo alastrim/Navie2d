@@ -84,24 +84,24 @@ double discrete_function::get_value (index ij) const
 double discrete_function::left (index ij) const
 {
   assert (m_name == "H", "Do not call left/right for anything other than H");
-  return (get_value (ij) + get_value ({ij.first, ij.second - 1})) / 2;
+  return (get_value (ij) + get_value ({ij.first, ij.second - 1})) / 2.;
 }
 
 double discrete_function::right (index ij) const
 {
   assert (m_name == "H", "Do not call left/right for anything other than H");
-  return (get_value (ij) + get_value ({ij.first - 1, ij.second})) / 2;
+  return (get_value (ij) + get_value ({ij.first - 1, ij.second})) / 2.;
 }
 
 double discrete_function::tilda (index ij) const
 {
   if (m_name == "V1")
     {
-      return (get_value (ij) + get_value ({ij.first, ij.second + 1})) / 2;
+      return (get_value (ij) + get_value ({ij.first, ij.second + 1})) / 2.;
     }
   if (m_name == "V2")
     {
-      return (get_value (ij) + get_value ({ij.first + 1, ij.second})) / 2;
+      return (get_value (ij) + get_value ({ij.first + 1, ij.second})) / 2.;
     }
   assert (false, "Do not call tilda for anything other than V1 and V2");
   return 0;
@@ -109,9 +109,9 @@ double discrete_function::tilda (index ij) const
 
 void discrete_function::do_for_each (discrete_foreach_function dff)
 {
-  for (unsigned int i = 0; i < m_i_size; i++)
+  for (int i = 0; i < toi (m_i_size); i++)
     {
-      for (unsigned int j = 0; j < m_j_size; j++)
+      for (int j = 0; j < toi (m_j_size); j++)
         {
           index ij = {i, j};
           point xy = m_grid->get_point (ij);

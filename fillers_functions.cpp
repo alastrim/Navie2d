@@ -50,17 +50,45 @@ double dpdx (double t, double x, double y)
 
 double f_1 (double t, double x, double y)
 {
-  double res = 2*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*Sin(2*Pi*x)*Sin(2*Pi*y) + Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)) + 2*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y)) +
-               2*Power(E,2*t)*Pi*Cos(2*Pi*x)*(1.5 + Cos(2*Pi*x))*Sin(2*Pi*y)*(1.5 + Sin(2*Pi*y)) - 2*Power(E,2*t)*Pi*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y)*(1.5 + Sin(2*Pi*y));
+  double res = 2.*Pi*(1.5 + Cos(2.*Pi*x))*Cos(2.*Pi*y)*Sin(2.*Pi*x)*Sin(2.*Pi*y) + Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2.*Pi*y)) + 2.*Pi*(1.5 + Cos(2.*Pi*x))*Cos(2.*Pi*y)*Sin(2.*Pi*x)*(1.5 + Sin(2.*Pi*y)) +
+               2.*Power(E,2.*t)*Pi*Cos(2.*Pi*x)*(1.5 + Cos(2.*Pi*x))*Sin(2.*Pi*y)*(1.5 + Sin(2.*Pi*y)) - 2.*Power(E,2*t)*Pi*Power(Sin(2.*Pi*x),2.)*Sin(2.*Pi*y)*(1.5 + Sin(2.*Pi*y));
 
   return res;
 }
 double f_2 (double t, double x, double y)
 {
-  double res = (-2*Power(E,t)*GAMMA*Pi*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y))*Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA) -
-                MIU*((4*Power(Pi,2)*Cos(2*Pi*x)*Cos(2*Pi*y))/(3.*Power(E,t)) - (28*Power(E,t)*Power(Pi,2)*Sin(2*Pi*x)*Sin(2*Pi*y))/3.) +
-                Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y))*(Power(E,t)*Sin(2*Pi*x)*Sin(2*Pi*y) + 2*Pi*Cos(2*Pi*y)*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y) +
-                   2*Power(E,2*t)*Pi*Cos(2*Pi*x)*Sin(2*Pi*x)*Power(Sin(2*Pi*y),2)))/(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)));
+//  auto du1dt = [](double t, double x, double y)
+//  { return u1 (t, x, y); };
+//  auto du1dx = [](double t, double x, double y)
+//  { return 2. * Pi * cos (2. * Pi * x) * sin (2. * Pi * y) * exp (t); };
+//  auto du1dy = [](double t, double x, double y)
+//  { return 2. * Pi * sin (2. * Pi * x) * cos (2. * Pi * y) * exp (t); };
+//  auto du1dxdx = [](double t, double x, double y)
+//  { return - 4. * Pi * Pi * sin (2. * Pi * x) * sin (2. * Pi * y) * exp (t); };
+//  auto du1dydy = [](double t, double x, double y)
+//  { return - 4. * Pi * Pi * sin (2. * Pi * x) * sin (2. * Pi * y) * exp (t); };
+//  auto du2dxdy = [](double t, double x, double y)
+//  { return 4. * Pi * Pi * cos (2. * Pi * x) * cos (2. * Pi * y) * exp (-t); };
+//  auto drdx = [](double t, double x, double y)
+//  { return - 2. * Pi * sin (2. * Pi * x) * (sin (2. * Pi * y) + 3./2.) * exp (t); };
+//  auto dpdx = [=](double t, double x, double y)
+//  { return GAMMA * Power (r (t, x, y), GAMMA - 1) * drdx (t, x, y); };
+
+
+//  double comp1 = du1dt (t, x, y) + u1 (t, x, y) * du1dx (t, x, y) + u2 (t, x, y) * du1dy (t, x, y);
+//  double comp2 = r (t, x, y) * comp1;
+//  double comp3 = comp2 + dpdx (t, x, y);
+//  double comp4 = 4./3. * du1dxdx (t, x, y) + du1dydy (t, x, y) + 1./3. * du2dxdy (t, x, y);
+//  double comp5 = MIU * comp4;
+//  double comp6 = comp3 - comp5;
+//  double comp7 = comp6 / r (t, x, y);
+//  return comp7;
+
+
+  double res = (-2.*Power(E,t)*GAMMA*Pi*Sin(2.*Pi*x)*(1.5 + Sin(2.*Pi*y))*Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2.*Pi*y)),-1. + GAMMA) -
+                MIU*((4.*Power(Pi,2.)*Cos(2.*Pi*x)*Cos(2.*Pi*y))/(3.*Power(E,t)) - (28.*Power(E,t)*Power(Pi,2.)*Sin(2*Pi*x)*Sin(2.*Pi*y))/3.) +
+                Power(E,t)*(1.5 + Cos(2.*Pi*x))*(1.5 + Sin(2.*Pi*y))*(Power(E,t)*Sin(2.*Pi*x)*Sin(2.*Pi*y) + 2*Pi*Cos(2.*Pi*y)*Power(Sin(2.*Pi*x),2.)*Sin(2.*Pi*y) +
+                   2.*Power(E,2.*t)*Pi*Cos(2.*Pi*x)*Sin(2.*Pi*x)*Power(Sin(2.*Pi*y),2.)))/(Power(E,t)*(1.5 + Cos(2.*Pi*x))*(1.5 + Sin(2.*Pi*y)));
   return res;
 }
 double f_3 (double t, double x, double y)
