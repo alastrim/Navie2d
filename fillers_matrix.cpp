@@ -29,13 +29,13 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     double x = xy.first, y = xy.second;
 
     A_at(m1,m2,0,0)=1.
-                  +tau*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))/2.0/h1
-                  +tau*(xpabs(V2.tilda(m1,m2+1))-xmabs(V2.tilda(m1,m2)))/2.0/h2;
+                  +tau/2./h1*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))
+                  +tau/2./h2*(xpabs(V2.tilda(m1,m2+1))-xmabs(V2.tilda(m1,m2)));
 
-    A_at(m1,m2,0,+1)=tau*xmabs(V2.tilda (m1,m2+1))/2.0/h2;
-    A_at(m1,m2,+1,0)=tau*xmabs(V1.tilda (m1+1,m2))/2.0/h1;
-    A_at(m1,m2,-1,0)=-tau*xpabs(V1.tilda (m1,m2))/2.0/h1;
-    A_at(m1,m2,0,-1)=-tau*xpabs(V2.tilda (m1,m2))/2.0/h2;
+    A_at(m1,m2,+1,0)=tau/2./h1*xmabs(V1.tilda (m1+1,m2));
+    A_at(m1,m2,0,+1)=tau/2./h2*xmabs(V2.tilda (m1,m2+1));
+    A_at(m1,m2,-1,0)=-tau/2./h1*xpabs(V1.tilda (m1,m2));
+    A_at(m1,m2,0,-1)=-tau/2./h2*xpabs(V2.tilda (m1,m2));
 
     B_at(m1,m2)=H.val(m1,m2)+tau*f_1(t,x,y);
   });
