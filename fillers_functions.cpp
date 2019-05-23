@@ -50,10 +50,22 @@ double dpdx (double t, double x, double y)
 
 double f_1 (double t, double x, double y)
 {
-  double res = 2.*Pi*(1.5 + Cos(2.*Pi*x))*Cos(2.*Pi*y)*Sin(2.*Pi*x)*Sin(2.*Pi*y) + Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2.*Pi*y)) + 2.*Pi*(1.5 + Cos(2.*Pi*x))*Cos(2.*Pi*y)*Sin(2.*Pi*x)*(1.5 + Sin(2.*Pi*y)) +
-               2.*Power(E,2.*t)*Pi*Cos(2.*Pi*x)*(1.5 + Cos(2.*Pi*x))*Sin(2.*Pi*y)*(1.5 + Sin(2.*Pi*y)) - 2.*Power(E,2*t)*Pi*Power(Sin(2.*Pi*x),2.)*Sin(2.*Pi*y)*(1.5 + Sin(2.*Pi*y));
+  auto du1dx = [](double t, double x, double y)
+  { return 2. * Pi * cos (2. * Pi * x) * sin (2. * Pi * y) * exp (t); };
+  auto du2dy = [](double t, double x, double y)
+  { return 2. * Pi * sin (2. * Pi * x) * cos (2. * Pi * y) * exp (-t); };
+  auto drdx = [](double t, double x, double y)
+  { return - 2. * Pi * sin (2. * Pi * x) * (sin (2. * Pi * y) + 3./2.) * exp (t); };
+  auto drdy = [](double t, double x, double y)
+  { return 2. * Pi * (cos (2. * Pi * x) + 3./2.) * cos (2. * Pi * y) * exp (t); };
+  auto drdt = [](double t, double x, double y)
+  { return r (t, x, y); };
 
-  return res;
+  double comp1 = r (t, x, y) * du1dx (t, x, y) + u1 (t, x, y) * drdx (t, x, y);
+  double comp2 = r (t, x, y) * du2dy (t, x, y) + u2 (t, x, y) * drdy (t, x, y);
+  double comp3 = drdt(t, x, y) + comp1 + comp2;
+
+  return comp3;
 }
 double f_2 (double t, double x, double y)
 {
