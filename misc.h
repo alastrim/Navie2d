@@ -30,6 +30,7 @@ extern "C"
 #include <functional>
 #include <memory>
 #include <algorithm>
+#include <map>
 
 #define MIN_FOR_COMPARISON 1e-12
 #define EPS_FOR_SOLVING 1e-8

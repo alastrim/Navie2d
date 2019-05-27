@@ -1,6 +1,6 @@
 ﻿#include "matvec.h"
 
-int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
+int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
 {
   static int print = 1;
   matrix LA;
@@ -8,7 +8,7 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
   vector LX;
   vector Lreal;
 
-  LA.set (A);
+  LA.set (A, toi (B.size ()));
   LB.set (B);
   LX.set (X);
   Lreal.set (real);
@@ -49,13 +49,11 @@ matrix::~matrix ()
   drop_laspack_pointer ();
 }
 
-void matrix::set (std::vector<double> &src)
+void matrix::set (std::map<unsigned int, double> &src, int full_size)
 {
   m_name = "Non-empty matrix";
   m_container = src;
-  m_size = static_cast<int> (sqrt (toi (m_container.size ())));
-  bool check = (m_size * m_size == toi (m_container.size ()));
-  assert (check, "Bad arguments for matrix constructor call");
+  m_size = full_size;
   m_non_zero_count = m_size + 1;
 }
 
@@ -75,7 +73,12 @@ void matrix::print ()
   for (int i = 0; i < m_size; i++)
     {
       for (int j = 0; j < m_size; j++)
-        printf ("%9.6f ", m_container[tou (i * m_size + j)]);
+        {
+          double value = 0;
+          if (m_container.find (tou (i * m_size + j)) != m_container.end ())
+            value = m_container[tou (i * m_size + j)];
+          printf ("%9.6f ", value);
+        }
       printf ("\n");
     }
 }
@@ -102,7 +105,9 @@ void matrix::update_to_laspack ()
       for (int j = 0; j < m_size; j++)
         {
           int lj = j + 1;
-          double value = m_container[tou (i * m_size + j)];
+          double value = 0;
+          if (m_container.find (tou (i * m_size + j)) != m_container.end ())
+            value = m_container[tou (i * m_size + j)];
           if (fuzzycmp (value))
             Q_SetEntry (m_laspack_pointer, tou (li), tou (non_zero_count++), tou (lj), value);
         }

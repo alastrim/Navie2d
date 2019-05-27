@@ -13,8 +13,8 @@ double xpabs (double x)
   return x + fabs (x);
 }
 
-MatrixSetter::MatrixSetter (std::vector<double> &A, const discrete_function &df)
-  : A (A), m_df (df)
+MatrixSetter::MatrixSetter (std::map<unsigned int, double> &A, const discrete_function &df)
+  : m_A (A), m_df (df)
 {}
 
 VectorSetter::VectorSetter (std::vector<double> &B, const discrete_function &df)
@@ -40,7 +40,7 @@ double & MatrixSetter::operator () (int m1_base, int m2_base, int m1_mod, int m2
   assert (std::find (m_taken.begin (), m_taken.end (), ind) == m_taken.end (), "Taken sanity");
   m_taken.push_back (ind);
 
-  return A[tou (ind)];
+  return m_A[tou (ind)];
 }
 
 double & VectorSetter::operator () (int m1, int m2)
