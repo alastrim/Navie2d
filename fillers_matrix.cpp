@@ -37,7 +37,7 @@ void fill_first (int k, std::vector<double> &A, std::vector<double> &B, trio &es
     A_at(m1,m2,-1,0)=-tau/2./h1*xpabs(V1.tilda (m1,m2));
     A_at(m1,m2,0,-1)=-tau/2./h2*xpabs(V2.tilda (m1,m2));
 
-    B_at(m1,m2)=H.val(m1,m2)+tau*f_1(t,x,y);
+    B_at(m1,m2)=H.val(m1,m2)+tau*f_1 (t,x,y);
   });
 }
 

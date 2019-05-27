@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "misc.h"
+class matrix;
+class vector;
 
 // Interfaces from C++ containers to laspack matrix and vector
 
@@ -7,6 +9,7 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
 
 class matrix
 {
+friend void print_system (matrix &a, vector &b);
 public:
   matrix ();
   ~matrix ();
@@ -32,6 +35,7 @@ private:
 
 class vector
 {
+friend void print_system (matrix &a, vector &b);
 public:
   vector ();
   ~vector ();
@@ -53,3 +57,5 @@ private:
   std::vector<double> m_container;
   Vector *m_laspack_pointer;
 };
+
+void print_system (matrix &a, vector &b);

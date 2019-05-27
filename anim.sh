@@ -64,7 +64,7 @@ do for [i=0:t_step_count] {
     set zlabel "z"
     F = sprintf ("%s/%d", f_name, i)
     R = sprintf ("%s/%d", real_name, i)
-    splot F with lines title f_name lw 2, R with lines title real_name lw 2
+    splot F with lines title f_name lw 2 #, R with lines title real_name lw 2
 }
 
 EOF
@@ -151,6 +151,6 @@ do for [i=0:t_step_count] {
 
 EOF
 
-eog V1.gif &
-eog V2.gif &
+#eog V1.gif &
+#eog V2.gif &
 eog H.gif &

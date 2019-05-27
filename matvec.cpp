@@ -2,6 +2,7 @@
 
 int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
 {
+  static int print = 1;
   matrix LA;
   vector LB;
   vector LX;
@@ -17,17 +18,20 @@ int solve_system (std::vector<double> &A, std::vector<double> &B, std::vector<do
   BiCGIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, JacobiPrecond, 0);
 //  CGNIter (LA.get_as_laspack (), LX.get_as_laspack (), LB.get_as_laspack (), MAXITER, nullptr, 0);
 
-  if (DEBUG)
+  if (DEBUG && print > 0)
     {
-      printf ("Matrix:\n");
-      LA.print ();
-      printf ("Vector:\n");
-      LB.print ();
+//      printf ("Matrix:\n");
+//      LA.print ();
+//      printf ("Vector:\n");
+//      LB.print ();
+      printf ("System:\n");
+      print_system (LA, LB);
       printf ("Result:\n");
       LX.print ();
       printf ("Real:\n");
       Lreal.print ();
       printf ("\n");
+      print--;
     }
 
   X = LX.get ();
@@ -181,3 +185,18 @@ void vector::update_from_laspack ()
       m_container[tou (i)] = V_GetCmp (m_laspack_pointer, tou (li));
     }
 }
+
+// ----------------------------------------------------------------------
+
+
+void print_system (matrix &a, vector &b)
+{
+  b.update_from_laspack ();
+  for (int i = 0; i < a.m_size; i++)
+    {
+      for (int j = 0; j < a.m_size; j++)
+        printf ("%9.6f ", a.m_container[tou (i * a.m_size + j)]);
+      printf (" %9.6f\n", b.m_container[tou (i)]);
+    }
+}
+

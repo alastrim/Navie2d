@@ -61,11 +61,9 @@ double f_1 (double t, double x, double y)
   auto drdt = [](double t, double x, double y)
   { return r (t, x, y); };
 
-  double comp1 = r (t, x, y) * du1dx (t, x, y) + u1 (t, x, y) * drdx (t, x, y);
-  double comp2 = r (t, x, y) * du2dy (t, x, y) + u2 (t, x, y) * drdy (t, x, y);
-  double comp3 = drdt(t, x, y) + comp1 + comp2;
-
-  return comp3;
+  return (drdt (t, x, y)) * 1.0
+      + (r (t, x, y) * du1dx (t, x, y) + u1 (t, x, y) * drdx (t, x, y)) * 1.0
+      + (r (t, x, y) * du2dy (t, x, y) + u2 (t, x, y) * drdy (t, x, y)) * 1.0;
 }
 double f_2 (double t, double x, double y)
 {
