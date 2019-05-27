@@ -30,23 +30,12 @@ void print_to_gnuplot (timed_discrete_function &tdf, std::string name)
     });
 }
 
-void print_residuals (std::string filename, timed_discrete_function &tdf, timed_discrete_function &tdf_real, std::string name)
+void print_residuals (timed_discrete_function &tdf, timed_discrete_function &tdf_real, std::string name)
 {
-  filename = "logs/" + filename + ".log";
-  FILE *out = fopen (filename.c_str (), "a");
-
-  if (!out)
-    {
-      printf ("Cannot create output files\n");
-      return;
-    }
-
-  fprintf (out, "Residual for %s is: %e\n", name.c_str (), tdf.residual (tdf_real));
-
-  fclose (out);
+  printf ("Residual for %s is: %e\n", name.c_str (), tdf.residual (tdf_real));
 }
 
-std::string get_parameters_string (const trio &essential)
+void print_parameters (const trio &essential)
 {
   const timed_discrete_function &V1 = essential.m_tdfV1;
   const scale *sc = V1.get_scale ();
@@ -57,7 +46,5 @@ std::string get_parameters_string (const trio &essential)
   int x_point_count = gr_p.m_x_point_count;
   int y_point_count = gr_p.m_y_point_count;
   double miu = MIU;
-  char buf [LEN];
-  snprintf (buf, LEN, "MIU=%f,N=%d,M1=%d,M2=%d", miu, t_point_count, x_point_count, y_point_count);
-  return std::string (buf);
+  printf ("MIU=%.3f,N=%d,M1=%d,M2=%d", miu, t_point_count, x_point_count, y_point_count);
 }
