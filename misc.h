@@ -31,13 +31,18 @@ extern "C"
 #include <memory>
 #include <algorithm>
 #include <map>
+#include <unordered_map>
 
 #define MIN_FOR_COMPARISON 1e-12
 #define EPS_FOR_SOLVING 1e-8
 #define MAXITER 2000
-#define GAMMA 1.4
-#define MIU 0.1
 #define DEBUG 0
+#define LEN 250
+#define PRINT_RESULTS false
+#define MAX_NON_ZERO 5
+#define GAMMA 1.4
+
+extern double MIU;
 
 void assert (bool check, std::string message);
 int toi (size_t src);

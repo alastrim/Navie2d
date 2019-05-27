@@ -1,6 +1,6 @@
 ﻿#include "matvec.h"
 
-int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
+int solve_system (std::unordered_map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
 {
   static int print = 1;
   matrix LA;
@@ -49,12 +49,13 @@ matrix::~matrix ()
   drop_laspack_pointer ();
 }
 
-void matrix::set (std::map<unsigned int, double> &src, int full_size)
+void matrix::set (std::unordered_map<unsigned int, double> &src, int full_size)
 {
-  m_name = "Non-empty matrix";
+  m_name = std::string ("Non-empty matrix");
   m_container = src;
   m_size = full_size;
   m_non_zero_count = m_size + 1;
+  m_non_zero_count = MAX_NON_ZERO;
 }
 
 QMatrix *matrix::get_as_laspack ()

@@ -40,7 +40,7 @@ public:
   discrete_function &get_cut (int k);
   const discrete_function &get_cut (int k) const;
   const grid *get_grid () const { return m_grid; }
-  const scale *get_scale () { return m_scale; }
+  const scale *get_scale () const { return m_scale; }
   void do_for_each (timed_discrete_foreach_function tdff);
 private:
   std::string m_name;

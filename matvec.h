@@ -5,7 +5,7 @@ class vector;
 
 // Interfaces from C++ containers to laspack matrix and vector
 
-int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real);
+int solve_system (std::unordered_map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real);
 
 class matrix
 {
@@ -14,7 +14,7 @@ public:
   matrix ();
   ~matrix ();
 
-  void set (std::map<unsigned int, double> &src, int full_size);
+  void set (std::unordered_map<unsigned int, double> &src, int full_size);
   // std::vector<double> &get ();
 
   QMatrix *get_as_laspack ();
@@ -29,7 +29,7 @@ private:
   std::string m_name;
   int m_size;
   int m_non_zero_count;
-  std::map<unsigned int, double> m_container;
+  std::unordered_map<unsigned int, double> m_container;
   QMatrix *m_laspack_pointer;
 };
 

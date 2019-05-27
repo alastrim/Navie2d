@@ -153,4 +153,4 @@ EOF
 
 #eog V1.gif &
 #eog V2.gif &
-eog H.gif &
+#eog H.gif &

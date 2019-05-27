@@ -9,7 +9,7 @@
 
 namespace fillers
 {
-void fill_first (int k, std::map<unsigned int, double> &A, std::vector<double> &B, trio &essential)
+void fill_first (int k, std::unordered_map<unsigned int, double> &A, std::vector<double> &B, trio &essential)
 {
   discrete_function &H = essential.m_tdfH.get_cut (k);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
@@ -41,7 +41,7 @@ void fill_first (int k, std::map<unsigned int, double> &A, std::vector<double> &
   });
 }
 
-void fill_second (int k, std::map<unsigned int, double> &A, std::vector<double> &B, trio &essential)
+void fill_second (int k, std::unordered_map<unsigned int, double> &A, std::vector<double> &B, trio &essential)
 {
   discrete_function &H = essential.m_tdfH.get_cut (k + 1);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
@@ -82,7 +82,7 @@ void fill_second (int k, std::map<unsigned int, double> &A, std::vector<double> 
   });
 }
 
-void fill_third (int k, std::map<unsigned int, double> &A, std::vector<double> &B, trio &essential)
+void fill_third (int k, std::unordered_map<unsigned int, double> &A, std::vector<double> &B, trio &essential)
 {
   discrete_function &H = essential.m_tdfH.get_cut (k + 1);
   discrete_function &V1 = essential.m_tdfV1.get_cut (k);
