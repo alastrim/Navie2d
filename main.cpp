@@ -36,7 +36,7 @@ static std::string ets (residual_t type)
   return "Err";
 }
 
-#define TSIZE 4
+#define TSIZE 3
 #define TSTART 20
 #define TMOD 2
 
@@ -109,6 +109,11 @@ int main (int argc, char **argv)
                   set[0].second[Nloop].second[Mloop].first = M;
                   set[0].second[Nloop].second[Mloop].second = {t1, t2, t3};
 
+                  print_parameters (essential);
+                  print_residuals (tdfH, real_tdfH, "H");
+                  print_residuals (tdfV1, real_tdfV1, "V1");
+                  print_residuals (tdfV2, real_tdfV2, "V2");
+
                 }
             }
 
@@ -152,21 +157,20 @@ int main (int argc, char **argv)
 
           time_loop (essential, real);
 
-          if (PRINT_RESULTS)
-            {
-              print_to_gnuplot (tdfH, "H");
-              print_to_gnuplot (tdfV1, "V1");
-              print_to_gnuplot (tdfV2, "V2");
+          print_to_gnuplot (tdfH, "H");
+          print_to_gnuplot (tdfV1, "V1");
+          print_to_gnuplot (tdfV2, "V2");
 
-              print_to_gnuplot (real_tdfH, "realH");
-              print_to_gnuplot (real_tdfV1, "realV1");
-              print_to_gnuplot (real_tdfV2, "realV2");
-            }
+          print_to_gnuplot (real_tdfH, "realH");
+          print_to_gnuplot (real_tdfV1, "realV1");
+          print_to_gnuplot (real_tdfV2, "realV2");
 
           print_parameters (essential);
           print_residuals (tdfH, real_tdfH, "H");
           print_residuals (tdfV1, real_tdfV1, "V1");
           print_residuals (tdfV2, real_tdfV2, "V2");
+
+          return 0;
 
         }
     }

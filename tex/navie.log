@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.15)  27 MAY 2019 22:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.15)  28 MAY 2019 10:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -668,7 +668,7 @@ LaTeX Font Info:    ... okay on input line 7.
 Here is how much of TeX's memory you used:
  2384 strings out of 492982
  26285 string characters out of 6134895
- 91155 words of memory out of 5000000
+ 90155 words of memory out of 5000000
  5947 multiletter control sequences out of 15000+600000
  11106 words of font info for 31 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -677,7 +677,7 @@ Here is how much of TeX's memory you used:
 /texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</usr/share/texmf/fonts/type1/
 public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx
 1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on navie.pdf (1 page, 41738 bytes).
+Output written on navie.pdf (1 page, 40820 bytes).
 PDF statistics:
  21 PDF objects out of 1000 (max. 8388607)
  14 compressed objects within 1 object stream

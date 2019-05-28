@@ -754,6 +754,7 @@ misc.o: misc.cpp misc.h
 printers.o: printers.cpp printers.h \
 		misc.h \
 		discrete_function.h \
+		fillers_misc.h \
 		grid.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o printers.o printers.cpp
 
@@ -811,7 +812,8 @@ fillers_functions.o: fillers_functions.cpp fillers_misc.h \
 setter_helpers.o: setter_helpers.cpp setter_helpers.h \
 		misc.h \
 		discrete_function.h \
-		grid.h
+		grid.h \
+		fillers_functions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o setter_helpers.o setter_helpers.cpp
 
 ####### Install
