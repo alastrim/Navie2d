@@ -36,7 +36,7 @@ extern "C"
 #define MIN_FOR_COMPARISON 1e-12
 #define EPS_FOR_SOLVING 1e-8
 #define MAXITER 2000
-#define DEBUG 1
+#define DEBUG 0
 #define LEN 250
 #define PRINT_RESULTS true
 #define MAX_NON_ZERO 5

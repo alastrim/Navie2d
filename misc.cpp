@@ -5,7 +5,7 @@ void assert (bool check, std::string message)
   if (!check)
     {
       fprintf (stderr, "WARNING: %s\n", message.c_str());
-      throw std::runtime_error ("ASSERT!");
+      throw std::runtime_error ("ASSERT: " + message);
     }
 }
 

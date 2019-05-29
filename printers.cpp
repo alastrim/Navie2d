@@ -46,5 +46,5 @@ void print_parameters (const trio &essential)
   int x_point_count = gr_p.m_x_point_count;
   int y_point_count = gr_p.m_y_point_count;
   double miu = MIU;
-  printf ("MIU=%.3f,N=%d,M1=%d,M2=%d\n", miu, t_point_count, x_point_count, y_point_count);
+  printf ("\nMIU=%.3f,N=%d,M1=%d,M2=%d\n", miu, t_point_count, x_point_count, y_point_count);
 }

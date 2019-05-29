@@ -38,7 +38,7 @@ double r (double t, double x, double y)
 }
 double p (double r)
 {
-  assert (r > 0, "Sanity");
+  assert (r > 0, "Rho should be positive");
   return pow (r, GAMMA);
 }
 
