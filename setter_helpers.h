@@ -30,6 +30,7 @@ public:
   VectorSetter (std::vector<double> &B, const discrete_function &df);
   double & operator () (int m1, int m2);
 private:
-  std::vector<double> &B;
+  std::vector<double> &m_B;
+  std::vector<int> m_taken;
   const discrete_function &m_df;
 };

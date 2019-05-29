@@ -26,15 +26,15 @@ namespace fillers
 {
 double u1 (double t, double x, double y)
 {
-  return sin (2.0 * M_PI * x) * sin (2.0 * M_PI * y) * exp (t);
+  return sin (2.0 * M_PI * x) * sin (2.0 * M_PI * y) * Power (E, t);
 }
 double u2 (double t, double x, double y)
 {
-  return sin (2.0 * M_PI * x) * sin (2.0 * M_PI * y) * exp (-t);
+  return sin (2.0 * M_PI * x) * sin (2.0 * M_PI * y) / Power (E, t);
 }
 double r (double t, double x, double y)
 {
-  return (cos (2.0 * M_PI * x) + 3.0/2.0) * (sin (2.0 * M_PI * y) + 3.0/2.0) * exp (t);
+  return (cos (2.0 * M_PI * x) + 3.0/2.0) * (sin (2.0 * M_PI * y) + 3.0/2.0) * Power (E, t);
 }
 double p (double r)
 {
@@ -51,13 +51,13 @@ double dpdx (double t, double x, double y)
 double f_1 (double t, double x, double y)
 {
   auto du1dx = [](double t, double x, double y)
-  { return 2. * Pi * cos (2. * Pi * x) * sin (2. * Pi * y) * exp (t); };
+  { return 2. * Pi * cos (2. * Pi * x) * sin (2. * Pi * y) * Power (E, t); };
   auto du2dy = [](double t, double x, double y)
-  { return 2. * Pi * sin (2. * Pi * x) * cos (2. * Pi * y) * exp (-t); };
+  { return 2. * Pi * sin (2. * Pi * x) * cos (2. * Pi * y) / Power (E, t); };
   auto drdx = [](double t, double x, double y)
-  { return - 2. * Pi * sin (2. * Pi * x) * (sin (2. * Pi * y) + 3./2.) * exp (t); };
+  { return - 2. * Pi * sin (2. * Pi * x) * (sin (2. * Pi * y) + 3./2.) * Power (E, t); };
   auto drdy = [](double t, double x, double y)
-  { return 2. * Pi * (cos (2. * Pi * x) + 3./2.) * cos (2. * Pi * y) * exp (t); };
+  { return 2. * Pi * (cos (2. * Pi * x) + 3./2.) * cos (2. * Pi * y) * Power (E, t); };
   auto drdt = [](double t, double x, double y)
   { return r (t, x, y); };
 

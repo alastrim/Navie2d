@@ -18,7 +18,7 @@ MatrixSetter::MatrixSetter (std::unordered_map<unsigned int, double> &A, const d
 {}
 
 VectorSetter::VectorSetter (std::vector<double> &B, const discrete_function &df)
-  : B (B), m_df (df)
+  : m_B (B), m_df (df)
 {}
 
 double & MatrixSetter::operator () (int m1_base, int m2_base, int m1_mod, int m2_mod)
@@ -49,7 +49,11 @@ double & VectorSetter::operator () (int m1, int m2)
   grid_parameters gr_p = gr->get_parameters ();
   int M2 = gr_p.m_y_point_count;
 
-  return B[tou (m1 * M2 + m2)];
+  int ind = m1 * M2 + m2;
+  assert (std::find (m_taken.begin (), m_taken.end (), ind) == m_taken.end (), "Taken sanity");
+  m_taken.push_back (ind);
+
+  return m_B[tou (ind)];
 }
 
 bool process_if_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at)
