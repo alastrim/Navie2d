@@ -99,9 +99,9 @@ int main (int argc, char **argv)
                   time_loop (essential, real);
 
 
-                  double t1 = essential.m_tdfH.residual (real.m_tdfH);
-                  double t2 = essential.m_tdfV1.residual (real.m_tdfV1);
-                  double t3 = essential.m_tdfV2.residual (real.m_tdfV2);
+                  double t1 = essential.m_tdfH.residual (real.m_tdfH).first;
+                  double t2 = essential.m_tdfV1.residual (real.m_tdfV1).first;
+                  double t3 = essential.m_tdfV2.residual (real.m_tdfV2).first;
 
                   set[0].second[Nloop].first = N;
                   set[0].second[Nloop].second[Mloop].first = M;

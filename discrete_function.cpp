@@ -53,13 +53,15 @@ void discrete_function::fill (continuous_function cf)
   });
 }
 
-double discrete_function::residual (const discrete_function &real)
+residual_value discrete_function::residual (const discrete_function &real)
 {
-  double max = 0;
-  do_for_each ([&max, &real] (index ij, point, discrete_function &self){
+  residual_value max = {0, {-1, -1}};
+  do_for_each ([&max, &real] (index ij, point xy, discrete_function &self){
+      if (self.m_grid->get_full_type (ij) == point_type::outer)
+        return;
       double diff = fabs (self.get_value (ij) - real.get_value (ij));
-      if (diff > max)
-        max = diff;
+      if (diff > max.first)
+        max = {diff, xy};
   });
   return max;
 }
@@ -112,8 +114,6 @@ void discrete_function::do_for_each (discrete_foreach_function dff)
       for (int j = 0; j < toi (m_j_size); j++)
         {
           index ij = {i, j};
-//          if (m_grid->get_type (ij) == point_type::outer)
-//            continue;
           point xy = m_grid->get_point (ij);
           dff (ij, xy, *this);
         }
@@ -141,12 +141,12 @@ void timed_discrete_function::fill (timed_continuous_function tcf)
     });
 }
 
-double timed_discrete_function::residual (const timed_discrete_function &real)
+residual_value timed_discrete_function::residual (const timed_discrete_function &real)
 {
-  double max = 0;
+  residual_value max = {0, {-1, -1}};
   do_for_each ([&max, &real] (int k, double, timed_discrete_function &self) {
-      double diff = self.get_cut (k).residual (real.get_cut (k));
-      if (diff > max)
+      residual_value diff = self.get_cut (k).residual (real.get_cut (k));
+      if (diff.first > max.first)
         max = diff;
     });
   return max;

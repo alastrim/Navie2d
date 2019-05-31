@@ -32,7 +32,8 @@ void print_to_gnuplot (timed_discrete_function &tdf, std::string name)
 
 void print_residuals (timed_discrete_function &tdf, timed_discrete_function &tdf_real, std::string name)
 {
-  printf ("Residual for %s is: %e\n", name.c_str (), tdf.residual (tdf_real));
+  residual_value val = tdf.residual (tdf_real);
+  printf ("Residual for %s is: %e at %.2f %.2f\n", name.c_str (), val.first, val.second.first, val.second.second);
 }
 
 void print_parameters (const trio &essential)
