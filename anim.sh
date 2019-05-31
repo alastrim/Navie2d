@@ -49,6 +49,10 @@ y_start = (0+y_step/2)
 y_end = (Y-y_step/2)
 grid_row_count = (y_step_count)
 grid_column_count = (x_step_count)
+x_start = x_start * 6.3
+x_end = x_end * 6.3
+y_start = y_start * 6.3
+y_end = y_end * 6.3
 
 set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
@@ -64,7 +68,7 @@ do for [i=0:t_step_count] {
     set zlabel "z"
     F = sprintf ("%s/%d", f_name, i)
     R = sprintf ("%s/%d", real_name, i)
-    splot F with lines title f_name lw 2 #, R with lines title real_name lw 2
+    splot F with lines title f_name lw 2, R with lines title real_name lw 2
 }
 
 EOF
@@ -90,6 +94,10 @@ y_start = (0)
 y_end = (Y)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
+x_start = x_start * 6.3
+x_end = x_end * 6.3
+y_start = y_start * 6.3
+y_end = y_end * 6.3
 
 set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
@@ -131,6 +139,10 @@ y_start = (0)
 y_end = (Y)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
+x_start = x_start * 6.3
+x_end = x_end * 6.3
+y_start = y_start * 6.3
+y_end = y_end * 6.3
 
 set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
@@ -151,6 +163,6 @@ do for [i=0:t_step_count] {
 
 EOF
 
-#eog V1.gif &
-#eog V2.gif &
+eog V1.gif &
+eog V2.gif &
 eog H.gif &

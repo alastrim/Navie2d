@@ -22,16 +22,16 @@ void fill_initial_info (trio &essential)
   V1_initial_cut.fill (V1_initial_filler);
   V2_initial_cut.fill (V2_initial_filler);
 
-  discrete_foreach_function zero_setter = [&] (index ij, point, discrete_function &self)
-  {
-    if (self.get_grid ()->get_type (ij) == point_type::edge)
-      self.set_value (ij, 0);
-  };
-  timed_discrete_foreach_function timed_zero_setter = [&] (int k, double, timed_discrete_function &self) { self.get_cut (k).do_for_each (zero_setter); };
+//  discrete_foreach_function zero_setter = [&] (index ij, point, discrete_function &self)
+//  {
+//    if (self.get_grid ()->get_type (ij) == point_type::edge)
+//      self.set_value (ij, 0);
+//  };
+//  timed_discrete_foreach_function timed_zero_setter = [&] (int k, double, timed_discrete_function &self) { self.get_cut (k).do_for_each (zero_setter); };
 
-//  essential.m_tdfH.do_for_each (timed_zero_setter);
-  essential.m_tdfV1.do_for_each (timed_zero_setter);
-  essential.m_tdfV2.do_for_each (timed_zero_setter);
+////  essential.m_tdfH.do_for_each (timed_zero_setter);
+//  essential.m_tdfV1.do_for_each (timed_zero_setter);
+//  essential.m_tdfV2.do_for_each (timed_zero_setter);
 }
 
 void fill_real_info (trio &real)
@@ -39,6 +39,17 @@ void fill_real_info (trio &real)
   real.m_tdfH.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return r (t, x, y); });
   real.m_tdfV1.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return u1 (t, x, y); });
   real.m_tdfV2.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return u2 (t, x, y); });
+
+//  discrete_foreach_function zero_setter = [&] (index ij, point, discrete_function &self)
+//  {
+//    if (self.get_grid ()->get_type (ij) == point_type::edge)
+//      self.set_value (ij, 0);
+//  };
+//  timed_discrete_foreach_function timed_zero_setter = [&] (int k, double, timed_discrete_function &self) { self.get_cut (k).do_for_each (zero_setter); };
+
+//  real.m_tdfV1.do_for_each (timed_zero_setter);
+//  real.m_tdfV2.do_for_each (timed_zero_setter);
+
 }
 
 std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
@@ -56,6 +67,8 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
       iY = 1;
     }
   double T = iT, X = iX, Y = iY;
+  X = X * 2. * M_PI;
+  Y = Y * 2. * M_PI;
 
   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
 
