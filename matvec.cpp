@@ -1,6 +1,6 @@
 ﻿#include "matvec.h"
 
-int solve_system (std::unordered_map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
+int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
 {
   static int print = 1;
   matrix LA;
@@ -49,7 +49,7 @@ matrix::~matrix ()
   drop_laspack_pointer ();
 }
 
-void matrix::set (std::unordered_map<unsigned int, double> &src, int full_size)
+void matrix::set (std::map<unsigned int, double> &src, int full_size)
 {
   m_name = std::string ("Non-empty matrix");
   m_container = src;
@@ -98,23 +98,22 @@ void matrix::update_to_laspack ()
   m_laspack_pointer = new QMatrix ();
   Q_Constr (m_laspack_pointer, const_cast<char *> (m_name.c_str ()), tou (m_size), False, Rowws, Normal, True);
 
-  for (int i = 0; i < m_size; i++)
+  for (int li = 1; li <= m_size; li++)
+    Q_SetLen (m_laspack_pointer, tou (li), tou (m_non_zero_count));
+
+  std::vector<int> non_zero_counts (tou (m_size), 0);
+  for (const std::pair<unsigned int, double> ind_and_val : m_container)
     {
+      int i = toi (ind_and_val.first) / m_size;
+      int j = toi (ind_and_val.first) - i * m_size;
+
       int li = i + 1;
-      int non_zero_count = 0;
-      Q_SetLen (m_laspack_pointer, tou (li), tou (m_non_zero_count));
-      for (int j = 0; j < m_size; j++)
-        {
-          int lj = j + 1;
-          double value = 0;
-          if (m_container.find (tou (i * m_size + j)) != m_container.end ())
-            value = m_container[tou (i * m_size + j)];
-          if (fuzzycmp (value))
-            Q_SetEntry (m_laspack_pointer, tou (li), tou (non_zero_count++), tou (lj), value);
-        }
+      int lj = j + 1;
+
+      double value = ind_and_val.second;
+      Q_SetEntry (m_laspack_pointer, tou (li), tou (non_zero_counts[tou (i)]++), tou (lj), value);
     }
 }
-
 
 // vector----------------------------------------------------------------------
 

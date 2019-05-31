@@ -13,7 +13,7 @@ double xpabs (double x)
   return x + fabs (x);
 }
 
-MatrixSetter::MatrixSetter (std::unordered_map<unsigned int, double> &A, const discrete_function &df)
+MatrixSetter::MatrixSetter (std::map<unsigned int, double> &A, const discrete_function &df)
   : m_A (A), m_df (df)
 {}
 

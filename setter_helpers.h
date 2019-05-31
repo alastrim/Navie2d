@@ -15,10 +15,10 @@ class MatrixSetter
 friend bool process_if_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at);
 friend bool process_H_edge (int m1, int m2, double t, MatrixSetter &A_at, VectorSetter &B_at);
 public:
-  MatrixSetter (std::unordered_map<unsigned int, double> &A, const discrete_function &df);
+  MatrixSetter (std::map<unsigned int, double> &A, const discrete_function &df);
   double & operator () (int m1_base, int m2_base, int m1_mod, int m2_mod);
 private:
-  std::unordered_map<unsigned int, double> &m_A;
+  std::map<unsigned int, double> &m_A;
   std::vector<int> m_taken;
   const discrete_function &m_df;
   double m_dummy;
