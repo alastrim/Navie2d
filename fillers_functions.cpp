@@ -18,7 +18,6 @@ static double Power (double x, double y)
 
   return pow (x, y);
 }
-static double Pi = M_PI;
 static double E = M_E;
 
 
@@ -42,43 +41,19 @@ double p (double r)
   return pow (r, GAMMA);
 }
 
-double dpdx (double t, double x, double y)
-{
-  return -2*Power(E,t)*GAMMA*Pi*Sin(2*Pi*x)*(1.5 + Sin(2*Pi*y))*Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA);
-}
-
-
 double f_1 (double t, double x, double y)
 {
-  auto du1dx = [](double t, double x, double y)
-  { return cos (x) * sin (y) * Power (E, t); };
-  auto du2dy = [](double t, double x, double y)
-  { return sin (x) * cos (y) / Power (E, t); };
-  auto drdx = [](double t, double x, double y)
-  { return - sin (x) * (sin (y) + 3./2.) * Power (E, t); };
-  auto drdy = [](double t, double x, double y)
-  { return (cos (x) + 3./2.) * cos (y) * Power (E, t); };
-  auto drdt = [](double t, double x, double y)
-  { return r (t, x, y); };
-
-  return (drdt (t, x, y)) * 1.0
-      + (r (t, x, y) * du1dx (t, x, y) + u1 (t, x, y) * drdx (t, x, y)) * 1.0
-      + (r (t, x, y) * du2dy (t, x, y) + u2 (t, x, y) * drdy (t, x, y)) * 1.0;
+  return (1.5 + Cos(x))*Cos(y)*Sin(x)*Sin(y) + Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)) + (1.5 + Cos(x))*Cos(y)*Sin(x)*(1.5 + Sin(y)) + Power(E,2*t)*Cos(x)*(1.5 + Cos(x))*Sin(y)*(1.5 + Sin(y)) -
+     Power(E,2*t)*Power(Sin(x),2)*Sin(y)*(1.5 + Sin(y));
 }
 double f_2 (double t, double x, double y)
 {
-  double res = (-2.*Power(E,t)*GAMMA*Pi*Sin(2.*Pi*x)*(1.5 + Sin(2.*Pi*y))*Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2.*Pi*y)),-1. + GAMMA) -
-                MIU*((4.*Power(Pi,2.)*Cos(2.*Pi*x)*Cos(2.*Pi*y))/(3.*Power(E,t)) - (28.*Power(E,t)*Power(Pi,2.)*Sin(2*Pi*x)*Sin(2.*Pi*y))/3.) +
-                Power(E,t)*(1.5 + Cos(2.*Pi*x))*(1.5 + Sin(2.*Pi*y))*(Power(E,t)*Sin(2.*Pi*x)*Sin(2.*Pi*y) + 2*Pi*Cos(2.*Pi*y)*Power(Sin(2.*Pi*x),2.)*Sin(2.*Pi*y) +
-                   2.*Power(E,2.*t)*Pi*Cos(2.*Pi*x)*Sin(2.*Pi*x)*Power(Sin(2.*Pi*y),2.)))/(Power(E,t)*(1.5 + Cos(2.*Pi*x))*(1.5 + Sin(2.*Pi*y)));
-  return res;
+  return (-(Power(E,t)*GAMMA*Sin(x)*(1.5 + Sin(y))*Power(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)),-1 + GAMMA)) - MIU*((Cos(x)*Cos(y))/(3.*Power(E,t)) - (7*Power(E,t)*Sin(x)*Sin(y))/3.) +
+          Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y))*(Power(E,t)*Sin(x)*Sin(y) + Cos(y)*Power(Sin(x),2)*Sin(y) + Power(E,2*t)*Cos(x)*Sin(x)*Power(Sin(y),2)))/(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)));
 }
 double f_3 (double t, double x, double y)
 {
-  double res = (2*Power(E,t)*GAMMA*Pi*(1.5 + Cos(2*Pi*x))*Cos(2*Pi*y)*Power(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)),-1 + GAMMA) -
-                MIU*((4*Power(E,t)*Power(Pi,2)*Cos(2*Pi*x)*Cos(2*Pi*y))/3. - (28*Power(Pi,2)*Sin(2*Pi*x)*Sin(2*Pi*y))/(3.*Power(E,t))) +
-                Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y))*(-((Sin(2*Pi*x)*Sin(2*Pi*y))/Power(E,t)) + (2*Pi*Cos(2*Pi*y)*Power(Sin(2*Pi*x),2)*Sin(2*Pi*y))/Power(E,2*t) +
-                   2*Pi*Cos(2*Pi*x)*Sin(2*Pi*x)*Power(Sin(2*Pi*y),2)))/(Power(E,t)*(1.5 + Cos(2*Pi*x))*(1.5 + Sin(2*Pi*y)));
-  return res;
+  return (Power(E,t)*GAMMA*(1.5 + Cos(x))*Cos(y)*Power(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)),-1 + GAMMA) - MIU*((Power(E,t)*Cos(x)*Cos(y))/3. - (7*Sin(x)*Sin(y))/(3.*Power(E,t))) +
+          Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y))*(-((Sin(x)*Sin(y))/Power(E,t)) + (Cos(y)*Power(Sin(x),2)*Sin(y))/Power(E,2*t) + Cos(x)*Sin(x)*Power(Sin(y),2)))/(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)));
 }
 }

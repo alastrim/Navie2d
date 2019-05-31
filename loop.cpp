@@ -24,7 +24,6 @@ void time_loop (trio &essential, trio &real)
         fillers::fill_first (k, A, B, essential);
 
         solve_system (A, B, X, realvect);
-//        X = realvect;
       }
       // Solving second system
       {
@@ -35,8 +34,7 @@ void time_loop (trio &essential, trio &real)
 
         fillers::fill_second (k, A, B, essential);
 
-//        solve_system (A, B, X, realvect);
-        X = realvect;
+        solve_system (A, B, X, realvect);
       }
       // Solving third system
       {
@@ -47,8 +45,7 @@ void time_loop (trio &essential, trio &real)
 
         fillers::fill_third (k, A, B, essential);
 
-//        solve_system (A, B, X, realvect);
-        X = realvect;
+        solve_system (A, B, X, realvect);
       }
     });
 }
