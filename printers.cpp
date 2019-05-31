@@ -3,7 +3,7 @@
 #include "fillers_misc.h"
 #include "grid.h"
 
-#define SCALE 0.3
+#define SCALE 1
 
 void print_to_gnuplot (discrete_function &df, std::string name, double t)
 {

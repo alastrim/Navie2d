@@ -63,7 +63,7 @@ bool process_V_condition (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at
   const discrete_function &V2 = A_at.m_df;
   if (m2 == 0)
     {
-      B_at (m1, m2) = V2.val (m1, m2);
+      B_at (m1, m2) = V2.val (m1, m2 + 1);
       A_at (m1, m2, 0, 0) = 1.;
       return true;
     }

@@ -6,7 +6,7 @@
 #include "fillers_matrix.h"
 #include "fillers_functions.h"
 
-static void set_edge_condition (discrete_function &df)
+static void set_V1_edge_condition (discrete_function &df)
 {
   if (KNOWN_FUNC)
     return;
@@ -21,6 +21,21 @@ static void set_edge_condition (discrete_function &df)
   });
 }
 
+static void set_H_edge_condition (discrete_function &df)
+{
+  if (KNOWN_FUNC)
+    return;
+
+  df.do_for_each ([&] (index ij, point, discrete_function &)
+  {
+    if (df.get_grid ()->get_full_type (ij) == point_type::outer)
+      return;
+
+    if (ij.first == 0)
+      df.set_value (ij, RHO_GAMMA);
+  });
+}
+
 void time_loop (trio &essential, trio *real)
 {
   essential.m_tdfH.do_for_each ([&essential, real] (int k, double, timed_discrete_function &)
@@ -30,10 +45,8 @@ void time_loop (trio &essential, trio *real)
       if (k == essential.m_tdfH.get_scale ()->get_parameters ().m_t_point_count - 1)
         return;
 
-      {
-        set_edge_condition (essential.m_tdfV1.get_cut (k));
-        set_edge_condition (essential.m_tdfV2.get_cut (k));
-      }
+      set_V1_edge_condition (essential.m_tdfV1.get_cut (k));
+      set_H_edge_condition (essential.m_tdfH.get_cut (k));
 
       {
         std::vector<double> &X = essential.m_tdfH.get_cut (k + 1).get_raw_vector ();
@@ -84,5 +97,8 @@ void time_loop (trio &essential, trio *real)
         else
           solve_system (A, B, X, nullptr);
       }
+
+      set_V1_edge_condition (essential.m_tdfV1.get_cut (k + 1));
+      set_H_edge_condition (essential.m_tdfH.get_cut (k + 1));
     });
 }

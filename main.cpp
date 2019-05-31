@@ -10,6 +10,7 @@
 double MIU;
 double OMEGA;
 double RHO_GAMMA;
+double RHO_NULL;
 
 enum class residual_t
 {
@@ -44,7 +45,8 @@ static std::string ets (residual_t type)
 
 int main (int argc, char **argv)
 {
-  OMEGA = 0.1;
+  OMEGA = 1;
+  RHO_NULL = 0;
   RHO_GAMMA = 1;
 
   std::vector<double> miu_vals = {0.1, 0.01, 0.001};

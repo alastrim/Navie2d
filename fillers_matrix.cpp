@@ -105,10 +105,10 @@ void fill_third (int k, std::map<unsigned int, double> &A, std::vector<double> &
     double x = xy.first, y = xy.second;
     double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
 
-    if (process_V_edge (m1, m2, check, A_at, B_at))
+    if (process_V_condition (m1, m2, A_at, B_at))
       return;
 
-    if (process_V_condition (m1, m2, A_at, B_at))
+    if (process_V_edge (m1, m2, check, A_at, B_at))
       return;
 
     A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
