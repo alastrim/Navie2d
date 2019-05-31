@@ -13,38 +13,38 @@ discrete_function::discrete_function (const grid *grid, std::string name) : m_gr
 
 void discrete_function::fill (continuous_function cf)
 {
-//  printf ("%s\n", m_name.c_str ());
-//  for (int i = -2; i < toi (m_i_size) + 2; i++)
-//    {
-//      for (int j = -2; j < toi (m_j_size) +2; j++)
-//        {
-//          point_type type = m_grid->get_type ({i, j});
-//          switch (type)
-//            {
-//          case point_type::inner:
-//          {
-//            printf ("i");
-//            break;
-//          }
-//          case point_type::edge:
-//          {
-//            printf ("e");
-//            break;
-//          }
-//          case point_type::outer:
-//          {
-//            printf ("o");
-//            break;
-//          }
-//          case point_type::INVALID:
-//          {
-//            assert (false, "Sanity");
-//          }
-//            }
-//        }
-//      printf ("\n");
-//    }
-//  printf ("\n");
+  printf ("%s\n", m_name.c_str ());
+  for (int i = 0; i < toi (m_i_size); i++)
+    {
+      for (int j = 0; j < toi (m_j_size); j++)
+        {
+          point_type type = m_grid->get_type ({i, j});
+          switch (type)
+            {
+          case point_type::inner:
+          {
+            printf ("i");
+            break;
+          }
+          case point_type::edge:
+          {
+            printf ("e");
+            break;
+          }
+          case point_type::outer:
+          {
+            printf ("o");
+            break;
+          }
+          case point_type::INVALID:
+          {
+            assert (false, "Sanity");
+          }
+            }
+        }
+      printf ("\n");
+    }
+  printf ("\n");
 
   do_for_each ([&cf] (index ij, point xy, discrete_function &self){
     double value = cf (xy);
@@ -114,6 +114,8 @@ void discrete_function::do_for_each (discrete_foreach_function dff)
       for (int j = 0; j < toi (m_j_size); j++)
         {
           index ij = {i, j};
+          if (m_grid->get_type (ij) == point_type::outer)
+            continue;
           point xy = m_grid->get_point (ij);
           dff (ij, xy, *this);
         }

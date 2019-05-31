@@ -75,8 +75,10 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
 
   result->m_H_grid = std::make_unique<grid> (0 + half_x_step, 0 + half_y_step,
                                              X - half_x_step, Y - half_y_step,
+                                             0., 0.,
+                                             2. * M_PI, 1. * M_PI,
                                              x_step_count - 1, y_step_count - 1);
-  result->m_V_grid = std::make_unique<grid> (0, 0, X, Y, x_step_count, y_step_count);
+  result->m_V_grid = std::make_unique<grid> (0, 0, X, Y, 0., 0., 2. * M_PI, 1. * M_PI, x_step_count, y_step_count);
   result->m_scale = std::make_unique<scale> (0, T, t_step_count);
 
   return result;

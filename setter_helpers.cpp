@@ -68,16 +68,3 @@ bool process_if_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSe
     }
   return false;
 }
-
-bool process_H_edge (int m1, int m2, double t, MatrixSetter &A_at, VectorSetter &B_at)
-{
-  const grid *gr = A_at.m_df.get_grid ();
-
-  if (gr->get_type ({m1, m2}) == point_type::edge)
-    {
-      A_at (m1,m2,0,0) = 1.0;
-      B_at (m1,m2) = fillers::r (t, gr->get_point ({m1, m2}).first, gr->get_point ({m1, m2}).second);
-      return true;
-    }
-  return false;
-}
