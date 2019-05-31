@@ -3,6 +3,8 @@
 #include "fillers_misc.h"
 #include "grid.h"
 
+#define SCALE 0.3
+
 void print_to_gnuplot (discrete_function &df, std::string name, double t)
 {
   FILE *out = fopen (name.c_str (), "w");
@@ -21,12 +23,41 @@ void print_to_gnuplot (discrete_function &df, std::string name, double t)
   fclose (out);
 }
 
+void print_velocity_to_gnuplot (discrete_function &dfV1, discrete_function &dfV2, std::string name, double t)
+{
+  FILE *out = fopen (name.c_str (), "w");
+
+  if (!out)
+    {
+      printf ("Cannot create output files\n");
+      return;
+    }
+
+  dfV1.do_for_each ([&] (index ij, point xy, discrete_function &) {
+    double valueV1 = dfV1.get_value (ij) * SCALE;
+    double valueV2 = dfV2.get_value (ij) * SCALE;
+    fprintf (out, "%f %f %f %f #%f\n", xy.first, xy.second, valueV1, valueV2, t);
+  });
+
+  fclose (out);
+}
+
 void print_to_gnuplot (timed_discrete_function &tdf, std::string name)
 {
   tdf.do_for_each ([name] (int k, double t, timed_discrete_function &self) {
       std::string filename = name + "/" + std::to_string (k);
       discrete_function &df = self.get_cut (k);
       print_to_gnuplot (df, filename, t);
+    });
+}
+
+void print_velocity_to_gnuplot (timed_discrete_function &tdfV1, timed_discrete_function &tdfV2, std::string name)
+{
+  tdfV1.do_for_each ([&] (int k, double t, timed_discrete_function &) {
+      std::string filename = name + "/" + std::to_string (k);
+      discrete_function &dfV1 = tdfV1.get_cut (k);
+      discrete_function &dfV2 = tdfV2.get_cut (k);
+      print_velocity_to_gnuplot (dfV1, dfV2, filename, t);
     });
 }
 

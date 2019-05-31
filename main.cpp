@@ -158,10 +158,12 @@ int main (int argc, char **argv)
           print_to_gnuplot (tdfH, "H");
           print_to_gnuplot (tdfV1, "V1");
           print_to_gnuplot (tdfV2, "V2");
+          print_velocity_to_gnuplot (tdfV1, tdfV2, "V1V2");
 
           print_to_gnuplot (real_tdfH, "realH");
           print_to_gnuplot (real_tdfV1, "realV1");
           print_to_gnuplot (real_tdfV2, "realV2");
+          print_velocity_to_gnuplot (real_tdfV1, real_tdfV2, "realV1V2");
 
           print_parameters (essential);
           print_residuals (tdfH, real_tdfH, "H");

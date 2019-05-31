@@ -5,14 +5,18 @@ if [ -d H ]; then
 	rm -rf realH
 	rm -rf realV1
 	rm -rf realV2
+	rm -rf V1V2
+	rm -rf realV1V2
 fi
 
 mkdir H
 mkdir V1
 mkdir V2
+mkdir V1V2
 mkdir realH
 mkdir realV1
 mkdir realV2
+mkdir realV1V2
 make
 ./navie $1 $2 $3 $4 $5
 
