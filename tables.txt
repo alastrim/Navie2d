@@ -1,0 +1,46 @@
+STARTED ANOTHER RUN
+
+
+
+\subsection{MIU = 0.100}
+\begin{table}[H]
+\caption {Тип невязки: C   }
+\begin{center}
+\begin{tabular}{l|l|l|l|l}
+\hline
+M/N  & 20 & 40 & 80 & 160 \\ \hline
+  21 & 6e-01 / 2e-01& 3e-01 / 1e-01\\ \hline
+  42 & 7e-01 / 2e-01& 4e-01 / 1e-01\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+\subsection{MIU = 0.010}
+\begin{table}[H]
+\caption {Тип невязки: C   }
+\begin{center}
+\begin{tabular}{l|l|l|l|l}
+\hline
+M/N  & 20 & 40 & 80 & 160 \\ \hline
+  21 & 7e-01 / 3e-01& 3e-01 / 2e-01\\ \hline
+  42 & 7e-01 / 3e-01& 4e-01 / 2e-01\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+\subsection{MIU = 0.001}
+\begin{table}[H]
+\caption {Тип невязки: C   }
+\begin{center}
+\begin{tabular}{l|l|l|l|l}
+\hline
+M/N  & 20 & 40 & 80 & 160 \\ \hline
+  21 & 7e-01 / 3e-01& 3e-01 / 2e-01\\ \hline
+  42 & 7e-01 / 3e-01& 4e-01 / 2e-01\\ \hline
+\end{tabular}
+\end{center}
+\end{table}

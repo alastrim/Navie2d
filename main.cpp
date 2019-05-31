@@ -39,8 +39,8 @@ static std::string ets (residual_t type)
   return "Err";
 }
 
-#define TSIZE 3
-#define TSTART 20
+#define TSIZE 4
+#define TSTART 21
 #define TMOD 2
 
 int main (int argc, char **argv)
@@ -49,6 +49,13 @@ int main (int argc, char **argv)
   RHO_NULL = 0;
   RHO_GAMMA = 1;
 
+  if (!PRINT_RESULTS)
+    {
+      FILE *f = fopen ("tables.txt", "w");
+      fprintf (f, "STARTED ANOTHER RUN\n");
+      fclose (f);
+    }
+
   std::vector<double> miu_vals = {0.1, 0.01, 0.001};
   for (double miu_val : miu_vals)
     {
@@ -56,6 +63,7 @@ int main (int argc, char **argv)
       if (!PRINT_RESULTS)
         {
           assert (KNOWN_FUNC, "Why create table if you cant calculate residuals?");
+
           typedef std::tuple<double, double, double> table_value_t;
           typedef std::vector<std::pair<int, table_value_t>> table_line_t; // M value
           typedef std::vector<std::pair<int, table_line_t>> table_t; // N value
@@ -122,10 +130,11 @@ int main (int argc, char **argv)
                 }
             }
 
-          printf ("\n\n\n\\subsection{MIU = %.3f}\n", MIU);
+          FILE *f = fopen ("tables.txt", "a");
+          fprintf (f, "\n\n\n\\subsection{MIU = %.3f}\n", MIU);
           for (std::pair<residual_t, table_t> &table : set)
             {
-              printf ("\\begin{table}[H]\n"
+              fprintf (f, "\\begin{table}[H]\n"
                       "\\caption {Тип невязки: %s}\n"
                       "\\begin{center}\n"
                       "\\begin{tabular}{l|l|l|l|l}\n"
@@ -133,15 +142,16 @@ int main (int argc, char **argv)
                       "M/N  & 20 & 40 & 80 & 160 \\\\ \\hline\n", ets (table.first).c_str ());
               for (std::pair<int, table_line_t> &line : table.second)
                 {
-                  printf ("%4d ", line.first);
+                  fprintf (f, "%4d ", line.first);
                   for (std::pair<int, table_value_t> & value : line.second)
-                    printf ("& %1.0e / %1.0e", std::get<1>(value.second), std::get<2>(value.second));
-                  printf ("\\\\ \\hline\n");
+                    fprintf (f, "& %1.0e / %1.0e", std::get<1>(value.second), std::get<2>(value.second));
+                  fprintf (f, "\\\\ \\hline\n");
                 }
-              printf ("\\end{tabular}\n"
+              fprintf (f, "\\end{tabular}\n"
                       "\\end{center}\n"
                       "\\end{table}\n");
             }
+          fclose (f);
 
         }
       else

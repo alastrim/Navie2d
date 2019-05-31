@@ -38,10 +38,10 @@ extern "C"
 #define MAXITER 2000
 #define DEBUG false
 #define LEN 250
-#define PRINT_RESULTS true
+#define PRINT_RESULTS false
 #define MAX_NON_ZERO 5
 #define GAMMA 1.4
-#define KNOWN_FUNC false
+#define KNOWN_FUNC true
 
 extern double OMEGA;
 extern double RHO_GAMMA;
