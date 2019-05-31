@@ -41,7 +41,6 @@ grid::grid(double x_origin, double y_origin,
           && m_parameters.m_hole_end_index_y >= 0,
           "Bad hole coordinates");
 }
-}
 
 point_type grid::get_type (index ij) const
 {
@@ -75,6 +74,16 @@ point_type grid::get_type (index ij) const
   else if (x_point_type == point_type::edge || y_point_type == point_type::edge)
     res_point_type = point_type::edge;
   assert (res_point_type != point_type::INVALID, "Bad point type");
+
+  if (i == m_parameters.m_hole_end_index_x
+      && j >= m_parameters.m_hole_origin_index_y && j <= m_parameters.m_hole_end_index_y)
+    return point_type::edge;
+  if (i >= m_parameters.m_hole_origin_index_x && i <= m_parameters.m_hole_end_index_x
+      && j == m_parameters.m_hole_end_index_y)
+    return point_type::edge;
+  if (i >= m_parameters.m_hole_origin_index_x && i <= m_parameters.m_hole_end_index_x
+      && j >= m_parameters.m_hole_origin_index_y && j <= m_parameters.m_hole_end_index_y)
+    return point_type::outer;
 
   return res_point_type;
 }
