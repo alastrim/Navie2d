@@ -14,7 +14,7 @@ static double Power (double x, double y)
     return x * x;
   if (!fuzzycmp (y, 3))
     return x * x * x;
-  assert (x > 0, "Sanity");
+  assert (x > 0, "X in power function should be positive");
 
   return pow (x, y);
 }
