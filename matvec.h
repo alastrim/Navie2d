@@ -5,7 +5,7 @@ class vector;
 
 // Interfaces from C++ containers to laspack matrix and vector
 
-int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real);
+int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> *real);
 
 class matrix
 {

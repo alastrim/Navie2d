@@ -9,9 +9,11 @@ class MatrixSetter;
 
 bool process_V_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at);
 bool process_H_edge (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at);
+bool process_V_condition (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at);
 
 class MatrixSetter
 {
+friend bool process_V_condition (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at);
 friend bool process_V_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at);
 friend bool process_H_edge (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at);
 public:

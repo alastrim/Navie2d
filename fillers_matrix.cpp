@@ -108,6 +108,9 @@ void fill_third (int k, std::map<unsigned int, double> &A, std::vector<double> &
     if (process_V_edge (m1, m2, check, A_at, B_at))
       return;
 
+    if (process_V_condition (m1, m2, A_at, B_at))
+      return;
+
     A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
                     +tau*MIU*(2./h1/h1+8./3./h2/h2);
 

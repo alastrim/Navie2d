@@ -8,6 +8,8 @@
 #include "loop.h"
 
 double MIU;
+double OMEGA;
+double RHO_GAMMA;
 
 enum class residual_t
 {
@@ -42,12 +44,16 @@ static std::string ets (residual_t type)
 
 int main (int argc, char **argv)
 {
+  OMEGA = 0.1;
+  RHO_GAMMA = 1;
+
   std::vector<double> miu_vals = {0.1, 0.01, 0.001};
   for (double miu_val : miu_vals)
     {
       MIU = miu_val;
       if (!PRINT_RESULTS)
         {
+          assert (KNOWN_FUNC, "Why create table if you cant calculate residuals?");
           typedef std::tuple<double, double, double> table_value_t;
           typedef std::vector<std::pair<int, table_value_t>> table_line_t; // M value
           typedef std::vector<std::pair<int, table_line_t>> table_t; // N value
@@ -96,8 +102,7 @@ int main (int argc, char **argv)
                   trio real (real_tdfH, real_tdfV1, real_tdfV2);
                   fillers::fill_real_info (real);
 
-                  time_loop (essential, real);
-
+                  time_loop (essential, &real);
 
                   double t1 = essential.m_tdfH.residual (real.m_tdfH).first;
                   double t2 = essential.m_tdfV1.residual (real.m_tdfV1).first;
@@ -147,28 +152,42 @@ int main (int argc, char **argv)
           trio essential (tdfH, tdfV1, tdfV2);
           fillers::fill_initial_info (essential);
 
-          timed_discrete_function real_tdfH (main_mesh->m_H_grid.get (), main_mesh->m_scale.get (), "H");
-          timed_discrete_function real_tdfV1 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get (), "V1");
-          timed_discrete_function real_tdfV2 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get (), "V2");
-          trio real (real_tdfH, real_tdfV1, real_tdfV2);
-          fillers::fill_real_info (real);
+          if (KNOWN_FUNC)
+            {
+              timed_discrete_function real_tdfH (main_mesh->m_H_grid.get (), main_mesh->m_scale.get (), "H");
+              timed_discrete_function real_tdfV1 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get (), "V1");
+              timed_discrete_function real_tdfV2 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get (), "V2");
+              trio real (real_tdfH, real_tdfV1, real_tdfV2);
+              fillers::fill_real_info (real);
 
-          time_loop (essential, real);
+              time_loop (essential, &real);
 
-          print_to_gnuplot (tdfH, "H");
-          print_to_gnuplot (tdfV1, "V1");
-          print_to_gnuplot (tdfV2, "V2");
-          print_velocity_to_gnuplot (tdfV1, tdfV2, "V1V2");
+              print_to_gnuplot (tdfH, "H");
+              print_to_gnuplot (tdfV1, "V1");
+              print_to_gnuplot (tdfV2, "V2");
+              print_velocity_to_gnuplot (tdfV1, tdfV2, "V1V2");
 
-          print_to_gnuplot (real_tdfH, "realH");
-          print_to_gnuplot (real_tdfV1, "realV1");
-          print_to_gnuplot (real_tdfV2, "realV2");
-          print_velocity_to_gnuplot (real_tdfV1, real_tdfV2, "realV1V2");
+              print_to_gnuplot (real_tdfH, "realH");
+              print_to_gnuplot (real_tdfV1, "realV1");
+              print_to_gnuplot (real_tdfV2, "realV2");
+              print_velocity_to_gnuplot (real_tdfV1, real_tdfV2, "realV1V2");
 
-          print_parameters (essential);
-          print_residuals (tdfH, real_tdfH, "H");
-          print_residuals (tdfV1, real_tdfV1, "V1");
-          print_residuals (tdfV2, real_tdfV2, "V2");
+              print_parameters (essential);
+              print_residuals (tdfH, real_tdfH, "H");
+              print_residuals (tdfV1, real_tdfV1, "V1");
+              print_residuals (tdfV2, real_tdfV2, "V2");
+            }
+          else
+            {
+              time_loop (essential, nullptr);
+
+              print_to_gnuplot (tdfH, "H");
+              print_to_gnuplot (tdfV1, "V1");
+              print_to_gnuplot (tdfV2, "V2");
+              print_velocity_to_gnuplot (tdfV1, tdfV2, "V1V2");
+
+              print_parameters (essential);
+            }
 
           return 0;
 

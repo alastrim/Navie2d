@@ -65,8 +65,7 @@ do for [i=0:t_step_count] {
     set ylabel "y"
     set zlabel "z"
     F = sprintf ("%s/%d", f_name, i)
-    R = sprintf ("%s/%d", real_name, i)
-    plot F using 1:2:3:4 with vectors filled head lw 2 title f_name, R using 1:2:3:4 with vectors filled head lw 2 title real_name
+    plot F using 1:2:3:4 with vectors filled head lw 2 title f_name
 }
 
 EOF

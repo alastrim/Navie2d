@@ -27,14 +27,29 @@ namespace fillers
 {
 double u1 (double t, double x, double y)
 {
+  if (!KNOWN_FUNC)
+    {
+      assert (!fuzzycmp (t, 0), "Dont use known func if it is not known");
+      return 0;
+    }
   return sin (x) * sin (y) * Power (E, t);
 }
 double u2 (double t, double x, double y)
 {
+  if (!KNOWN_FUNC)
+    {
+      assert (!fuzzycmp (t, 0), "Dont use known func if it is not known");
+      return 0;
+    }
   return sin (x) * sin (y) / Power (E, t);
 }
 double r (double t, double x, double y)
 {
+  if (!KNOWN_FUNC)
+    {
+      assert (!fuzzycmp (t, 0), "Dont use known func if it is not known");
+      return RHO_GAMMA;
+    }
   return (cos (x) + 3.0/2.0) * (sin (y) + 3.0/2.0) * Power (E, t);
 }
 double p (double r)
@@ -45,16 +60,22 @@ double p (double r)
 
 double f_1 (double t, double x, double y)
 {
+  if (!KNOWN_FUNC)
+    return 0;
   return (1.5 + Cos(x))*Cos(y)*Sin(x)*Sin(y) + Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)) + (1.5 + Cos(x))*Cos(y)*Sin(x)*(1.5 + Sin(y)) + Power(E,2*t)*Cos(x)*(1.5 + Cos(x))*Sin(y)*(1.5 + Sin(y)) -
      Power(E,2*t)*Power(Sin(x),2)*Sin(y)*(1.5 + Sin(y));
 }
 double f_2 (double t, double x, double y)
 {
+  if (!KNOWN_FUNC)
+    return 0;
   return (-(Power(E,t)*GAMMA*Sin(x)*(1.5 + Sin(y))*Power(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)),-1 + GAMMA)) - MIU*((Cos(x)*Cos(y))/(3.*Power(E,t)) - (7*Power(E,t)*Sin(x)*Sin(y))/3.) +
           Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y))*(Power(E,t)*Sin(x)*Sin(y) + Cos(y)*Power(Sin(x),2)*Sin(y) + Power(E,2*t)*Cos(x)*Sin(x)*Power(Sin(y),2)))/(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)));
 }
 double f_3 (double t, double x, double y)
 {
+  if (!KNOWN_FUNC)
+    return 0;
   return (Power(E,t)*GAMMA*(1.5 + Cos(x))*Cos(y)*Power(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)),-1 + GAMMA) - MIU*((Power(E,t)*Cos(x)*Cos(y))/3. - (7*Sin(x)*Sin(y))/(3.*Power(E,t))) +
           Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y))*(-((Sin(x)*Sin(y))/Power(E,t)) + (Cos(y)*Power(Sin(x),2)*Sin(y))/Power(E,2*t) + Cos(x)*Sin(x)*Power(Sin(y),2)))/(Power(E,t)*(1.5 + Cos(x))*(1.5 + Sin(y)));
 }

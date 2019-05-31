@@ -1,6 +1,6 @@
 ﻿#include "matvec.h"
 
-int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> &real)
+int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std::vector<double> &X, std::vector<double> *real)
 {
   static int print = 1;
   matrix LA;
@@ -11,7 +11,8 @@ int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std
   LA.set (A, toi (B.size ()));
   LB.set (B);
   LX.set (X);
-  Lreal.set (real);
+  if (real)
+    Lreal.set (*real);
 
 
   SetRTCAccuracy (EPS_FOR_SOLVING);
@@ -28,8 +29,11 @@ int solve_system (std::map<unsigned int, double> &A, std::vector<double> &B, std
       print_system (LA, LB);
       printf ("Result:\n");
       LX.print ();
-      printf ("Real:\n");
-      Lreal.print ();
+      if (real)
+        {
+          printf ("Real:\n");
+          Lreal.print ();
+        }
       printf ("\n");
       print--;
     }

@@ -25,6 +25,7 @@ void fill_initial_info (trio &essential)
 
 void fill_real_info (trio &real)
 {
+  assert (KNOWN_FUNC, "Dont try to fill real info if you dont know it");
   real.m_tdfH.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return r (t, x, y); });
   real.m_tdfV1.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return u1 (t, x, y); });
   real.m_tdfV2.fill ([] (double t, point xy) { double x = xy.first, y = xy.second; return u2 (t, x, y); });

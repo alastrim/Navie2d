@@ -56,6 +56,20 @@ double & VectorSetter::operator () (int m1, int m2)
   return m_B[tou (ind)];
 }
 
+bool process_V_condition (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at)
+{
+  if (KNOWN_FUNC)
+    return false;
+  const discrete_function &V2 = A_at.m_df;
+  if (m2 == 0)
+    {
+      B_at (m1, m2) = V2.val (m1, m2);
+      A_at (m1, m2, 0, 0) = 1.;
+      return true;
+    }
+  return false;
+}
+
 bool process_V_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at)
 {
   const grid *gr = A_at.m_df.get_grid ();
