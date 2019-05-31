@@ -26,13 +26,10 @@ struct grid_parameters
 class grid
 {
 public:
-  grid (double x_origin, double y_origin,
-        double x_end, double y_end,
-        double x_hole_origin, double y_hole_origin,
-        double x_hole_end, double y_hole_end,
-        int x_step_count, int y_step_count);
+  grid (const grid_parameters &parameters);
   point get_point (index ij) const;
-  point_type get_type (index ij) const;
+  point_type get_full_type (index ij) const;
+  point_type get_grid_only_type (index ij) const;
   grid_parameters get_parameters () const;
 private:
   grid_parameters m_parameters;

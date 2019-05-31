@@ -13,42 +13,43 @@ discrete_function::discrete_function (const grid *grid, std::string name) : m_gr
 
 void discrete_function::fill (continuous_function cf)
 {
-  printf ("%s\n", m_name.c_str ());
-  for (int i = 0; i < toi (m_i_size); i++)
-    {
-      for (int j = 0; j < toi (m_j_size); j++)
-        {
-          point_type type = m_grid->get_type ({i, j});
-          switch (type)
-            {
-          case point_type::inner:
-          {
-            printf ("i");
-            break;
-          }
-          case point_type::edge:
-          {
-            printf ("e");
-            break;
-          }
-          case point_type::outer:
-          {
-            printf ("o");
-            break;
-          }
-          case point_type::INVALID:
-          {
-            assert (false, "Sanity");
-          }
-            }
-        }
-      printf ("\n");
-    }
-  printf ("\n");
+//  printf ("%s\n", m_name.c_str ());
+//  for (int i = 0; i < toi (m_i_size); i++)
+//    {
+//      for (int j = 0; j < toi (m_j_size); j++)
+//        {
+//          point_type type = m_grid->get_type ({i, j});
+//          switch (type)
+//            {
+//          case point_type::inner:
+//          {
+//            printf ("i");
+//            break;
+//          }
+//          case point_type::edge:
+//          {
+//            printf ("e");
+//            break;
+//          }
+//          case point_type::outer:
+//          {
+//            printf ("o");
+//            break;
+//          }
+//          case point_type::INVALID:
+//          {
+//            assert (false, "Sanity");
+//          }
+//            }
+//        }
+//      printf ("\n");
+//    }
+//  printf ("\n");
 
   do_for_each ([&cf] (index ij, point xy, discrete_function &self){
     double value = cf (xy);
-    self.set_value (ij, value);
+    if (self.m_grid->get_full_type (ij) != point_type::outer)
+      self.set_value (ij, value);
   });
 }
 
@@ -65,17 +66,14 @@ double discrete_function::residual (const discrete_function &real)
 
 void discrete_function::set_value (index ij, double value)
 {
-  assert (ij.first >= 0 && tou (ij.first) < m_i_size, "Bad argument for function set value");
-  assert (ij.second >= 0 && tou (ij.second) < m_j_size, "Bad argument for function set value");
+  assert (m_grid->get_full_type (ij) != point_type::outer, "Bad argument for function set value");
 
   m_data[tou (ij.first) * m_j_size + tou (ij.second)] = value;
 }
 
 double discrete_function::get_value (index ij) const
 {
-  if (ij.first < 0 || tou (ij.first) >= m_i_size)
-    return 0;
-  if (ij.second < 0 || tou (ij.second) >= m_j_size)
+  if (m_grid->get_full_type (ij) == point_type::outer)
     return 0;
 
   return m_data[tou (ij.first) * m_j_size + tou (ij.second)];
@@ -114,8 +112,8 @@ void discrete_function::do_for_each (discrete_foreach_function dff)
       for (int j = 0; j < toi (m_j_size); j++)
         {
           index ij = {i, j};
-          if (m_grid->get_type (ij) == point_type::outer)
-            continue;
+//          if (m_grid->get_type (ij) == point_type::outer)
+//            continue;
           point xy = m_grid->get_point (ij);
           dff (ij, xy, *this);
         }

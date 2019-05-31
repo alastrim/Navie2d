@@ -28,6 +28,9 @@ void fill_first (int k, std::map<unsigned int, double> &A, std::vector<double> &
     int m1 = ij.first, m2 = ij.second;
     double x = xy.first, y = xy.second;
 
+    if (process_H_edge (m1, m2, A_at, B_at))
+      return;
+
     A_at(m1,m2,0,0)=1.
                   +tau*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))/2./h1
                   +tau*(xpabs(V2.tilda(m1,m2+1))-xmabs(V2.tilda(m1,m2)))/2./h2;
@@ -61,7 +64,7 @@ void fill_second (int k, std::map<unsigned int, double> &A, std::vector<double> 
     double x = xy.first, y = xy.second;
     double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
 
-    if (process_if_edge (m1, m2, check, A_at, B_at))
+    if (process_V_edge (m1, m2, check, A_at, B_at))
       return;
 
     A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
@@ -102,7 +105,7 @@ void fill_third (int k, std::map<unsigned int, double> &A, std::vector<double> &
     double x = xy.first, y = xy.second;
     double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
 
-    if (process_if_edge (m1, m2, check, A_at, B_at))
+    if (process_V_edge (m1, m2, check, A_at, B_at))
       return;
 
     A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))

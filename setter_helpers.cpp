@@ -33,7 +33,7 @@ double & MatrixSetter::operator () (int m1_base, int m2_base, int m1_mod, int m2
   int m1 = m1_base + m1_mod, m2 = m2_base + m2_mod;
 
 
-  if (gr->get_type ({m1, m2}) == point_type::outer)
+  if (gr->get_grid_only_type ({m1, m2}) == point_type::outer)
     return m_dummy;
 
   int ind = i * S + m1 * M2 + m2;
@@ -56,11 +56,22 @@ double & VectorSetter::operator () (int m1, int m2)
   return m_B[tou (ind)];
 }
 
-bool process_if_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at)
+bool process_V_edge (int m1, int m2, double check, MatrixSetter &A_at, VectorSetter &B_at)
 {
   const grid *gr = A_at.m_df.get_grid ();
+  if (gr->get_full_type ({m1, m2}) == point_type::outer || gr->get_full_type ({m1, m2}) == point_type::edge || !fuzzycmp (check))
+    {
+      A_at (m1,m2,0,0) = 1.0;
+      B_at (m1,m2) = 0.0;
+      return true;
+    }
+  return false;
+}
 
-  if (gr->get_type ({m1, m2}) == point_type::edge || !fuzzycmp (check))
+bool process_H_edge (int m1, int m2, MatrixSetter &A_at, VectorSetter &B_at)
+{
+  const grid *gr = A_at.m_df.get_grid ();
+  if (gr->get_full_type ({m1, m2}) == point_type::outer)
     {
       A_at (m1,m2,0,0) = 1.0;
       B_at (m1,m2) = 0.0;

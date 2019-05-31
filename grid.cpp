@@ -1,48 +1,30 @@
 #include "grid.h"
 
-grid::grid(double x_origin, double y_origin,
-           double x_end, double y_end,
-           double x_hole_origin, double y_hole_origin,
-           double x_hole_end, double y_hole_end,
-           int x_step_count, int y_step_count)
+grid::grid (const grid_parameters &parameters) : m_parameters (parameters)
 {
-  assert (x_step_count > 0 && y_step_count > 0, "Bad arguments for grid creation");
-  assert (x_end > x_origin && y_end > y_origin, "Bad arguments for grid creation");
-
-  m_parameters.m_x_origin = x_origin;
-  m_parameters.m_y_origin = y_origin;
-  m_parameters.m_x_step = (x_end - x_origin) / x_step_count;
-  m_parameters.m_y_step = (y_end - y_origin) / y_step_count;
-  m_parameters.m_x_point_count = x_step_count + 1;
-  m_parameters.m_y_point_count = y_step_count + 1;
-
-  for (int i = 0; i < m_parameters.m_x_point_count; i++)
-    {
-      if (m_parameters.m_x_origin + i * m_parameters.m_x_step >= x_hole_origin && m_parameters.m_hole_origin_index_x < 0)
-        m_parameters.m_hole_origin_index_x = i;
-      if (m_parameters.m_x_origin + i * m_parameters.m_x_step > x_hole_end && m_parameters.m_hole_end_index_x < 0)
-        m_parameters.m_hole_end_index_x = i - 1;
-    }
-  for (int j = 0; j < m_parameters.m_y_point_count; j++)
-    {
-      if (m_parameters.m_y_origin + j * m_parameters.m_y_step >= y_hole_origin && m_parameters.m_hole_origin_index_y < 0)
-        m_parameters.m_hole_origin_index_y = j;
-      if (m_parameters.m_y_origin + j * m_parameters.m_y_step > y_hole_end && m_parameters.m_hole_end_index_y < 0)
-        m_parameters.m_hole_end_index_y = j - 1;
-    }
-  printf ("x start = %d, x_end = %d, y start = %d, y end = %d\n",
-          m_parameters.m_hole_origin_index_x,
-          m_parameters.m_hole_end_index_x,
-          m_parameters.m_hole_origin_index_y,
-          m_parameters.m_hole_end_index_y);
-  assert (m_parameters.m_hole_origin_index_x >= 0
-          && m_parameters.m_hole_end_index_x >= 0
-          && m_parameters.m_hole_origin_index_y >= 0
-          && m_parameters.m_hole_end_index_y >= 0,
-          "Bad hole coordinates");
 }
 
-point_type grid::get_type (index ij) const
+point_type grid::get_full_type (index ij) const
+{
+  int i = ij.first;
+  int j = ij.second;
+
+  point_type res_point_type = get_grid_only_type (ij);
+
+  if (i == m_parameters.m_hole_end_index_x
+      && j >= m_parameters.m_hole_origin_index_y && j <= m_parameters.m_hole_end_index_y)
+    return point_type::edge;
+  if (i >= m_parameters.m_hole_origin_index_x && i <= m_parameters.m_hole_end_index_x
+      && j == m_parameters.m_hole_end_index_y)
+    return point_type::edge;
+  if (i >= m_parameters.m_hole_origin_index_x && i <= m_parameters.m_hole_end_index_x
+      && j >= m_parameters.m_hole_origin_index_y && j <= m_parameters.m_hole_end_index_y)
+    return point_type::outer;
+
+  return res_point_type;
+}
+
+point_type grid::get_grid_only_type (index ij) const
 {
   int i = ij.first;
   int j = ij.second;
@@ -75,23 +57,11 @@ point_type grid::get_type (index ij) const
     res_point_type = point_type::edge;
   assert (res_point_type != point_type::INVALID, "Bad point type");
 
-  if (i == m_parameters.m_hole_end_index_x
-      && j >= m_parameters.m_hole_origin_index_y && j <= m_parameters.m_hole_end_index_y)
-    return point_type::edge;
-  if (i >= m_parameters.m_hole_origin_index_x && i <= m_parameters.m_hole_end_index_x
-      && j == m_parameters.m_hole_end_index_y)
-    return point_type::edge;
-  if (i >= m_parameters.m_hole_origin_index_x && i <= m_parameters.m_hole_end_index_x
-      && j >= m_parameters.m_hole_origin_index_y && j <= m_parameters.m_hole_end_index_y)
-    return point_type::outer;
-
   return res_point_type;
 }
 
 point grid::get_point (index ij) const
 {
-  assert (get_type (ij) != point_type::outer, "Bad index for point");
-
   double x = m_parameters.m_x_origin + m_parameters.m_x_step * ij.first;
   double y = m_parameters.m_y_origin + m_parameters.m_y_step * ij.second;
 

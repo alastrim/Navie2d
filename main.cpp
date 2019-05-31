@@ -72,18 +72,14 @@ int main (int argc, char **argv)
                   int M = TSTART * static_cast<int> (pow (TMOD, static_cast<double> (Mloop)));
 
                   int t_step_count = N, x_step_count = M, y_step_count = M;
-                  double T = 1, X = 1, Y = 1;
+                  double T = 1, X = 3. * M_PI, Y = 3. * M_PI;
                   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
 
-                  double half_x_step = (X - 0) / x_step_count / 2.0;
-                  double half_y_step = (Y - 0) / y_step_count / 2.0;
+                  grid_parameters V_grid_parameters = fillers::construct_V_grid_parameters (0, 0, X, Y, 0., 0., 2. * M_PI, 1. * M_PI, x_step_count, y_step_count);
+                  grid_parameters H_grid_parameters = fillers::construct_H_grid_parameters (V_grid_parameters);
 
-                  result->m_H_grid = std::make_unique<grid> (0 + half_x_step, 0 + half_y_step,
-                                                             X - half_x_step, Y - half_y_step,
-                                                             0., 0.,
-                                                             2. * M_PI, 1. * M_PI,
-                                                             x_step_count - 1, y_step_count - 1);
-                  result->m_V_grid = std::make_unique<grid> (0, 0, X, Y, 0., 0., 2. * M_PI, 1. * M_PI, x_step_count, y_step_count);
+                  result->m_H_grid = std::make_unique<grid> (H_grid_parameters);
+                  result->m_V_grid = std::make_unique<grid> (V_grid_parameters);
                   result->m_scale = std::make_unique<scale> (0, T, t_step_count);
                   main_mesh = std::move (result);
 
