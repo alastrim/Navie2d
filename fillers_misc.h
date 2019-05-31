@@ -26,7 +26,9 @@ grid_parameters construct_V_grid_parameters (double x_origin, double y_origin,
                                              double x_hole_origin, double y_hole_origin,
                                              double x_hole_end, double y_hole_end,
                                              int x_step_count, int y_step_count);
-grid_parameters construct_H_grid_parameters (const grid_parameters &V_grid_parameters);
+grid_parameters construct_H_grid_parameters (const grid_parameters &V_grid_parameters,
+                                             double x_hole_origin, double y_hole_origin,
+                                             double x_hole_end, double y_hole_end);
 void fill_initial_info (trio &essential);
 void fill_real_info (trio &real);
 std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv);

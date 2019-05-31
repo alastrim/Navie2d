@@ -49,7 +49,7 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
 
   grid_parameters V_grid_parameters = construct_V_grid_parameters (0, 0, X, Y, 0., 0., 2. * M_PI, 1. * M_PI, x_step_count, y_step_count);
-  grid_parameters H_grid_parameters = construct_H_grid_parameters (V_grid_parameters);
+  grid_parameters H_grid_parameters = construct_H_grid_parameters (V_grid_parameters, 0., 0., 2. * M_PI, 1. * M_PI);
 
   result->m_H_grid = std::make_unique<grid> (H_grid_parameters);
   result->m_V_grid = std::make_unique<grid> (V_grid_parameters);
@@ -58,7 +58,9 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
   return result;
 }
 
-grid_parameters construct_H_grid_parameters (const grid_parameters &V_grid_parameters)
+grid_parameters construct_H_grid_parameters (const grid_parameters &V_grid_parameters,
+                                             double x_hole_origin, double y_hole_origin,
+                                             double x_hole_end, double y_hole_end)
 {
   grid_parameters H_grid_parameters;
 
@@ -76,6 +78,14 @@ grid_parameters construct_H_grid_parameters (const grid_parameters &V_grid_param
   H_grid_parameters.m_hole_origin_index_y = V_grid_parameters.m_hole_origin_index_y;
   H_grid_parameters.m_hole_end_index_y = V_grid_parameters.m_hole_end_index_y;
 
+  double calc_x_hole_origin = V_grid_parameters.m_x_origin + V_grid_parameters.m_hole_origin_index_x * V_grid_parameters.m_x_step;
+  assert (!fuzzycmp (calc_x_hole_origin, x_hole_origin), "Hole does not conform to the grid");
+  double calc_x_hole_end = V_grid_parameters.m_x_origin + V_grid_parameters.m_hole_end_index_x * V_grid_parameters.m_x_step;
+  assert (!fuzzycmp (calc_x_hole_end, x_hole_end), "Hole does not conform to the grid");
+  double calc_y_hole_origin = V_grid_parameters.m_y_origin + V_grid_parameters.m_hole_origin_index_y * V_grid_parameters.m_y_step;
+  assert (!fuzzycmp (calc_y_hole_origin, y_hole_origin), "Hole does not conform to the grid");
+  double calc_y_hole_end = V_grid_parameters.m_y_origin + V_grid_parameters.m_hole_end_index_y * V_grid_parameters.m_y_step;
+  assert (!fuzzycmp (calc_y_hole_end, y_hole_end), "Hole does not conform to the grid");
 
   return H_grid_parameters;
 }
@@ -116,6 +126,15 @@ grid_parameters construct_V_grid_parameters (double x_origin, double y_origin,
           && V_grid_parameters.m_hole_origin_index_y >= 0
           && V_grid_parameters.m_hole_end_index_y >= 0,
           "Bad hole coordinates");
+
+  double calc_x_hole_origin = V_grid_parameters.m_x_origin + V_grid_parameters.m_hole_origin_index_x * V_grid_parameters.m_x_step;
+  assert (!fuzzycmp (calc_x_hole_origin, x_hole_origin), "Hole does not conform to the grid");
+  double calc_x_hole_end = V_grid_parameters.m_x_origin + V_grid_parameters.m_hole_end_index_x * V_grid_parameters.m_x_step;
+  assert (!fuzzycmp (calc_x_hole_end, x_hole_end), "Hole does not conform to the grid");
+  double calc_y_hole_origin = V_grid_parameters.m_y_origin + V_grid_parameters.m_hole_origin_index_y * V_grid_parameters.m_y_step;
+  assert (!fuzzycmp (calc_y_hole_origin, y_hole_origin), "Hole does not conform to the grid");
+  double calc_y_hole_end = V_grid_parameters.m_y_origin + V_grid_parameters.m_hole_end_index_y * V_grid_parameters.m_y_step;
+  assert (!fuzzycmp (calc_y_hole_end, y_hole_end), "Hole does not conform to the grid");
 
   return V_grid_parameters;
 }

@@ -76,7 +76,7 @@ int main (int argc, char **argv)
                   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
 
                   grid_parameters V_grid_parameters = fillers::construct_V_grid_parameters (0, 0, X, Y, 0., 0., 2. * M_PI, 1. * M_PI, x_step_count, y_step_count);
-                  grid_parameters H_grid_parameters = fillers::construct_H_grid_parameters (V_grid_parameters);
+                  grid_parameters H_grid_parameters = fillers::construct_H_grid_parameters (V_grid_parameters, 0., 0., 2. * M_PI, 1. * M_PI);
 
                   result->m_H_grid = std::make_unique<grid> (H_grid_parameters);
                   result->m_V_grid = std::make_unique<grid> (V_grid_parameters);
