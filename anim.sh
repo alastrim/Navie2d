@@ -14,7 +14,7 @@ mkdir realH
 mkdir realV1
 mkdir realV2
 make
-./navie $1 $2 $3 $4 $5 $6 $7
+./navie $1 $2 $3 $4 $5
 
 if [ ! -d H ]; then
 	exit
@@ -22,11 +22,9 @@ fi
 
 #1 - T
 #2 - t_step_count
-#3 - X
-#4 - x_step_count
-#5 - Y
-#6 - y_step_count
-#7 - anim delay
+#3 - x_step_count
+#4 - y_step_count
+#5 - anim delay
 
 gnuplot -p << EOF
 
@@ -34,27 +32,23 @@ f_name = "H"
 real_name = "realH"
 t_step_count = ($2)
 t_point_count = (t_step_count+1)
-x_step_count = ($4)
+x_step_count = ($3)
 x_point_count = (x_step_count+1)
-y_step_count = ($6)
+y_step_count = ($4)
 y_point_count = (y_step_count+1)
 T = ($1)
-X = ($3)
-Y = ($5)
+X = 3 * 3.15
+Y = 3 * 3.15
 x_step = (X/x_step_count)
 y_step = (Y/y_step_count)
-x_start = (0+x_step/2)
-x_end = (X-x_step/2)
-y_start = (0+y_step/2)
-y_end = (Y-y_step/2)
+x_start = (0-x_step/2)
+x_end = (X+x_step/2)
+y_start = (0-y_step/2)
+y_end = (Y+y_step/2)
 grid_row_count = (y_step_count)
 grid_column_count = (x_step_count)
-x_start = x_start * 3.15
-x_end = x_end * 3.15
-y_start = y_start * 3.15
-y_end = y_end * 3.15
 
-set terminal gif animate delay ($7)
+set terminal gif animate delay ($5)
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {
@@ -79,13 +73,13 @@ f_name = "V1"
 real_name = "realV1"
 t_step_count = ($2)
 t_point_count = (t_step_count+1)
-x_step_count = ($4)
+x_step_count = ($3)
 x_point_count = (x_step_count+1)
-y_step_count = ($6)
+y_step_count = ($4)
 y_point_count = (y_step_count+1)
 T = ($1)
-X = ($3)
-Y = ($5)
+X = 3 * 3.15
+Y = 3 * 3.15
 x_step = (X/x_step_count)
 y_step = (Y/y_step_count)
 x_start = (0)
@@ -94,12 +88,8 @@ y_start = (0)
 y_end = (Y)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
-x_start = x_start * 3.15
-x_end = x_end * 3.15
-y_start = y_start * 3.15
-y_end = y_end * 3.15
 
-set terminal gif animate delay ($7)
+set terminal gif animate delay ($5)
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {
@@ -124,13 +114,13 @@ f_name = "V2"
 real_name = "realV2"
 t_step_count = ($2)
 t_point_count = (t_step_count+1)
-x_step_count = ($4)
+x_step_count = ($3)
 x_point_count = (x_step_count+1)
-y_step_count = ($6)
+y_step_count = ($4)
 y_point_count = (y_step_count+1)
 T = ($1)
-X = ($3)
-Y = ($5)
+X = 3 * 3.15
+Y = 3 * 3.15
 x_step = (X/x_step_count)
 y_step = (Y/y_step_count)
 x_start = (0)
@@ -139,12 +129,8 @@ y_start = (0)
 y_end = (Y)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
-x_start = x_start * 3.15
-x_end = x_end * 3.15
-y_start = y_start * 3.15
-y_end = y_end * 3.15
 
-set terminal gif animate delay ($7)
+set terminal gif animate delay ($5)
 set output sprintf ("%s.gif", f_name)
 
 do for [i=0:t_step_count] {

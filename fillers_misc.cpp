@@ -54,21 +54,19 @@ void fill_real_info (trio &real)
 
 std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
 {
-  int t_step_count, x_step_count, y_step_count, iT, iX, iY;
-  if (argc < 7 || !(iT = atoi (argv[1])) || !(t_step_count = atoi(argv[2])) || !(iX = atoi (argv[3])) || !(x_step_count = atoi(argv[4])) || !(iY = atoi (argv[5])) || !(y_step_count = atoi(argv[6])))
+  int t_step_count, x_step_count, y_step_count, iT;
+  if (argc < 5 || !(iT = atoi (argv[1])) || !(t_step_count = atoi(argv[2])) || !(x_step_count = atoi(argv[3])) || !(y_step_count = atoi(argv[4])))
     {
-      printf ("Usage: ./main.exe <T> <t_step_count> <X> <x_step_count> <Y> <y_step_count>\n");
+      printf ("Usage: ./main.exe <T> <t_step_count> <x_step_count> <y_step_count>\n");
       printf ("Bad arguments given, using default...\n");
       t_step_count = 35;
-      x_step_count = 13;
+      x_step_count = 15;
       y_step_count = 15;
       iT = 1;
-      iX = 1;
-      iY = 1;
     }
-  double T = iT, X = iX, Y = iY;
-  X = X * M_PI;
-  Y = Y * M_PI;
+  double T = iT;
+  double X = 3. * M_PI;
+  double Y = 3. * M_PI;
 
   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
 
