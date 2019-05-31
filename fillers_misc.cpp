@@ -67,8 +67,8 @@ std::unique_ptr<mesh> fill_mesh_by_arguments (int argc, char **argv)
       iY = 1;
     }
   double T = iT, X = iX, Y = iY;
-  X = X * 2. * M_PI;
-  Y = Y * 2. * M_PI;
+  X = X * M_PI;
+  Y = Y * M_PI;
 
   std::unique_ptr<mesh> result = std::make_unique<mesh> ();
 

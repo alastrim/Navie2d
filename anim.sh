@@ -49,10 +49,10 @@ y_start = (0+y_step/2)
 y_end = (Y-y_step/2)
 grid_row_count = (y_step_count)
 grid_column_count = (x_step_count)
-x_start = x_start * 6.3
-x_end = x_end * 6.3
-y_start = y_start * 6.3
-y_end = y_end * 6.3
+x_start = x_start * 3.15
+x_end = x_end * 3.15
+y_start = y_start * 3.15
+y_end = y_end * 3.15
 
 set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
@@ -94,10 +94,10 @@ y_start = (0)
 y_end = (Y)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
-x_start = x_start * 6.3
-x_end = x_end * 6.3
-y_start = y_start * 6.3
-y_end = y_end * 6.3
+x_start = x_start * 3.15
+x_end = x_end * 3.15
+y_start = y_start * 3.15
+y_end = y_end * 3.15
 
 set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
@@ -139,10 +139,10 @@ y_start = (0)
 y_end = (Y)
 grid_row_count = (y_step_count+1)
 grid_column_count = (x_step_count+1)
-x_start = x_start * 6.3
-x_end = x_end * 6.3
-y_start = y_start * 6.3
-y_end = y_end * 6.3
+x_start = x_start * 3.15
+x_end = x_end * 3.15
+y_start = y_start * 3.15
+y_end = y_end * 3.15
 
 set terminal gif animate delay ($7)
 set output sprintf ("%s.gif", f_name)
