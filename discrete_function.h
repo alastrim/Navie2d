@@ -6,7 +6,8 @@ class discrete_function
 public:
   discrete_function (const discrete_function &) = delete;
   discrete_function (const grid *grid, std::string name);
-  residual_value residual (const discrete_function &real);
+  double residual_C (const discrete_function &real);
+  double residual_L2 (const discrete_function &real);
   void fill (continuous_function cf);
   void set_value (index ij, double value);
   double get_value (index ij) const;
@@ -34,7 +35,8 @@ class timed_discrete_function
 public:
   timed_discrete_function (const timed_discrete_function &) = delete;
   timed_discrete_function (const grid *grid, const scale *scale, std::string name);
-  residual_value residual (const timed_discrete_function &real);
+  double residual_C (const timed_discrete_function &real);
+  double residual_L2 (const timed_discrete_function &real);
   void fill (timed_continuous_function tcf);
   void set_cut (int k, std::unique_ptr<discrete_function> df);
   discrete_function &get_cut (int k);

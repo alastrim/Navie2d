@@ -61,7 +61,6 @@ struct trio;
 
 typedef std::pair<double, double> point;
 typedef std::pair<int, int> index;
-typedef std::pair<double, point> residual_value;
 typedef std::function<double (point xy)> continuous_function;
 typedef std::function<double (double t, point xy)> timed_continuous_function;
 typedef std::function<void (index ij, point xy, discrete_function &self)> discrete_foreach_function;

@@ -15,10 +15,7 @@ double RHO_NULL;
 enum class residual_t
 {
   C,
-  //  L2,
-  //  L2_d,
-  //  W,
-  //  Mass
+  L2
 };
 
 static std::string ets (residual_t type)
@@ -27,14 +24,8 @@ static std::string ets (residual_t type)
     {
   case residual_t::C:
     return "C   ";
-    //  case residual_t::L2:
-    //    return "L2  ";
-    //  case residual_t::L2_d:
-    //    return "L2-d";
-    //  case residual_t::W:
-    //    return "W   ";
-    //  case residual_t::Mass:
-    //    return "Mass";
+  case residual_t::L2:
+    return "L2  ";
     }
   return "Err";
 }
@@ -69,7 +60,7 @@ int main (int argc, char **argv)
           typedef std::vector<std::pair<int, table_line_t>> table_t; // N value
           typedef std::vector<std::pair<residual_t, table_t>> table_set_t; // type of residual
 
-          std::vector<residual_t> types = {residual_t::C/*, residual_t::L2, residual_t::L2_d, residual_t::W, residual_t::Mass*/};
+          std::vector<residual_t> types = {residual_t::C, residual_t::L2};
           table_set_t set;
           for (auto t : types)
             {
@@ -83,6 +74,7 @@ int main (int argc, char **argv)
             {
               for (unsigned int Mloop = 0; Mloop < TSIZE; Mloop++)
                 {
+                  printf ("\nStarting another calculation...\n");
                   std::unique_ptr<mesh> main_mesh;
                   int N = TSTART * static_cast<int> (pow (TMOD, static_cast<double> (Nloop)));
                   int M = TSTART * static_cast<int> (pow (TMOD, static_cast<double> (Mloop)));
@@ -105,6 +97,7 @@ int main (int argc, char **argv)
                   timed_discrete_function tdfV2 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get (), "V2");
                   trio essential (tdfH, tdfV1, tdfV2);
                   fillers::fill_initial_info (essential);
+                  print_parameters (essential);
 
                   timed_discrete_function real_tdfH (main_mesh->m_H_grid.get (), main_mesh->m_scale.get (), "H");
                   timed_discrete_function real_tdfV1 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get (), "V1");
@@ -114,15 +107,20 @@ int main (int argc, char **argv)
 
                   time_loop (essential, &real);
 
-                  double t1 = essential.m_tdfH.residual (real.m_tdfH).first;
-                  double t2 = essential.m_tdfV1.residual (real.m_tdfV1).first;
-                  double t3 = essential.m_tdfV2.residual (real.m_tdfV2).first;
+                  double t1 = essential.m_tdfH.residual_C (real.m_tdfH);
+                  double t2 = essential.m_tdfV1.residual_C (real.m_tdfV1);
+                  double t3 = essential.m_tdfV2.residual_C (real.m_tdfV2);
+                  double t4 = essential.m_tdfH.residual_L2 (real.m_tdfH);
+                  double t5 = essential.m_tdfV1.residual_L2 (real.m_tdfV1);
+                  double t6 = essential.m_tdfV2.residual_L2 (real.m_tdfV2);
 
                   set[0].second[Nloop].first = N;
                   set[0].second[Nloop].second[Mloop].first = M;
                   set[0].second[Nloop].second[Mloop].second = {t1, t2, t3};
+                  set[1].second[Nloop].first = N;
+                  set[1].second[Nloop].second[Mloop].first = M;
+                  set[1].second[Nloop].second[Mloop].second = {t4, t5, t6};
 
-                  print_parameters (essential);
                   print_residuals (tdfH, real_tdfH, "H");
                   print_residuals (tdfV1, real_tdfV1, "V1");
                   print_residuals (tdfV2, real_tdfV2, "V2");
@@ -135,16 +133,50 @@ int main (int argc, char **argv)
           for (std::pair<residual_t, table_t> &table : set)
             {
               fprintf (f, "\\begin{table}[H]\n"
-                      "\\caption {Тип невязки: %s}\n"
+                      "\\caption {Функция: %s Тип невязки: %s}\n"
                       "\\begin{center}\n"
                       "\\begin{tabular}{l|l|l|l|l}\n"
                       "\\hline\n"
-                      "M/N  & 21 & 42 & 84 & 168 \\\\ \\hline\n", ets (table.first).c_str ());
+                      "M/N  & 21 & 42 & 84 & 168 \\\\ \\hline\n", "H", ets (table.first).c_str ());
               for (std::pair<int, table_line_t> &line : table.second)
                 {
                   fprintf (f, "%4d ", line.first);
                   for (std::pair<int, table_value_t> & value : line.second)
-                    fprintf (f, "& %1.0e / %1.0e", std::get<1>(value.second), std::get<2>(value.second));
+                    fprintf (f, "& %1.0e", std::get<0>(value.second));
+                  fprintf (f, "\\\\ \\hline\n");
+                }
+              fprintf (f, "\\end{tabular}\n"
+                      "\\end{center}\n"
+                      "\\end{table}\n");
+
+              fprintf (f, "\\begin{table}[H]\n"
+                          "\\caption {Функция: %s Тип невязки: %s}\n"
+                      "\\begin{center}\n"
+                      "\\begin{tabular}{l|l|l|l|l}\n"
+                      "\\hline\n"
+                      "M/N  & 21 & 42 & 84 & 168 \\\\ \\hline\n", "V1", ets (table.first).c_str ());
+              for (std::pair<int, table_line_t> &line : table.second)
+                {
+                  fprintf (f, "%4d ", line.first);
+                  for (std::pair<int, table_value_t> & value : line.second)
+                    fprintf (f, "& %1.0e", std::get<1>(value.second));
+                  fprintf (f, "\\\\ \\hline\n");
+                }
+              fprintf (f, "\\end{tabular}\n"
+                      "\\end{center}\n"
+                      "\\end{table}\n");
+
+              fprintf (f, "\\begin{table}[H]\n"
+                          "\\caption {Функция: %s Тип невязки: %s}\n"
+                      "\\begin{center}\n"
+                      "\\begin{tabular}{l|l|l|l|l}\n"
+                      "\\hline\n"
+                      "M/N  & 21 & 42 & 84 & 168 \\\\ \\hline\n", "V2", ets (table.first).c_str ());
+              for (std::pair<int, table_line_t> &line : table.second)
+                {
+                  fprintf (f, "%4d ", line.first);
+                  for (std::pair<int, table_value_t> & value : line.second)
+                    fprintf (f, "& %1.0e", std::get<2>(value.second));
                   fprintf (f, "\\\\ \\hline\n");
                 }
               fprintf (f, "\\end{tabular}\n"
@@ -156,6 +188,7 @@ int main (int argc, char **argv)
         }
       else
         {
+          printf ("\nStarting another calculation...\n");
           std::unique_ptr<mesh> main_mesh = fillers::fill_mesh_by_arguments (argc, argv);
 
           timed_discrete_function tdfH (main_mesh->m_H_grid.get (), main_mesh->m_scale.get (), "H");
@@ -163,6 +196,7 @@ int main (int argc, char **argv)
           timed_discrete_function tdfV2 (main_mesh->m_V_grid.get (), main_mesh->m_scale.get (), "V2");
           trio essential (tdfH, tdfV1, tdfV2);
           fillers::fill_initial_info (essential);
+          print_parameters (essential);
 
           if (KNOWN_FUNC)
             {
@@ -184,7 +218,6 @@ int main (int argc, char **argv)
               print_to_gnuplot (real_tdfV2, "realV2");
               print_velocity_to_gnuplot (real_tdfV1, real_tdfV2, "realV1V2");
 
-              print_parameters (essential);
               print_residuals (tdfH, real_tdfH, "H");
               print_residuals (tdfV1, real_tdfV1, "V1");
               print_residuals (tdfV2, real_tdfV2, "V2");
@@ -197,8 +230,6 @@ int main (int argc, char **argv)
               print_to_gnuplot (tdfV1, "V1");
               print_to_gnuplot (tdfV2, "V2");
               print_velocity_to_gnuplot (tdfV1, tdfV2, "V1V2");
-
-              print_parameters (essential);
             }
 
           return 0;

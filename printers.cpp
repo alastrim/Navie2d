@@ -63,8 +63,8 @@ void print_velocity_to_gnuplot (timed_discrete_function &tdfV1, timed_discrete_f
 
 void print_residuals (timed_discrete_function &tdf, timed_discrete_function &tdf_real, std::string name)
 {
-  residual_value val = tdf.residual (tdf_real);
-  printf ("Residual for %s is: %e\n", name.c_str (), val.first);
+  double val = tdf.residual_C (tdf_real);
+  printf ("Residual for %s is: %e\n", name.c_str (), val);
 }
 
 void print_parameters (const trio &essential)
@@ -78,5 +78,5 @@ void print_parameters (const trio &essential)
   int x_point_count = gr_p.m_x_point_count;
   int y_point_count = gr_p.m_y_point_count;
   double miu = MIU;
-  printf ("\nMIU=%.3f,N=%d,M1=%d,M2=%d\n", miu, t_point_count, x_point_count, y_point_count);
+  printf ("MIU=%.3f,N=%d,M1=%d,M2=%d\n", miu, t_point_count, x_point_count, y_point_count);
 }

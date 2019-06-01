@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.15)  31 MAY 2019 22:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.15)  1 JUN 2019 18:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -664,23 +664,24 @@ LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 7.
 LaTeX Font Info:    ... okay on input line 7.
  [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./navie.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] (./navie.aux) 
+) 
 Here is how much of TeX's memory you used:
  2384 strings out of 492982
  26285 string characters out of 6134895
- 94155 words of memory out of 5000000
+ 95155 words of memory out of 5000000
  5947 multiletter control sequences out of 15000+600000
  11106 words of font info for 31 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 27i,7n,23p,335b,253s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share
-/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</usr/share/texmf/fonts/type1/
-public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx
-1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on navie.pdf (1 page, 42305 bytes).
+ 27i,7n,23p,344b,253s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</usr/share/texmf/
+fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/c
+m-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb
+>
+Output written on navie.pdf (4 pages, 46782 bytes).
 PDF statistics:
- 21 PDF objects out of 1000 (max. 8388607)
- 14 compressed objects within 1 object stream
+ 30 PDF objects out of 1000 (max. 8388607)
+ 20 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
