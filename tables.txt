@@ -9,8 +9,10 @@ STARTED ANOTHER RUN
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 20 & 40 & 80 & 160 \\ \hline
-  21 & 6e-01 / 2e-01& 3e-01 / 1e-01\\ \hline
-  42 & 7e-01 / 2e-01& 4e-01 / 1e-01\\ \hline
+  21 & 6e-01 / 2e-01& 3e-01 / 1e-01& 2e-01 / 1e-01& 1e+00 / 1e+00\\ \hline
+  42 & 7e-01 / 2e-01& 4e-01 / 1e-01& 2e-01 / 8e-02& 8e-02 / 5e-02\\ \hline
+  84 & 7e-01 / 2e-01& 4e-01 / 1e-01& 2e-01 / 8e-02& 1e-01 / 4e-02\\ \hline
+ 168 & 7e-01 / 2e-01& 4e-01 / 1e-01& 2e-01 / 8e-02& 1e-01 / 4e-02\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -24,8 +26,10 @@ M/N  & 20 & 40 & 80 & 160 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 20 & 40 & 80 & 160 \\ \hline
-  21 & 7e-01 / 3e-01& 3e-01 / 2e-01\\ \hline
-  42 & 7e-01 / 3e-01& 4e-01 / 2e-01\\ \hline
+  21 & 7e-01 / 3e-01& 3e-01 / 2e-01& 2e-01 / 1e-01& 4e+00 / 6e+00\\ \hline
+  42 & 7e-01 / 3e-01& 4e-01 / 2e-01& 2e-01 / 9e-02& 9e-02 / 6e-02\\ \hline
+  84 & 7e-01 / 3e-01& 4e-01 / 2e-01& 2e-01 / 9e-02& 1e-01 / 5e-02\\ \hline
+ 168 & 7e-01 / 3e-01& 4e-01 / 2e-01& 2e-01 / 9e-02& 1e-01 / 5e-02\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -39,8 +43,10 @@ M/N  & 20 & 40 & 80 & 160 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 20 & 40 & 80 & 160 \\ \hline
-  21 & 7e-01 / 3e-01& 3e-01 / 2e-01\\ \hline
-  42 & 7e-01 / 3e-01& 4e-01 / 2e-01\\ \hline
+  21 & 7e-01 / 3e-01& 3e-01 / 2e-01& 2e-01 / 1e-01& 4e+00 / 5e+00\\ \hline
+  42 & 7e-01 / 3e-01& 4e-01 / 2e-01& 2e-01 / 9e-02& 9e-02 / 6e-02\\ \hline
+  84 & 7e-01 / 3e-01& 4e-01 / 2e-01& 2e-01 / 9e-02& 1e-01 / 5e-02\\ \hline
+ 168 & 7e-01 / 3e-01& 4e-01 / 2e-01& 2e-01 / 9e-02& 1e-01 / 5e-02\\ \hline
 \end{tabular}
 \end{center}
 \end{table}

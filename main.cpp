@@ -139,7 +139,7 @@ int main (int argc, char **argv)
                       "\\begin{center}\n"
                       "\\begin{tabular}{l|l|l|l|l}\n"
                       "\\hline\n"
-                      "M/N  & 20 & 40 & 80 & 160 \\\\ \\hline\n", ets (table.first).c_str ());
+                      "M/N  & 21 & 42 & 84 & 168 \\\\ \\hline\n", ets (table.first).c_str ());
               for (std::pair<int, table_line_t> &line : table.second)
                 {
                   fprintf (f, "%4d ", line.first);
