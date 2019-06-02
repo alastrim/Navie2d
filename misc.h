@@ -41,7 +41,7 @@ extern "C"
 #define PRINT_RESULTS true
 #define MAX_NON_ZERO 5
 #define GAMMA 1.4
-#define KNOWN_FUNC true
+#define KNOWN_FUNC false
 
 extern double OMEGA;
 extern double RHO_GAMMA;
