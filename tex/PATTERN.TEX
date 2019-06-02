@@ -1,0 +1,27 @@
+
+%  Store the catcode of the @ in the csname so that it can be restored later.
+\expandafter\chardef\csname pre book.tex at\endcsname=\the\catcode`\@
+%  Set the catcode to 11 for use in private control sequence names.
+\catcode`\@=11
+
+\@addtoreset{equation}{section}
+
+%  Restore the catcode value for @ that was previously saved.
+\catcode`\@=\csname pre book.tex at\endcsname
+
+\def\parspace{\hbox to\parindent{}}
+\newtheorem{theorem}{\parspace{}Теорема}[section]
+\newtheorem{lemma}{\parspace{}Лемма}[section]
+\newtheorem{note}{\parspace{}Замечание}[section]
+\newtheorem{corollary}{\parspace{}Следствие}[section]
+
+\def\thetheorem{\arabic{section}.\arabic{theorem}}
+\def\thelemma{\arabic{section}.\arabic{lemma}}
+\def\thenote{\arabic{section}.\arabic{note}}
+\def\thecorollary{\arabic{section}.\arabic{corollary}}
+
+\def\theequation{\arabic{section}.\arabic{equation}}
+
+\def\vphi{\varphi}
+\def\eps{\varepsilon}
+

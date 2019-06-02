@@ -5,171 +5,250 @@
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{longtable}
+\input PATTERN.TEX
+\input OPR.TEX
 
 \begin{document}
 
-\section{Начально-краевая задача}
-\label{dif}
-
-Изучение свойств численного алгоритма и создание его программной реализации
-начинается с наиболее простых задач с постепенным их усложнением.
-Приведем систему уравнений, описывающую нестационарное
-одномерное движение вязкого баротропного газа
-
+\section{Постановкa дифференциальной задачи}
+Система уравнений, описывающая нестационарное движение баротропного газа
+в области $\Omega$,
+выглядит следующим образом
 \begin{equation}
 \begin{array}{l}
-\dfrac{\partial\rho}{\partial t} + \dfrac{\partial\rho u}{\partial x} = 0, \\[2.0ex]
-\rho\dfrac{\partial u}{\partial t} + \rho u\dfrac{\partial u}{\partial x}  +
-\dfrac{\partial p}{\partial x} =\mu\dfrac{\partial^2 u}{\partial x^2}  + \rho f, \\[1.5ex]
-p=p(\rho).
+\dfrac{\partial \rho}{\partial t}+\dfrac{\partial \rho u_1}{\partial x_1}+
+\dfrac{\partial \rho u_2}{\partial x_2}= 0, \\[2.0ex]
+\dfrac{\partial \rho u_1}{\partial t}
++\dfrac{\partial \rho u_1^2}{\partial x_1}+
+\dfrac{\partial \rho u_2 u_1}{\partial x_2}+
+\dfrac{\partial p}{\partial x_1}
+=\mu\left(
+\dfrac{4}{3}\dfrac{\partial^2 u_1}{\partial x_1^2}+
+\dfrac{\partial^2 u_1}{\partial x_2^2}+
+\dfrac{1}{3}\dfrac{\partial^2 u_2}{\partial x_1\partial x_2}\right)
++\rho f_1, \\[2.0ex]
+\dfrac{\partial \rho u_2}{\partial t}
++\dfrac{\partial \rho u_1 u_2}{\partial x_1}+
+\dfrac{\partial \rho u_2^2}{\partial x_2}+
+\dfrac{\partial p}{\partial x_2}
+=\mu\left(
+\dfrac{1}{3}\dfrac{\partial^2 u_1}{\partial x_1\partial x_2}+
+\dfrac{\partial^2 u_2}{\partial x_1^2}+
+\dfrac{4}{3}\dfrac{\partial^2 u_2}{\partial x_2^2}\right)
++\rho f_2,
 \end{array}
-\label{onedim.1}
+\label{dif.1}
 \end{equation}
 
-Выше через $\mu$ обозначен коэффициент
-вязкости газа, который будем считать
-известной неотрицательной константой.
-
-Неизвестные функции: плотность $\rho$  и  скорость $u$ являются
+Неизвестные функции: плотность $\rho$  и вектор скорости $\u$ являются
 функциями переменных Эйлера
 $$
-(t,x) \in Q=[0,T]\times [0,X].
+(t,\x) \in Q=[0,T]\times\bar\Omega.
 $$%
 
-В уравнения входят еще две известные функции:
-давление газа $p$,  зависящее от плотности, и вектор внешних сил $f$,
-являющийся функцией переменных Эйлера.
+Обозначим через $\Omega_{nm}$ квадрат, координаты точек которого удовлетворяют
+неравенствам $n < x < (n+1)$ и $m < y < (m+1)$. Множества точек,
+составляющие стороны квадрата $\Omega_{nm}$ обозначим $\Gamma_{nm}^{x-}$,
+$\Gamma_{nm}^{x+}$, $\Gamma_{nm}^{y-}$ и $\Gamma_{nm}^{y+}$,
+где индекс $x$ или $y$ означает какая из координат на стороне
+является постоянной,
+а + или - означает максимальное или минимальное значение
+принимает эта координата.
 
-В начальный момент времени задаются функции, значениями которых являются
-плотность и скорость газа в точках отрезка $[0,\,X]$:
-\begin{equation}
-(\rho,u)|_{t=0} =(\rho_0,u_0),\;  x\in [0,X].
-\label{onedim.2}
-\end{equation}
+Заданная область: $\bar\Omega=\bar\Omega_{00}\cup\bar\Omega_{10}\cup
+\bar\Omega_{11}\cup\bar\Omega_{20}\cup\bar\Omega_{21}$,
 
-Простейшими граничными условиями являются условия непротекания
-\begin{equation}
-u(t,0)=u(t,X)=0,\;  t\in [0,T].
-\label{onedim.3}
-\end{equation}
-В этом случае граничные условия на плотность газа не ставятся.
+Граничные условия для неизвестного решения: $\rho\vert_{\Gamma_{00}^{x-}}=\rho_{\gamma}$, $u_1\vert_{\Gamma_{00}^{x-}}=w$,
+$\frac{\partial u_1}{\partial x}\vert_{\Gamma_{20}^{x+}\cup\Gamma_{21}^{x+}}=0$
+На остальных участках границы
+функция плотности считается неизвестной и подлежит определению, а компоненты функции скорости равны нулю.
 
-Дифференциальные уравнения системы этой системы являются следствиями
-интегральных законов сохранения массы и импульса в случае достаточной
-гладкости функций плотности и скорости газа.
-Важными требованиями к вычислительным алгоритмам являются выполнение аналогов
-этих законов для сеточных функций. Численные методы, для которых выполняются
-один или несколько законов сохранения (но не все), называют консервативными.
-Если выполняются все законы сохранения, то метод называют полностью
-консервативным.
+
+
+
+
+
+
+
 
 \newpage
-\section{Основные обозначения}
-\label{obozn}
-В заданиях практикума рассматривается
-пространственные области в виде отрезка
-$\bar\Omega =[0;\,X]$, где вводится равномерная сетка с шагом $h$:
-$\bar\omega_{h}=\{mh\mid m=0,\dots,M\}$, где $Mh=X$. На временном
-интервале $[0;\,T]$ также используется равномерная сетка:
-$\omega_{\tau}=\{n\tau\mid n=0,\dots,N\},$ где $N\tau =T$. В результате в
-области $Q$ вводится сетка $\bar Q_{\tau h}=\omega_{\tau}\times\bar\omega_{\bar h}$.
-Узлы сетки
-$\bar\omega_{h}$, попадающие на границу области $\omega$, обозначим $\gamma_{h}$
-(граничные узлы), а попадающие в область $\omega$ через $\omega_{h}$ (внутренние
-узлы). Узелы $x=0$ и $x=X$ будем обозначать $\gamma^{-}_{h}$ и $\gamma^{+}_{h}$
-соответственно.
+\section{Схема А.Г.Соколова ПЛОТНОСТЬ-СКОРОСТЬ}
+\label{r_v_sok}
 
-Кроме сетки $\omega_{h}$ в ряде схем используются сдвинутые сетки с
-полуцелыми узлами. Через $\omega^{1/2}_{h}$ будем обозначать сетку
-$\omega^{1/2}_{h}=\{mh+h/2\mid m=0,\dots,M-1\}$, а через
-$Q^{1/2}_{\tau h}=\omega_{\tau}\times\omega^{1/2}_{h}$.
+Сеточная функция $\V$, приближающая функцию вектора скорости $\u$, определяется
+в узлах сетки $\bar Q_{\tau\bar h}$, а значения функции $H$, приближающей
+функцию плотности $\rho$, ищутся в узлах сетки $Q^{1/2}_{\tau\bar h}$ по
+следующей схеме, аппроксимирующей систему~(\ref{dif.1})
 
-Значение функции $g$, определенной на сетке $Q_{\tau h}$
-(или на сетке $Q^{1/2}_{\tau h}$), в узле $(n, m)$
-будем обозначать через $g^n_{m}$. Если индексы будут опущены, то это
-означает, что они равны $n$ и $m$. Для сокращения записи значений функции
-$g$ в узлах, соседних с узлом $(n,m)$, используются следующие обозначения:
-$$
-g^{n+1}_{m}=\hat g, \qquad g^{n}_{m\pm 1}= g^{\pm 1}.
-$$%
-Введем обозначения для среднего значения величин сеточной функции в двух
-соседних узлах
-$$
-g_{s}=\dfrac{g^n_{m+1} +g^n_{m}}{2},\quad
-g_{\bar s_k}=\dfrac{g^n_{m}+g^n_{m-1}}{2}.
-$$
-
-Для разностных операторов применяются следующие обозначения:
-$$
-g_t=\dfrac{ g^{n+1}_{m} - g^n_{m}}{\tau},\quad
-g_{x}=\dfrac{g^n_{m+1} -g^n_{m}}{h},\quad
-g_{{\mathop{x}\limits^\circ}}=\dfrac{g^n_{m+1}-g^n_{m-1}}{2h}, \quad
-g_{\bar x}=\dfrac{g^n_{m}-g^n_{m-1}}{h}.
-$$%
-
-В схеме А.Г.Соколова в конвективных слагаемых узел шаблона, в котором нужно
-брать значение сеточной функции, зависит от знака компоненты вектора скорости.
-Для этих выражений используется обозначение
-\begin{equation}
-\sigma\{H,V\}=H\dfrac{|V|-V}{2|V|}+H^{(-1)}\dfrac{|V|+V}{2|V|}=\left\{
-\begin{array}{l}
-H,\qquad \hbox{если}\;V<0,\\
-H^{(-1)},\; \hbox{если}\;V\ge 0,
-\end{array}
-\right.
-\end{equation}
-
-\newpage
-\section{Разностная схема А.Г.Соколова ПЛОТНОСТЬ-СКОРОСТЬ}
-Функции $H$, заданная в узлах сетки $\omega^{1/2}_h$, и
-$V$, заданная в узлах сетки $\omega_h$, ищутся по схеме:
-\begin{equation}
-H_t+(\sigma\{\hat H,V\} V)_x=0, \qquad 0\le m <M,\; n\ge 0,\\
-\end{equation}
 \begin{equation}
 \begin{array}{l}
-\hat H_{\bar s}V_t+
-\hat H_{\bar s}\delta\{\hat V,V\}
-+\dfrac{\gamma}{\gamma -1}\hat H_{\bar s}((\hat H)^{\gamma-1})_{\bar x}
-=\mu\hat V_{x\bar x}+\hat H_{\bar s}f,
-\qquad \hbox{при}\; \hat H_{\bar s}\ne 0,\\
-\hat V=0, \qquad \hbox{при}\; \hat H_{\bar s}=0,\\
-0< m <M,\; n\ge 0,\\
-\hat V_0=\hat V_M=0.
+H_t+(\sigma_1\{\hat H,{V_1}_{s_2}\} {V_1}_{s_2})_{x_1}
++(\sigma_2\{\hat H,{V_2}_{s_1}\} {V_2}_{s_1})_{x_2}=0,
+\qquad \x\in\Omega^{1/2}_{\bar h};\\
+\hat H_{\bar s_1\bar s_2}{V_1}_t+
+\hat H_{\bar s_1\bar s_2} \delta_1\{\hat V_1,V_1\}+
+\hat H_{\bar s_1\bar s_2} \delta_2\{\hat V_1,V_2\}
++p(\hat H_{\bar s_2})_{\bar x_1}=\\
+=\mu\left(\frac{4}{3}(\hat V_1)_{x_1\bar x_1}+(\hat V_1)_{x_2\bar x_2}\right)+
+\dfrac{\mu}{3}(V_2)_{\xo_1\xo_2}+f_1\hat H_{\bar s_1\bar s_2},
+\qquad \hbox{при}\; \hat H_{\bar s_1\bar s_2}\ne 0,\\
+\hat V_1=0, \qquad \hbox{при}\; \hat H_{\bar s_1\bar s_2}=0,
+\qquad \x\in\Omega_{\bar h};\\
+\hat H_{\bar s_1\bar s_2}{V_2}_t+
+\hat H_{\bar s_1\bar s_2} \delta_1\{\hat V_2,V_1\}+
+\hat H_{\bar s_1\bar s_2} \delta_2\{\hat V_2,V_2\}
++p(\hat H_{\bar s_1})_{\bar x_2}=\\
+=\mu\left((\hat V_2)_{x_1\bar x_1}+\frac{4}{3}(\hat V_2)_{x_2\bar x_2}\right)+
+\dfrac{\mu}{3}(V_1)_{\xo_1\xo_2}+f_2\hat H_{\bar s_1\bar s_2},
+\qquad \hbox{при}\; \hat H_{\bar s_1\bar s_2}\ne 0,\\
+\hat V_2=0, \qquad \hbox{при}\; \hat H_{\bar s_1\bar s_2}=0,
+\qquad \x\in\Omega_{\bar h}.
 \end{array}
+\label{r_v_sok.1}
 \end{equation}
 
-Разностные уравнения в индексах имеют вид:
+В граничных узлах $\gamma_{\bar h}$ значения функции $\V$ считаются известными
+из граничных условий. В граничных узлах, где газ втекает в область, задаются
+значения плотности газа, которые также берутся из граничных условий.
+
+Разностные уравнения (\ref{r_i_sok.1}) в индексах имеют вид
 \begin{equation}
 \begin{array}{c}
-\dfrac{H^{n+1}_m-H^n_m}{\tau}+\\ +\dfrac{
-(V^n_{m+1}-|V^n_{m+1}|)H_{m+1}^{n+1}+
-(V^n_{m+1}+|V^n_{m+1}|-V^n_{m}+|V^n_{m}|)H_{m}^{n+1}-
-(V^n_{m}+|V^n_{m}|)H_{m-1}^{n+1}
-}{2h}=0, \\
-0\le m <M,\; n\ge 0.
-\end{array}
-\end{equation}
-\begin{equation}
-\begin{array}{c}
-\dfrac{(H^{n+1}_{m-1}+H^{n+1}_m)V^{n+1}_m-(H^n_{m-1}+H^n_m)V^n_m}{2\tau}-\\
+\dfrac{H^{n+1}_{m_1,m_2}-H^n_{m_1,m_2}}{\tau}+\\
++\dfrac{
+(({{\tilde V}_2})^n_{m_1,m_2+1}-|({{\tilde V}_2})^n_{m_1,m_2+1}|)H_{m_1,m_2+1}^{n+1}
+}{2h_2}
++\dfrac{
+(({{\tilde V}_1})^n_{m_1+1,m_2}-|({{\tilde V}_1})^n_{m_1+1,m_2}|)H_{m_1+1,m_2}^{n+1}
+}{2h_1}+ \\
++\left(\dfrac{1}{2h_1}
+(({{\tilde V}_1})^n_{m_1+1,m_2}+|({{\tilde V}_1})^n_{m_1+1,m_2}|
+-({{\tilde V}_1})^n_{m_1,m_2}+|({{\tilde V}_1})^n_{m_1,m_2}|)+\right.\\
+\left.+\dfrac{1}{2h_2}
+(({{\tilde V}_2})^n_{m_1,m_2+1}+|({{\tilde V}_2})^n_{m_1,m_2+1}|
+-({{\tilde V}_2})^n_{m_1,m_2}+|({{\tilde V}_2})^n_{m_1,m_2}|)\right)
+H_{m_1,m_2}^{n+1}
+- \\
 -\dfrac{
-((|V^n_{m-1}|+V^n_{m-1})H^{n+1}_{m-2}+
-(|V^n_{m}|+V^n_{m})H_{m-1}^{n+1})V^{n+1}_{m-1}}{4h}+\\
-+\dfrac{((|V^n_{m-1}|-V^n_{m-1}+|V^n_m|+V^n_m)H_{m-1}^{n+1}+
-(|V^n_{m+1}|+V^n_{m+1}+|V^n_m|-V^n_m)H_m^{n+1})V^{n+1}_m}{4h}-\\
--\dfrac{((|V^n_m|-V^n_m)H_m^{n+1}+(|V^n_{m+1}|-V^n_{m+1})H_{m+1}^{n+1})V^{n+1}_{m+1}
-}{4h}+ \\
-+\dfrac{\gamma}{\gamma -1}\dfrac{H^{n+1}_{m}+H^{n+1}_{m-1}}{2}
-\dfrac{(H^{n+1}_{m})^{\gamma-1}-(H^{n+1}_{m-1})^{\gamma-1}}{h}= \\
-=\mu\dfrac{V^{n+1}_{m-1}-2V^{n+1}_{m}+V^{n+1}_{m+1}}{h^2}
-+\dfrac{H^{n+1}_{m-1}+H^{n+1}_m}{2}f_m^{n+1},\\
-\qquad \hbox{при}\; H^{n+1}_{m-1}+H^{n+1}_m\ne 0,\\
-V^{n+1}_m=0, \qquad \hbox{при}\; H^{n+1}_{m-1}+H^{n+1}_m=0,\\
-0< m <M,\; n\ge 0,\\
-V^{n+1}_0=V^{n+1}_M=0.
+(({{\tilde V}_1})^n_{m_1,m_2}+|({{\tilde V}_1})^n_{m_1,m_2}|)H_{m_1-1,m_2}^{n+1}
+}{2h_1}
+-\dfrac{
+(({{\tilde V}_2})^n_{m_1,m_2}+|({{\tilde V}_2})^n_{m_1,m_2}|)H_{m_1,m_2-1}^{n+1}
+}{2h_2}=0, \\
+0\le m_1 <M_1,\;0\le m_2 <M_2,\; n\ge 0.
 \end{array}
+\label{r_i_sok.2}
 \end{equation}
+
+Поскольку разностное уравнение, аппроксимирующее уравнение неразрывности,
+в точности совпадает с первым уравнением схемы из параграфа \ref{r_i_sok}, приведем
+запись в индексах лишь для двух оставшихся уравнений.
+\begin{equation}
+\begin{array}{c}
+(\tilde H)^{n+1}_{m_1,m_2}\left(\dfrac{({V_1}^{n+1}_{m_1,m_2}
+-{V_1}^n_{m_1,m_2}}{\tau}-\dfrac{
+|{V_2}^n_{m_1,m_2}|+{V_2}^n_{m_1,m_2}}{2h_2}{V_1}^{n+1}_{m_1,m_2-1}-\right.\\
+-\dfrac{|{V_1}^n_{m_1,m_2}|+{V_1}^n_{m_1,m_2}}{2h_1}{V_1}^{n+1}_{m_1-1,m_2}
++\left(\dfrac{|{V_1}^n_{m_1,m_2}|}{h_1}
++\dfrac{|{V_2}^n_{m_1,m_2}|}{h_2}\right){V_1}^{n+1}_{m_1,m_2}+\\
++\left.\dfrac{{V_1}^n_{m_1,m_2}-|{V_1}^n_{m_1,m_2}|}{2h_1}{V_1}^{n+1}_{m_1+1,m_2}
++\dfrac{{V_2}^n_{m_1,m_2}-|{V_2}^n_{m_1,m_2}|}{2h_2}{V_1}^{n+1}_{m_1,m_2+1}
+\right)+\\
++\dfrac{p({H_1}^{n+1}_{m_1,m_2})-p({H_1}^{n+1}_{m_1-1,m_2})}{h_1}= \\
+=\mu\left(\dfrac{4}{3}\dfrac{{V_1}^{n+1}_{m_1-1,m_2}-2{V_1}^{n+1}_{m_1,m_2}+
+{V_1}^{n+1}_{m_1+1,m_2}}{h_1^2}+
+\dfrac{{V_1}^{n+1}_{m_1,m_2-1}-2{V_1}^{n+1}_{m_1,m_2}+
+{V_1}^{n+1}_{m_1,m_2+1}}{h_2^2}\right)+\\
++\dfrac{\mu}{3}\dfrac{{V_2}^{n}_{m_1-1,m_2-1}-{V_2}^{n}_{m_1-1,m_2+1}-
+{V_2}^{n}_{m_1+1,m_2-1}+{V_2}^{n}_{m_1+1,m_2+1}}{4h_1 h_2}
++{f_1}^{n+1}_{m_1,m_2}(\tilde H)^{n+1}_{m_1,m_2},\\
+\quad \hbox{при}\; \tilde H^{n+1}_{\m}\ne 0,\\
+\hat {V_1}_{m_1,m_2}=0, \qquad \hbox{при}\; \tilde H^{n+1}_{m_1,m_2}=0;
+\qquad\x\in\Omega_h.
+\end{array}
+\label{r_v_sok.2}
+\end{equation}
+\begin{equation}
+\begin{array}{c}
+(\tilde H)^{n+1}_{m_1,m_2}\left(\dfrac{({V_2}^{n+1}_{m_1,m_2}
+-{V_2}^n_{m_1,m_2}}{\tau}-\dfrac{
+|{V_2}^n_{m_1,m_2}|+{V_2}^n_{m_1,m_2}}{2h_2}{V_2}^{n+1}_{m_1,m_2-1}-\right.\\
+-\dfrac{|{V_1}^n_{m_1,m_2}|+{V_1}^n_{m_1,m_2}}{2h_1}{V_2}^{n+1}_{m_1-1,m_2}
++\left(\dfrac{|{V_1}^n_{m_1,m_2}|}{h_1}
++\dfrac{|{V_2}^n_{m_1,m_2}|}{h_2}\right){V_2}^{n+1}_{m_1,m_2}+\\
++\left.\dfrac{{V_1}^n_{m_1,m_2}-|{V_1}^n_{m_1,m_2}|}{2h_1}{V_2}^{n+1}_{m_1+1,m_2}
++\dfrac{{V_2}^n_{m_1,m_2}-|{V_2}^n_{m_1,m_2}|}{2h_2}{V_2}^{n+1}_{m_1,m_2+1}
+\right)+\\
++\dfrac{p({H_2}^{n+1}_{m_1,m_2})-p({H_2}^{n+1}_{m_1,m_2-1})}{h_2}= \\
+=\mu\left(\dfrac{{V_2}^{n+1}_{m_1-1,m_2}-2{V_2}^{n+1}_{m_1,m_2}+
+{V_2}^{n+1}_{m_1+1,m_2}}{h_1^2}+\dfrac{4}{3}
+\dfrac{{V_2}^{n+1}_{m_1,m_2-1}-2{V_2}^{n+1}_{m_1,m_2}+
+{V_2}^{n+1}_{m_1,m_2+1}}{h_2^2}\right)+\\
++\dfrac{\mu}{3}\dfrac{{V_1}^{n}_{m_1-1,m_2-1}-{V_1}^{n}_{m_1-1,m_2+1}-
+{V_1}^{n}_{m_1+1,m_2-1}+{V_1}^{n}_{m_1+1,m_2+1}}{4h_1 h_2}
++{f_2}^{n+1}_{m_1,m_2}(\tilde H)^{n+1}_{m_1,m_2},\\
+\quad \hbox{при}\; \tilde H^{n+1}_{\m}\ne 0,\\
+\hat {V_2}_{m_1,m_2}=0, \qquad \hbox{при}\; \tilde H^{n+1}_{m_1,m_2}=0;
+\qquad\x\in\Omega_h.
+\end{array}
+\label{r_v_sok.3}
+\end{equation}
+
+Также как и в случае схемы из параграфа~\ref{r_i_sok} по этой схеме на каждом
+временном слое решается СЛАУ, решением которой является сеточная функция
+плотности $H^{n+1}$, а затем в любом порядке решаются СЛАУ, которые
+задают функции $V_1^{n+1}$ и $V_2^{n+1}$. Последние две системы можно решать
+независимо.
+
+Из разностного уравнения~(\ref{r_v_sok.2}) получаются следующие алгебраические
+уравнения для всех внутренних  узлов сетки $\Omega_h$
+\begin{equation}
+\begin{array}{l}
+av1\_V100\cdot {V_1}^{n+1}_{m_1,m_2}+av1\_V1R0\cdot {V_1}^{n+1}_{m_1+1,m_2}+
+av1\_V1L0\cdot {V_1}^{n+1}_{m_1-1,m_2} +\\ +av1\_V10R\cdot {V_1}^{n+1}_{m_1,m_2+1}
++av1\_V10L\cdot {V_1}^{n+1}_{m_1,m_2-1}=bv1,
+ \end{array}
+\label{r_v_sok.4}
+\end{equation}
+где
+\begin{equation}
+\begin{array}{l}
+av1\_V100=HT00(1+
+\frac{\tau}{h_1}|V100|+\frac{\tau}{h_2}|V200|)+
+\tau\mu\left(\frac{8}{3h_1^2}+\frac{2}{h_2^2}\right),\\
+av1\_V1L0=
+-\frac{\tau}{2h_1}(V100+|V100|)HT00-
+\frac{4\tau\mu}{3h_1^2},\\
+av1\_V1R0=
+\frac{\tau}{2h_1}(V100-|V100|)HT00-
+\frac{4\tau\mu}{3h_1^2},\\
+av1\_V10L=-\frac{\tau}{2h_2}(V200+|V200|)HT00-
+\frac{\tau\mu}{h_2^2},\\
+av1\_V10R=\frac{\tau}{2h_2}(V200-|V200|)HT00-
+\frac{\tau\mu}{h_2^2},\\
+bv1=HT00*V100-\frac{\tau}{h_1}(p(H100)-
+p(H1L0))+\\
++\frac{\tau\mu}{12h_1h_2}(V2RR-V2RL-V2LR+V2LL)+\tau f_1 HT00.
+ \end{array}
+\label{r_v_sok.5}
+\end{equation}
+
+Аналогичным образом расписывается разностное уравнение~(\ref{r_v_sok.3}).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Заполнение матрицы первой системы}
@@ -268,6 +347,7 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
+\newpage
 \subsection{MIU = 0.010}
 \begin{table}[H]
 \caption {Функция: H Тип невязки: C   }
@@ -347,6 +427,7 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
+\newpage
 \subsection{MIU = 0.001}
 \begin{table}[H]
 \caption {Функция: H Тип невязки: C   }
