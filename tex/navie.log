@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.15)  2 JUN 2019 16:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.15)  2 JUN 2019 16:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -843,66 +843,163 @@ l(m1+1,m2-1)-V1.val(m1-1,m2+1)+V1.val(m1-1,m2-1))[]
  []
 
 [6] [7] [8] [9] [10] [11] [12]
-<cont_21.png, id=56, 1355.0625pt x 477.785pt>
+<stabilization/V1V2_0.png, id=56, 481.8pt x 361.35pt>
+File: stabilization/V1V2_0.png Graphic file (type png)
+<use stabilization/V1V2_0.png>
+Package pdftex.def Info: stabilization/V1V2_0.png  used on input line 622.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_50.png, id=57, 481.8pt x 361.35pt>
+File: stabilization/V1V2_50.png Graphic file (type png)
+<use stabilization/V1V2_50.png>
+Package pdftex.def Info: stabilization/V1V2_50.png  used on input line 627.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_100.png, id=58, 481.8pt x 361.35pt>
+File: stabilization/V1V2_100.png Graphic file (type png)
+<use stabilization/V1V2_100.png>
+Package pdftex.def Info: stabilization/V1V2_100.png  used on input line 632.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_150.png, id=59, 481.8pt x 361.35pt>
+File: stabilization/V1V2_150.png Graphic file (type png)
+<use stabilization/V1V2_150.png>
+Package pdftex.def Info: stabilization/V1V2_150.png  used on input line 637.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+ [13 <./stabilization/V1V2_0.png> <./stabilization/V1V2_50.png>]
+<stabilization/V1V2_200.png, id=66, 481.8pt x 361.35pt>
+File: stabilization/V1V2_200.png Graphic file (type png)
+<use stabilization/V1V2_200.png>
+Package pdftex.def Info: stabilization/V1V2_200.png  used on input line 642.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_250.png, id=67, 481.8pt x 361.35pt>
+File: stabilization/V1V2_250.png Graphic file (type png)
+<use stabilization/V1V2_250.png>
+Package pdftex.def Info: stabilization/V1V2_250.png  used on input line 647.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_300.png, id=68, 481.8pt x 361.35pt>
+File: stabilization/V1V2_300.png Graphic file (type png)
+<use stabilization/V1V2_300.png>
+Package pdftex.def Info: stabilization/V1V2_300.png  used on input line 652.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+ [14 <./stabilization/V1V2_100.png> <./stabilization/V1V2_150.png> <./stabiliza
+tion/V1V2_200.png>]
+<stabilization/V1V2_350.png, id=75, 481.8pt x 361.35pt>
+File: stabilization/V1V2_350.png Graphic file (type png)
+<use stabilization/V1V2_350.png>
+Package pdftex.def Info: stabilization/V1V2_350.png  used on input line 657.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_400.png, id=76, 481.8pt x 361.35pt>
+File: stabilization/V1V2_400.png Graphic file (type png)
+<use stabilization/V1V2_400.png>
+Package pdftex.def Info: stabilization/V1V2_400.png  used on input line 662.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_450.png, id=77, 481.8pt x 361.35pt>
+File: stabilization/V1V2_450.png Graphic file (type png)
+<use stabilization/V1V2_450.png>
+Package pdftex.def Info: stabilization/V1V2_450.png  used on input line 667.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+ [15 <./stabilization/V1V2_250.png> <./stabilization/V1V2_300.png> <./stabiliza
+tion/V1V2_350.png>]
+<stabilization/V1V2_500.png, id=84, 481.8pt x 361.35pt>
+File: stabilization/V1V2_500.png Graphic file (type png)
+<use stabilization/V1V2_500.png>
+Package pdftex.def Info: stabilization/V1V2_500.png  used on input line 672.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_550.png, id=85, 481.8pt x 361.35pt>
+File: stabilization/V1V2_550.png Graphic file (type png)
+<use stabilization/V1V2_550.png>
+Package pdftex.def Info: stabilization/V1V2_550.png  used on input line 677.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_600.png, id=86, 481.8pt x 361.35pt>
+File: stabilization/V1V2_600.png Graphic file (type png)
+<use stabilization/V1V2_600.png>
+Package pdftex.def Info: stabilization/V1V2_600.png  used on input line 682.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+ [16 <./stabilization/V1V2_400.png> <./stabilization/V1V2_450.png> <./stabiliza
+tion/V1V2_500.png>]
+<stabilization/V1V2_650.png, id=93, 481.8pt x 361.35pt>
+File: stabilization/V1V2_650.png Graphic file (type png)
+<use stabilization/V1V2_650.png>
+Package pdftex.def Info: stabilization/V1V2_650.png  used on input line 687.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_700.png, id=94, 481.8pt x 361.35pt>
+File: stabilization/V1V2_700.png Graphic file (type png)
+<use stabilization/V1V2_700.png>
+Package pdftex.def Info: stabilization/V1V2_700.png  used on input line 692.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+<stabilization/V1V2_750.png, id=95, 481.8pt x 361.35pt>
+File: stabilization/V1V2_750.png Graphic file (type png)
+<use stabilization/V1V2_750.png>
+Package pdftex.def Info: stabilization/V1V2_750.png  used on input line 697.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+
+[17 <./stabilization/V1V2_550.png> <./stabilization/V1V2_600.png> <./stabilizat
+ion/V1V2_650.png>]
+<stabilization/V1V2_800.png, id=102, 481.8pt x 361.35pt>
+File: stabilization/V1V2_800.png Graphic file (type png)
+<use stabilization/V1V2_800.png>
+Package pdftex.def Info: stabilization/V1V2_800.png  used on input line 702.
+(pdftex.def)             Requested size: 221.32687pt x 165.99144pt.
+ [18 <./stabilization/V1V2_700.png> <./stabilization/V1V2_750.png> <./stabiliza
+tion/V1V2_800.png>]
+<cont_21.png, id=109, 1355.0625pt x 477.785pt>
 File: cont_21.png Graphic file (type png)
 <use cont_21.png>
-Package pdftex.def Info: cont_21.png  used on input line 612.
+Package pdftex.def Info: cont_21.png  used on input line 724.
 (pdftex.def)             Requested size: 442.65375pt x 156.07294pt.
-<cont_42.png, id=58, 1352.05125pt x 470.75874pt>
+<cont_42.png, id=111, 1352.05125pt x 470.75874pt>
 File: cont_42.png Graphic file (type png)
 <use cont_42.png>
-Package pdftex.def Info: cont_42.png  used on input line 617.
+Package pdftex.def Info: cont_42.png  used on input line 729.
 (pdftex.def)             Requested size: 442.65375pt x 154.12254pt.
-<cont_84.png, id=59, 1345.025pt x 470.75874pt>
+<cont_84.png, id=112, 1345.025pt x 470.75874pt>
 File: cont_84.png Graphic file (type png)
 <use cont_84.png>
-Package pdftex.def Info: cont_84.png  used on input line 622.
+Package pdftex.def Info: cont_84.png  used on input line 734.
 (pdftex.def)             Requested size: 442.65375pt x 154.92705pt.
-<discont_21.png, id=60, 1350.04375pt x 480.79625pt>
+ [19 <./cont_21.png> <./cont_42.png> <./cont_84.png>]
+<discont_21.png, id=120, 1350.04375pt x 480.79625pt>
 File: discont_21.png Graphic file (type png)
 <use discont_21.png>
-Package pdftex.def Info: discont_21.png  used on input line 629.
+Package pdftex.def Info: discont_21.png  used on input line 758.
 (pdftex.def)             Requested size: 442.65375pt x 157.6435pt.
-<discont_42.png, id=61, 1355.0625pt x 473.77pt>
+<discont_42.png, id=121, 1355.0625pt x 473.77pt>
 File: discont_42.png Graphic file (type png)
 <use discont_42.png>
-Package pdftex.def Info: discont_42.png  used on input line 634.
+Package pdftex.def Info: discont_42.png  used on input line 763.
 (pdftex.def)             Requested size: 442.65375pt x 154.7614pt.
- [13 <./cont_21.png> <./cont_42.png> <./cont_84.png>]
-<discont_84.png, id=69, 1350.04375pt x 473.77pt>
+<discont_84.png, id=122, 1350.04375pt x 473.77pt>
 File: discont_84.png Graphic file (type png)
 <use discont_84.png>
-Package pdftex.def Info: discont_84.png  used on input line 639.
+Package pdftex.def Info: discont_84.png  used on input line 768.
 (pdftex.def)             Requested size: 442.65375pt x 155.33972pt.
- [14 <./discont_21.png> <./discont_42.png> <./discont_84.png>] [15]
-(./navie.aux) ) 
+ [20 <./discont_21.png> <./discont_42.png> <./discont_84.png>]
+[21] (./navie.aux) ) 
 Here is how much of TeX's memory you used:
- 3790 strings out of 492982
- 47020 string characters out of 6134895
+ 3876 strings out of 492982
+ 49314 string characters out of 6134895
  127018 words of memory out of 5000000
- 7264 multiletter control sequences out of 15000+600000
+ 7332 multiletter control sequences out of 15000+600000
  12346 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,11n,25p,567b,253s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc}</us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/s
-hare/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/typ
-e1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
-frm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on navie.pdf (15 pages, 378967 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t2a.enc
+}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></
+usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/font
+s/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-su
+per/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb>
+Output written on navie.pdf (21 pages, 532632 bytes).
 PDF statistics:
- 131 PDF objects out of 1000 (max. 8388607)
- 85 compressed objects within 1 object stream
+ 184 PDF objects out of 1000 (max. 8388607)
+ 98 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 116 words of extra memory for PDF output out of 10000 (max. 10000000)
 
