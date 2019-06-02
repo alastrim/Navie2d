@@ -1,11 +1,197 @@
 \documentclass[a4paper,11pt]{article}
-\usepackage[english, russian] {babel}
+\usepackage[english,russian]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{a4wide}
 \usepackage{amsmath}
 \usepackage{float}
+\usepackage{graphicx}
+
 \begin{document}
-\section{Результаты запуска:}
+
+\section{Начально-краевая задача}
+\label{dif}
+
+Изучение свойств численного алгоритма и создание его программной реализации
+начинается с наиболее простых задач с постепенным их усложнением.
+Приведем систему уравнений, описывающую нестационарное
+одномерное движение вязкого баротропного газа
+
+\begin{equation}
+\begin{array}{l}
+\dfrac{\partial\rho}{\partial t} + \dfrac{\partial\rho u}{\partial x} = 0, \\[2.0ex]
+\rho\dfrac{\partial u}{\partial t} + \rho u\dfrac{\partial u}{\partial x}  +
+\dfrac{\partial p}{\partial x} =\mu\dfrac{\partial^2 u}{\partial x^2}  + \rho f, \\[1.5ex]
+p=p(\rho).
+\end{array}
+\label{onedim.1}
+\end{equation}
+
+Выше через $\mu$ обозначен коэффициент
+вязкости газа, который будем считать
+известной неотрицательной константой.
+
+Неизвестные функции: плотность $\rho$  и  скорость $u$ являются
+функциями переменных Эйлера
+$$
+(t,x) \in Q=[0,T]\times [0,X].
+$$%
+
+В уравнения входят еще две известные функции:
+давление газа $p$,  зависящее от плотности, и вектор внешних сил $f$,
+являющийся функцией переменных Эйлера.
+
+В начальный момент времени задаются функции, значениями которых являются
+плотность и скорость газа в точках отрезка $[0,\,X]$:
+\begin{equation}
+(\rho,u)|_{t=0} =(\rho_0,u_0),\;  x\in [0,X].
+\label{onedim.2}
+\end{equation}
+
+Простейшими граничными условиями являются условия непротекания
+\begin{equation}
+u(t,0)=u(t,X)=0,\;  t\in [0,T].
+\label{onedim.3}
+\end{equation}
+В этом случае граничные условия на плотность газа не ставятся.
+
+Дифференциальные уравнения системы этой системы являются следствиями
+интегральных законов сохранения массы и импульса в случае достаточной
+гладкости функций плотности и скорости газа.
+Важными требованиями к вычислительным алгоритмам являются выполнение аналогов
+этих законов для сеточных функций. Численные методы, для которых выполняются
+один или несколько законов сохранения (но не все), называют консервативными.
+Если выполняются все законы сохранения, то метод называют полностью
+консервативным.
+
+\newpage
+\section{Основные обозначения}
+\label{obozn}
+В заданиях практикума рассматривается
+пространственные области в виде отрезка
+$\bar\Omega =[0;\,X]$, где вводится равномерная сетка с шагом $h$:
+$\bar\omega_{h}=\{mh\mid m=0,\dots,M\}$, где $Mh=X$. На временном
+интервале $[0;\,T]$ также используется равномерная сетка:
+$\omega_{\tau}=\{n\tau\mid n=0,\dots,N\},$ где $N\tau =T$. В результате в
+области $Q$ вводится сетка $\bar Q_{\tau h}=\omega_{\tau}\times\bar\omega_{\bar h}$.
+Узлы сетки
+$\bar\omega_{h}$, попадающие на границу области $\omega$, обозначим $\gamma_{h}$
+(граничные узлы), а попадающие в область $\omega$ через $\omega_{h}$ (внутренние
+узлы). Узелы $x=0$ и $x=X$ будем обозначать $\gamma^{-}_{h}$ и $\gamma^{+}_{h}$
+соответственно.
+
+Кроме сетки $\omega_{h}$ в ряде схем используются сдвинутые сетки с
+полуцелыми узлами. Через $\omega^{1/2}_{h}$ будем обозначать сетку
+$\omega^{1/2}_{h}=\{mh+h/2\mid m=0,\dots,M-1\}$, а через
+$Q^{1/2}_{\tau h}=\omega_{\tau}\times\omega^{1/2}_{h}$.
+
+Значение функции $g$, определенной на сетке $Q_{\tau h}$
+(или на сетке $Q^{1/2}_{\tau h}$), в узле $(n, m)$
+будем обозначать через $g^n_{m}$. Если индексы будут опущены, то это
+означает, что они равны $n$ и $m$. Для сокращения записи значений функции
+$g$ в узлах, соседних с узлом $(n,m)$, используются следующие обозначения:
+$$
+g^{n+1}_{m}=\hat g, \qquad g^{n}_{m\pm 1}= g^{\pm 1}.
+$$%
+Введем обозначения для среднего значения величин сеточной функции в двух
+соседних узлах
+$$
+g_{s}=\dfrac{g^n_{m+1} +g^n_{m}}{2},\quad
+g_{\bar s_k}=\dfrac{g^n_{m}+g^n_{m-1}}{2}.
+$$
+
+Для разностных операторов применяются следующие обозначения:
+$$
+g_t=\dfrac{ g^{n+1}_{m} - g^n_{m}}{\tau},\quad
+g_{x}=\dfrac{g^n_{m+1} -g^n_{m}}{h},\quad
+g_{{\mathop{x}\limits^\circ}}=\dfrac{g^n_{m+1}-g^n_{m-1}}{2h}, \quad
+g_{\bar x}=\dfrac{g^n_{m}-g^n_{m-1}}{h}.
+$$%
+
+В схеме А.Г.Соколова в конвективных слагаемых узел шаблона, в котором нужно
+брать значение сеточной функции, зависит от знака компоненты вектора скорости.
+Для этих выражений используется обозначение
+\begin{equation}
+\sigma\{H,V\}=H\dfrac{|V|-V}{2|V|}+H^{(-1)}\dfrac{|V|+V}{2|V|}=\left\{
+\begin{array}{l}
+H,\qquad \hbox{если}\;V<0,\\
+H^{(-1)},\; \hbox{если}\;V\ge 0,
+\end{array}
+\right.
+\end{equation}
+
+\newpage
+\section{Разностная схема А.Г.Соколова ПЛОТНОСТЬ-СКОРОСТЬ}
+Функции $H$, заданная в узлах сетки $\omega^{1/2}_h$, и
+$V$, заданная в узлах сетки $\omega_h$, ищутся по схеме:
+\begin{equation}
+H_t+(\sigma\{\hat H,V\} V)_x=0, \qquad 0\le m <M,\; n\ge 0,\\
+\end{equation}
+\begin{equation}
+\begin{array}{l}
+\hat H_{\bar s}V_t+
+\hat H_{\bar s}\delta\{\hat V,V\}
++\dfrac{\gamma}{\gamma -1}\hat H_{\bar s}((\hat H)^{\gamma-1})_{\bar x}
+=\mu\hat V_{x\bar x}+\hat H_{\bar s}f,
+\qquad \hbox{при}\; \hat H_{\bar s}\ne 0,\\
+\hat V=0, \qquad \hbox{при}\; \hat H_{\bar s}=0,\\
+0< m <M,\; n\ge 0,\\
+\hat V_0=\hat V_M=0.
+\end{array}
+\end{equation}
+
+Разностные уравнения в индексах имеют вид:
+\begin{equation}
+\begin{array}{c}
+\dfrac{H^{n+1}_m-H^n_m}{\tau}+\\ +\dfrac{
+(V^n_{m+1}-|V^n_{m+1}|)H_{m+1}^{n+1}+
+(V^n_{m+1}+|V^n_{m+1}|-V^n_{m}+|V^n_{m}|)H_{m}^{n+1}-
+(V^n_{m}+|V^n_{m}|)H_{m-1}^{n+1}
+}{2h}=0, \\
+0\le m <M,\; n\ge 0.
+\end{array}
+\end{equation}
+\begin{equation}
+\begin{array}{c}
+\dfrac{(H^{n+1}_{m-1}+H^{n+1}_m)V^{n+1}_m-(H^n_{m-1}+H^n_m)V^n_m}{2\tau}-\\
+-\dfrac{
+((|V^n_{m-1}|+V^n_{m-1})H^{n+1}_{m-2}+
+(|V^n_{m}|+V^n_{m})H_{m-1}^{n+1})V^{n+1}_{m-1}}{4h}+\\
++\dfrac{((|V^n_{m-1}|-V^n_{m-1}+|V^n_m|+V^n_m)H_{m-1}^{n+1}+
+(|V^n_{m+1}|+V^n_{m+1}+|V^n_m|-V^n_m)H_m^{n+1})V^{n+1}_m}{4h}-\\
+-\dfrac{((|V^n_m|-V^n_m)H_m^{n+1}+(|V^n_{m+1}|-V^n_{m+1})H_{m+1}^{n+1})V^{n+1}_{m+1}
+}{4h}+ \\
++\dfrac{\gamma}{\gamma -1}\dfrac{H^{n+1}_{m}+H^{n+1}_{m-1}}{2}
+\dfrac{(H^{n+1}_{m})^{\gamma-1}-(H^{n+1}_{m-1})^{\gamma-1}}{h}= \\
+=\mu\dfrac{V^{n+1}_{m-1}-2V^{n+1}_{m}+V^{n+1}_{m+1}}{h^2}
++\dfrac{H^{n+1}_{m-1}+H^{n+1}_m}{2}f_m^{n+1},\\
+\qquad \hbox{при}\; H^{n+1}_{m-1}+H^{n+1}_m\ne 0,\\
+V^{n+1}_m=0, \qquad \hbox{при}\; H^{n+1}_{m-1}+H^{n+1}_m=0,\\
+0< m <M,\; n\ge 0,\\
+V^{n+1}_0=V^{n+1}_M=0.
+\end{array}
+\end{equation}
+
+\newpage
+\section{Заполнение матрицы первой системы}
+За заполнение матрицы первой системы отвечает следующий код:
+\begin{verbatim}
+void fill_first (std::vector<double> &A, std::vector<double> &B,
+                 discrete_function &H, discrete_function &V,
+                 int n, double h, double tau, discrete_function &/*f*/,
+                 discrete_function &f_0)
+{
+  std::vector<double> &H_cut = H.cut (n);
+  std::vector<double> &V_cut = V.cut (n);
+  unsigned int M = static_cast<unsigned int> (H_cut.size ());
+
+}
+\end{verbatim}
+
+\newpage
+\section{Результаты запуска непрерывного случая на области без выреза:}
+
+\newpage
+\section{Результаты запуска непрерывного случая на области с вырезом:}
 \subsection{MIU = 0.100}
 \begin{table}[H]
 \caption {Функция: H Тип невязки: C   }
@@ -13,8 +199,10 @@
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 1e+00& 7e-01\\ \hline
-  42 & 1e+00& 7e-01\\ \hline
+  21 & 1e+00& 7e-01& 4e-01& 1e+01\\ \hline
+  42 & 1e+00& 7e-01& 4e-01& 2e-01\\ \hline
+  84 & 1e+00& 6e-01& 4e-01& 2e-01\\ \hline
+ 168 & 1e+00& 6e-01& 4e-01& 2e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -24,8 +212,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 6e-01& 3e-01\\ \hline
-  42 & 7e-01& 4e-01\\ \hline
+  21 & 6e-01& 3e-01& 2e-01& 1e+00\\ \hline
+  42 & 7e-01& 4e-01& 2e-01& 8e-02\\ \hline
+  84 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
+ 168 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -35,8 +225,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 2e-01& 1e-01\\ \hline
-  42 & 2e-01& 1e-01\\ \hline
+  21 & 2e-01& 1e-01& 1e-01& 1e+00\\ \hline
+  42 & 2e-01& 1e-01& 8e-02& 5e-02\\ \hline
+  84 & 2e-01& 1e-01& 8e-02& 4e-02\\ \hline
+ 168 & 2e-01& 1e-01& 8e-02& 4e-02\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -46,8 +238,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 6e+00& 5e+00\\ \hline
-  42 & 5e+00& 4e+00\\ \hline
+  21 & 3e+00& 2e+00& 1e+00& 9e+00\\ \hline
+  42 & 3e+00& 1e+00& 9e-01& 7e-01\\ \hline
+  84 & 3e+00& 1e+00& 7e-01& 5e-01\\ \hline
+ 168 & 2e+00& 1e+00& 7e-01& 4e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -57,8 +251,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 4e+00& 3e+00\\ \hline
-  42 & 4e+00& 3e+00\\ \hline
+  21 & 2e+00& 8e-01& 3e-01& 9e-01\\ \hline
+  42 & 2e+00& 1e+00& 5e-01& 2e-01\\ \hline
+  84 & 2e+00& 1e+00& 5e-01& 2e-01\\ \hline
+ 168 & 2e+00& 1e+00& 6e-01& 3e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -68,8 +264,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 1e+00& 1e+00\\ \hline
-  42 & 1e+00& 1e+00\\ \hline
+  21 & 7e-01& 4e-01& 3e-01& 1e+00\\ \hline
+  42 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
+  84 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
+ 168 & 6e-01& 4e-01& 2e-01& 1e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -83,8 +281,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 1e+00& 7e-01\\ \hline
-  42 & 1e+00& 7e-01\\ \hline
+  21 & 1e+00& 7e-01& 4e-01& 7e+01\\ \hline
+  42 & 1e+00& 7e-01& 4e-01& 2e-01\\ \hline
+  84 & 1e+00& 7e-01& 4e-01& 2e-01\\ \hline
+ 168 & 1e+00& 7e-01& 4e-01& 2e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -94,8 +294,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 7e-01& 3e-01\\ \hline
-  42 & 7e-01& 4e-01\\ \hline
+  21 & 7e-01& 3e-01& 2e-01& 4e+00\\ \hline
+  42 & 7e-01& 4e-01& 2e-01& 9e-02\\ \hline
+  84 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
+ 168 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -105,8 +307,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 3e-01& 2e-01\\ \hline
-  42 & 3e-01& 2e-01\\ \hline
+  21 & 3e-01& 2e-01& 1e-01& 6e+00\\ \hline
+  42 & 3e-01& 2e-01& 9e-02& 6e-02\\ \hline
+  84 & 3e-01& 2e-01& 9e-02& 5e-02\\ \hline
+ 168 & 3e-01& 2e-01& 9e-02& 5e-02\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -116,8 +320,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 6e+00& 5e+00\\ \hline
-  42 & 6e+00& 4e+00\\ \hline
+  21 & 3e+00& 2e+00& 1e+00& 3e+01\\ \hline
+  42 & 3e+00& 1e+00& 9e-01& 7e-01\\ \hline
+  84 & 3e+00& 1e+00& 8e-01& 5e-01\\ \hline
+ 168 & 3e+00& 1e+00& 7e-01& 4e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -127,8 +333,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 4e+00& 3e+00\\ \hline
-  42 & 4e+00& 3e+00\\ \hline
+  21 & 2e+00& 9e-01& 4e-01& 3e+00\\ \hline
+  42 & 2e+00& 1e+00& 5e-01& 2e-01\\ \hline
+  84 & 2e+00& 1e+00& 5e-01& 2e-01\\ \hline
+ 168 & 2e+00& 1e+00& 6e-01& 3e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -138,8 +346,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 2e+00& 1e+00\\ \hline
-  42 & 1e+00& 1e+00\\ \hline
+  21 & 7e-01& 4e-01& 3e-01& 8e+00\\ \hline
+  42 & 7e-01& 4e-01& 2e-01& 2e-01\\ \hline
+  84 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
+ 168 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -153,8 +363,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 1e+00& 7e-01\\ \hline
-  42 & 1e+00& 7e-01\\ \hline
+  21 & 1e+00& 7e-01& 4e-01& 1e+02\\ \hline
+  42 & 1e+00& 7e-01& 4e-01& 2e-01\\ \hline
+  84 & 1e+00& 7e-01& 4e-01& 2e-01\\ \hline
+ 168 & 1e+00& 7e-01& 4e-01& 2e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -164,8 +376,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 7e-01& 3e-01\\ \hline
-  42 & 7e-01& 4e-01\\ \hline
+  21 & 7e-01& 3e-01& 2e-01& 4e+00\\ \hline
+  42 & 7e-01& 4e-01& 2e-01& 9e-02\\ \hline
+  84 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
+ 168 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -175,8 +389,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 3e-01& 2e-01\\ \hline
-  42 & 3e-01& 2e-01\\ \hline
+  21 & 3e-01& 2e-01& 1e-01& 5e+00\\ \hline
+  42 & 3e-01& 2e-01& 9e-02& 6e-02\\ \hline
+  84 & 3e-01& 2e-01& 9e-02& 5e-02\\ \hline
+ 168 & 3e-01& 2e-01& 9e-02& 5e-02\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -186,8 +402,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 6e+00& 5e+00\\ \hline
-  42 & 6e+00& 4e+00\\ \hline
+  21 & 3e+00& 2e+00& 1e+00& 3e+01\\ \hline
+  42 & 3e+00& 1e+00& 9e-01& 7e-01\\ \hline
+  84 & 3e+00& 1e+00& 8e-01& 5e-01\\ \hline
+ 168 & 3e+00& 1e+00& 7e-01& 4e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -197,8 +415,10 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 4e+00& 3e+00\\ \hline
-  42 & 4e+00& 3e+00\\ \hline
+  21 & 2e+00& 9e-01& 4e-01& 4e+00\\ \hline
+  42 & 2e+00& 1e+00& 5e-01& 2e-01\\ \hline
+  84 & 2e+00& 1e+00& 6e-01& 3e-01\\ \hline
+ 168 & 2e+00& 1e+00& 6e-01& 3e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -208,11 +428,26 @@ M/N  & 21 & 42 & 84 & 168 \\ \hline
 \begin{tabular}{l|l|l|l|l}
 \hline
 M/N  & 21 & 42 & 84 & 168 \\ \hline
-  21 & 2e+00& 1e+00\\ \hline
-  42 & 1e+00& 1e+00\\ \hline
+  21 & 7e-01& 5e-01& 3e-01& 9e+00\\ \hline
+  42 & 7e-01& 4e-01& 2e-01& 2e-01\\ \hline
+  84 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
+ 168 & 7e-01& 4e-01& 2e-01& 1e-01\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
+\subsection{Стабилизация течения в разрывном случае:}
+
+\subsection{Примеры графиков, непрерывный случай на области без выреза:}
+\includegraphics[width=1.0\textwidth]{cont.png}
+
+\subsection{Примеры графиков, непрерывный случай на области с вырезом:}
+\includegraphics[width=1.0\textwidth]{cont.png}
+
+\subsection{Примеры графиков, разрывный случай}
+\includegraphics[width=1.0\textwidth]{cont.png}
+
+\section{Выводы}
 
 \end{document}
+
