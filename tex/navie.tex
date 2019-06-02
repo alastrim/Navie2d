@@ -56,11 +56,11 @@ $\Gamma_{nm}^{x+}$, $\Gamma_{nm}^{y-}$ и $\Gamma_{nm}^{y+}$,
 а + или - означает максимальное или минимальное значение
 принимает эта координата.
 
-Заданная область: $\bar\Omega=\bar\Omega_{00}\cup\bar\Omega_{10}\cup
-\bar\Omega_{11}\cup\bar\Omega_{20}\cup\bar\Omega_{21}$,
+Заданная область: 9. $\bar\Omega=\bar\Omega_{01}\cup\bar\Omega_{02}\cup\bar\Omega_{11}\cup
+\bar\Omega_{12}\cup\bar\Omega_{20}\cup\bar\Omega_{21}\cup\bar\Omega_{22}$,
 
-Граничные условия для неизвестного решения: $\rho\vert_{\Gamma_{00}^{x-}}=\rho_{\gamma}$, $u_1\vert_{\Gamma_{00}^{x-}}=w$,
-$\frac{\partial u_1}{\partial x}\vert_{\Gamma_{20}^{x+}\cup\Gamma_{21}^{x+}}=0$
+Граничные условия для неизвестного решения: $u_1\vert_{\Gamma_{01}^{x-}\cup\Gamma_{02}^{x-}}=w$,
+$\frac{\partial u_2}{\partial y}\vert_{\Gamma_{20}^{y-}}=0$.
 На остальных участках границы
 функция плотности считается неизвестной и подлежит определению, а компоненты функции скорости равны нулю.
 
@@ -112,7 +112,7 @@ H_t+(\sigma_1\{\hat H,{V_1}_{s_2}\} {V_1}_{s_2})_{x_1}
 из граничных условий. В граничных узлах, где газ втекает в область, задаются
 значения плотности газа, которые также берутся из граничных условий.
 
-Разностные уравнения (\ref{r_i_sok.1}) в индексах имеют вид
+Разностные уравнения в индексах имеют вид:
 \begin{equation}
 \begin{array}{c}
 \dfrac{H^{n+1}_{m_1,m_2}-H^n_{m_1,m_2}}{\tau}+\\
@@ -141,9 +141,6 @@ H_{m_1,m_2}^{n+1}
 \label{r_i_sok.2}
 \end{equation}
 
-Поскольку разностное уравнение, аппроксимирующее уравнение неразрывности,
-в точности совпадает с первым уравнением схемы из параграфа \ref{r_i_sok}, приведем
-запись в индексах лишь для двух оставшихся уравнений.
 \begin{equation}
 \begin{array}{c}
 (\tilde H)^{n+1}_{m_1,m_2}\left(\dfrac{({V_1}^{n+1}_{m_1,m_2}
@@ -195,47 +192,11 @@ H_{m_1,m_2}^{n+1}
 \label{r_v_sok.3}
 \end{equation}
 
-Также как и в случае схемы из параграфа~\ref{r_i_sok} по этой схеме на каждом
+По этой схеме на каждом
 временном слое решается СЛАУ, решением которой является сеточная функция
 плотности $H^{n+1}$, а затем в любом порядке решаются СЛАУ, которые
 задают функции $V_1^{n+1}$ и $V_2^{n+1}$. Последние две системы можно решать
 независимо.
-
-Из разностного уравнения~(\ref{r_v_sok.2}) получаются следующие алгебраические
-уравнения для всех внутренних  узлов сетки $\Omega_h$
-\begin{equation}
-\begin{array}{l}
-av1\_V100\cdot {V_1}^{n+1}_{m_1,m_2}+av1\_V1R0\cdot {V_1}^{n+1}_{m_1+1,m_2}+
-av1\_V1L0\cdot {V_1}^{n+1}_{m_1-1,m_2} +\\ +av1\_V10R\cdot {V_1}^{n+1}_{m_1,m_2+1}
-+av1\_V10L\cdot {V_1}^{n+1}_{m_1,m_2-1}=bv1,
- \end{array}
-\label{r_v_sok.4}
-\end{equation}
-где
-\begin{equation}
-\begin{array}{l}
-av1\_V100=HT00(1+
-\frac{\tau}{h_1}|V100|+\frac{\tau}{h_2}|V200|)+
-\tau\mu\left(\frac{8}{3h_1^2}+\frac{2}{h_2^2}\right),\\
-av1\_V1L0=
--\frac{\tau}{2h_1}(V100+|V100|)HT00-
-\frac{4\tau\mu}{3h_1^2},\\
-av1\_V1R0=
-\frac{\tau}{2h_1}(V100-|V100|)HT00-
-\frac{4\tau\mu}{3h_1^2},\\
-av1\_V10L=-\frac{\tau}{2h_2}(V200+|V200|)HT00-
-\frac{\tau\mu}{h_2^2},\\
-av1\_V10R=\frac{\tau}{2h_2}(V200-|V200|)HT00-
-\frac{\tau\mu}{h_2^2},\\
-bv1=HT00*V100-\frac{\tau}{h_1}(p(H100)-
-p(H1L0))+\\
-+\frac{\tau\mu}{12h_1h_2}(V2RR-V2RL-V2LR+V2LL)+\tau f_1 HT00.
- \end{array}
-\label{r_v_sok.5}
-\end{equation}
-
-Аналогичным образом расписывается разностное уравнение~(\ref{r_v_sok.3}).
-
 
 
 
@@ -252,19 +213,153 @@ p(H1L0))+\\
 
 \newpage
 \section{Заполнение матрицы первой системы}
-За заполнение матрицы первой системы отвечает следующий код:
 \begin{verbatim}
-void fill_first (std::vector<double> &A, std::vector<double> &B,
-                 discrete_function &H, discrete_function &V,
-                 int n, double h, double tau, discrete_function &/*f*/,
-                 discrete_function &f_0)
+void fill_first (int k, std::map<unsigned int, double> &A, 
+		std::vector<double> &B, trio &essential)
 {
-  std::vector<double> &H_cut = H.cut (n);
-  std::vector<double> &V_cut = V.cut (n);
-  unsigned int M = static_cast<unsigned int> (H_cut.size ());
+  discrete_function &H = essential.m_tdfH.get_cut (k);
+  discrete_function &V1 = essential.m_tdfV1.get_cut (k);
+  discrete_function &V2 = essential.m_tdfV2.get_cut (k);
 
+  double t = essential.m_tdfH.get_scale ()->get_time (k + 1);
+  double tau = essential.m_tdfH.get_scale ()->get_parameters ().m_t_step;
+  double h1 = essential.m_tdfH.get_grid ()->get_parameters ().m_x_step;
+  double h2 = essential.m_tdfH.get_grid ()->get_parameters ().m_y_step;
+
+  MatrixSetter A_at (A, H);
+  VectorSetter B_at (B, H);
+
+  H.do_for_each ([&] (index ij, point xy, discrete_function &)
+  {
+    int m1 = ij.first, m2 = ij.second;
+    double x = xy.first, y = xy.second;
+
+    if (process_H_edge (m1, m2, A_at, B_at))
+      return;
+
+    A_at(m1,m2,0,0)=1.
+                  +tau*(xpabs(V1.tilda(m1+1,m2))-xmabs(V1.tilda(m1,m2)))/2./h1
+                  +tau*(xpabs(V2.tilda(m1,m2+1))-xmabs(V2.tilda(m1,m2)))/2./h2;
+
+    A_at(m1,m2,+1,0)=tau*xmabs(V1.tilda (m1+1,m2))/2./h1;
+    A_at(m1,m2,0,+1)=tau*xmabs(V2.tilda (m1,m2+1))/2./h2;
+    A_at(m1,m2,-1,0)=-tau*xpabs(V1.tilda (m1,m2))/2./h1;
+    A_at(m1,m2,0,-1)=-tau*xpabs(V2.tilda (m1,m2))/2./h2;
+
+    B_at(m1,m2)=H.val(m1,m2)+tau*f_1 (t,x,y);
+  });
 }
 \end{verbatim}
+\newpage
+\section{Заполнение матрицы второй системы}
+\begin{verbatim}
+void fill_second (int k, std::map<unsigned int, double> &A, 
+		std::vector<double> &B, trio &essential)
+{
+  discrete_function &H = essential.m_tdfH.get_cut (k + 1);
+  discrete_function &V1 = essential.m_tdfV1.get_cut (k);
+  discrete_function &V2 = essential.m_tdfV2.get_cut (k);
+
+  double t = essential.m_tdfV1.get_scale ()->get_time (k + 1);
+  double tau = essential.m_tdfV1.get_scale ()->get_parameters ().m_t_step;
+  double h1 = essential.m_tdfV1.get_grid ()->get_parameters ().m_x_step;
+  double h2 = essential.m_tdfV1.get_grid ()->get_parameters ().m_y_step;
+
+  MatrixSetter A_at (A, V1);
+  VectorSetter B_at (B, V1);
+
+  V1.do_for_each ([&] (index ij, point xy, discrete_function &)
+  {
+    int m1 = ij.first, m2 = ij.second;
+    double x = xy.first, y = xy.second;
+    double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
+
+    if (process_V_edge (m1, m2, check, A_at, B_at))
+      return;
+
+    A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
+                    +tau*MIU*(8./3./h1/h1+2./h2/h2);
+
+    A_at(m1,m2,-1,0)=-tau/2./h1*xpabs(V1.val(m1,m2))*check
+                    -4./3.*tau*MIU/h1/h1;
+    A_at(m1,m2,+1,0)=tau/2./h1*xmabs(V1.val(m1,m2))*check
+                    -4./3.*tau*MIU/h1/h1;
+    A_at(m1,m2,0,-1)=-tau/2./h2*xpabs(V2.val(m1,m2))*check
+                    -tau*MIU/h2/h2;
+    A_at(m1,m2,0,+1)=tau/2./h2*xmabs(V2.val(m1,m2))*check
+                    -tau*MIU/h2/h2;
+
+    B_at(m1,m2)=check*V1.val(m1,m2)-tau/h1*(p(H.left(m1,m2))-p(H.left(m1-1,m2)))
+              +tau*MIU/12./h1/h2*(V2.val(m1+1,m2+1)-V2.val(m1+1,m2-1)-V2.val(m1-1,m2+1)+V2.val(m1-1,m2-1))
+              +tau*f_2(t,x,y)*check;
+  });
+}
+\end{verbatim}
+\newpage
+\section{Заполнение матрицы третьей системы}
+\begin{verbatim}
+void fill_third (int k, std::map<unsigned int, double> &A, 
+		std::vector<double> &B, trio &essential)
+{
+  discrete_function &H = essential.m_tdfH.get_cut (k + 1);
+  discrete_function &V1 = essential.m_tdfV1.get_cut (k);
+  discrete_function &V2 = essential.m_tdfV2.get_cut (k);
+
+  double t = essential.m_tdfV2.get_scale ()->get_time (k + 1);
+  double tau = essential.m_tdfV2.get_scale ()->get_parameters ().m_t_step;
+  double h1 = essential.m_tdfV2.get_grid ()->get_parameters ().m_x_step;
+  double h2 = essential.m_tdfV2.get_grid ()->get_parameters ().m_y_step;
+
+  MatrixSetter A_at (A, V2);
+  VectorSetter B_at (B, V2);
+
+  V2.do_for_each ([&] (index ij, point xy, discrete_function &)
+  {
+    int m1 = ij.first, m2 = ij.second;
+    double x = xy.first, y = xy.second;
+    double check = (H.val(m1,m2)+H.val(m1,m2-1)+H.val(m1-1,m2)+H.val(m1-1,m2-1))/4.0;
+
+    if (process_V_condition (m1, m2, A_at, B_at))
+      return;
+
+    if (process_V_edge (m1, m2, check, A_at, B_at))
+      return;
+
+    A_at(m1,m2,0,0)=check*(1.+tau/h1*fabs(V1.val(m1,m2))+tau/h2*fabs(V2.val(m1,m2)))
+                    +tau*MIU*(2./h1/h1+8./3./h2/h2);
+
+    A_at(m1,m2,-1,0)=-tau/2./h1*xpabs(V1.val(m1,m2))*check
+                     -tau*MIU/h1/h1;
+    A_at(m1,m2,+1,0)=tau/2./h1*xmabs(V1.val(m1,m2))*check
+                     -tau*MIU/h1/h1;
+    A_at(m1,m2,0,-1)=-tau/2./h2*xpabs(V2.val(m1,m2))*check
+                     -4./3.*tau*MIU/h2/h2;
+    A_at(m1,m2,0,+1)=tau/2./h2*xmabs(V2.val(m1,m2))*check
+                    -4./3.*tau*MIU/h2/h2;
+
+    B_at(m1,m2)=check*V2.val(m1,m2)-tau/h2*(p(H.right(m1,m2))-p(H.right(m1,m2-1)))
+              +tau*MIU/12./h1/h2*(V1.val(m1+1,m2+1)-V1.val(m1+1,m2-1)-V1.val(m1-1,m2+1)+V1.val(m1-1,m2-1))
+              +tau*f_3(t,x,y)*check;
+  });
+}
+\end{verbatim}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Таблицы невязок в непрерывном случае:}
