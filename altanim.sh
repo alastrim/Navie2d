@@ -53,7 +53,7 @@ grid_row_count = (y_step_count)
 grid_column_count = (x_step_count)
 
 set view map
-set cbrange [0:1]
+set cbrange [0:15]
 set key left top
 set palette rgbformulae -7, -7, 2
 

@@ -38,7 +38,7 @@ extern "C"
 #define MAXITER 2000
 #define DEBUG false
 #define LEN 250
-#define PRINT_RESULTS false
+#define PRINT_RESULTS true
 #define MAX_NON_ZERO 5
 #define GAMMA 1.4
 #define KNOWN_FUNC true
